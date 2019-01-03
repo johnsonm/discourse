@@ -1265,7 +1265,6 @@ pt_BR:
     auto_silence_fast_typers_max_trust_level: "Nível máximo de confiança para silenciar automaticamente os tipos rápidos"
     auto_silence_first_post_regex: "Regex insensitivo a maiúsculas e minúsculas que, se for transmitido, fará com que o primeiro post do usuário seja silenciado e enviado para a fila de aprovação. Exemplo: raging | a [bc] a, fará com que todas as mensagens contendo raging ou aba ou aca sejam silenciadas primeiro. Aplica-se apenas ao primeiro post."
     flags_default_topics: "Mostrar os tópicos sinalizados por padrão na seção admin"
-    min_flags_staff_visibility: "A quantidade mínima de sinalizadores em uma postagem deve ter antes que a equipe possa vê-la na seção administrativa"
     reply_by_email_enabled: "Habilitar responder tópicos via email"
     reply_by_email_address: "Template de resposta por email, por exemplo: %%{reply_key}@reply.example.com or replies+%%{reply_key}@example.com"
     alternative_reply_by_email_addresses: "Lista de modelos alternativos para responder por e-mail a endereços de e-mail recebidos. Exemplo:%%{reply_key}@reply.example.com|replies+%%{reply_key}@example.com"

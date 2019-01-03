@@ -1509,7 +1509,6 @@ fi:
     auto_silence_fast_typers_max_trust_level: "Enimmäisluottamustaso, jolla nopea kirjoittaja voidaan hiljentää automaattisesti"
     auto_silence_first_post_regex: "Isoista ja pienistä kirjaimista riippumaton säännöllinen lauseke, joka osuessaan aiheuttaa käyttäjän ensimmäisen viestin hiljennyksen ja viesti viedään arvioitavaksi. Esimerkki: hemmetti|a[bc]a aiheuttaa hiljennyksen, jos viesti sisältää sanan 'hemmetti', 'aba' tai 'aca'. Koskee vain käyttäjän ensimmäistä viestiä."
     flags_default_topics: "Näytä liputetut ketjut oletuksena ylläpito-osiossa"
-    min_flags_staff_visibility: "Kuinka monesti viesti täytyy liputtaa, jotta henkilökunta näkee sen ylläpito-osiossa"
     reply_by_email_enabled: "Ota käyttöön vastaukset sähköpostin avulla."
     reply_by_email_address: "Saapuvien sähköpostivastausten sähköpostiosoitekaava, esimerkiksi: %%{reply_key}@reply.esimerkki.fi or replies+%%{reply_key}@esimerkki.fi"
     alternative_reply_by_email_addresses: "Lista vaihtoehtoisista saapuvien sähköpostivastausten sähköpostiosoitekaavoista, esimerkiksi: %%{reply_key}@reply.esimerkki.fi tai replies+%%{reply_key}@esimerkki.fi"

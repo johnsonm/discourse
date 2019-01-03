@@ -1324,7 +1324,7 @@ spam:
   flags_default_topics:
     default: false
     client: true
-  min_flags_staff_visibility: 1
+  min_score_default_visibility: 0.0
 
 rate_limits:
   unique_posts_mins: 5

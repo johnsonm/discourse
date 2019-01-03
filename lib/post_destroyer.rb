@@ -60,6 +60,9 @@ class PostDestroyer
     elsif @user.id == @post.user_id
       mark_for_deletion(delete_removed_posts_after)
     end
+
+    UserActionManager.post_destroyed(@post)
+
     DiscourseEvent.trigger(:post_destroyed, @post, @opts, @user)
     WebHook.enqueue_hooks(:post, :post_destroyed,
       id: @post.id,
@@ -68,6 +71,7 @@ class PostDestroyer
     ) if WebHook.active_web_hooks(:post).exists?
 
     if @post.is_first_post? && @post.topic
+      UserActionManager.topic_destroyed(@post.topic)
       DiscourseEvent.trigger(:topic_destroyed, @post.topic, @user)
       WebHook.enqueue_hooks(:topic, :topic_destroyed,
         id: topic.id,
@@ -84,11 +88,12 @@ class PostDestroyer
       user_recovered
     end
     topic = Topic.with_deleted.find @post.topic_id
-    topic.recover! if @post.is_first_post?
+    topic.recover!(@user) if @post.is_first_post?
     topic.update_statistics
-    recover_user_actions
+    UserActionManager.post_created(@post)
     DiscourseEvent.trigger(:post_recovered, @post, @opts, @user)
     if @post.is_first_post?
+      UserActionManager.topic_created(@post.topic)
       DiscourseEvent.trigger(:topic_recovered, topic, @user)
       StaffActionLogger.new(@user).log_topic_delete_recover(topic, "recover_topic", @opts.slice(:context)) if @user.id != @post.user_id
     end
@@ -134,7 +139,6 @@ class PostDestroyer
       end
       trash_public_post_actions
       trash_user_actions
-      @post.update_flagged_posts_count
       remove_associated_replies
       remove_associated_notifications
       if @post.topic && @post.is_first_post?
@@ -146,11 +150,14 @@ class PostDestroyer
       update_associated_category_latest_topic
       update_user_counts
       TopicUser.update_post_action_cache(post_id: @post.id)
+
       DB.after_commit do
-        if @opts[:defer_flags].to_s == "true"
-          defer_flags
-        else
-          agree_with_flags
+        if reviewable = @post.reviewable_flag
+          if @opts[:defer_flags].to_s == "true"
+            ignore(reviewable)
+          else
+            agree(reviewable)
+          end
         end
       end
     end
@@ -172,7 +179,6 @@ class PostDestroyer
 
       Post.transaction do
         @post.update_column(:user_deleted, true)
-        @post.update_flagged_posts_count
         @post.topic_links.each(&:destroy)
       end
     end
@@ -182,7 +188,6 @@ class PostDestroyer
     Post.transaction do
       @post.update_column(:user_deleted, false)
       @post.skip_unique_check = true
-      @post.update_flagged_posts_count
     end
 
     # has internal transactions, if we nest then there are some very high risk deadlocks
@@ -225,8 +230,8 @@ class PostDestroyer
     end
   end
 
-  def agree_with_flags
-    if @post.has_active_flag? && @user.human? && @user.staff?
+  def agree(reviewable)
+    if @user.human? && @user.staff?
       Jobs.enqueue(
         :send_system_message,
         user_id: @post.user_id,
@@ -243,11 +248,11 @@ class PostDestroyer
       )
     end
 
-    PostAction.agree_flags!(@post, @user, delete_post: true)
+    reviewable.perform(@user, :agree, delete_post: true)
   end
 
-  def defer_flags
-    PostAction.defer_flags!(@post, @user, delete_post: true)
+  def ignore(reviewable)
+    reviewable.perform(@user, :ignore, delete_post: true)
   end
 
   def trash_user_actions
@@ -261,11 +266,6 @@ class PostDestroyer
       }
       UserAction.remove_action!(row)
     end
-  end
-
-  def recover_user_actions
-    # TODO: Use a trash concept for `user_actions` to avoid churn and simplify this?
-    UserActionCreator.log_post(@post)
   end
 
   def remove_associated_replies

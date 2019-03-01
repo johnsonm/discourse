@@ -507,6 +507,10 @@ class ImportScripts::FMGP < ImportScripts::Base
     elsif @images[url].present?
       @imagefiles.write("#{@images[url][:filepath]}\n") if !@imagefiles.nil?
       upload = create_upload(@system_user.id, @images[url][:filepath], @images[url][:filename])
+      if upload.id.nil?
+        # This seems to happen when users delete content, and for videos
+        return "<i>missing/deleted image from Google+</i>"
+      end
       @totalsize += @images[url][:filesize].to_i
       @uploaded[url] = upload
       return "\n#{embedded_image_html(upload)}"

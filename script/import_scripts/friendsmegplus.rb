@@ -491,6 +491,12 @@ class ImportScripts::FMGP < ImportScripts::Base
     formatted_link_text(url, url)
   end
 
+  def embedded_image_md(upload)
+    # remove unnecessary size logic relative to embedded_image_html
+    upload_name = upload.short_url || upload.url
+    "![#{upload.original_filename}](#{upload_name})"
+  end
+
   def formatted_link_text(url, text)
     # two ways to present images attached to posts; you may want to edit this for preference
     # - display: embedded_image_html(upload)
@@ -503,7 +509,7 @@ class ImportScripts::FMGP < ImportScripts::Base
     end
     if @uploaded[url].present?
       upload = @uploaded[url]
-      return "\n#{embedded_image_html(upload)}"
+      return "\n#{embedded_image_md(upload)}"
     elsif @images[url].present?
       @imagefiles.write("#{@images[url][:filepath]}\n") if !@imagefiles.nil?
       upload = create_upload(@system_user.id, @images[url][:filepath], @images[url][:filename])
@@ -514,7 +520,7 @@ class ImportScripts::FMGP < ImportScripts::Base
       end
       @totalsize += @images[url][:filesize].to_i
       @uploaded[url] = upload
-      return "\n#{embedded_image_html(upload)}"
+      return "\n#{embedded_image_md(upload)}"
     end
     if text == url
       # leave the URL bare and Discourse will do the right thing

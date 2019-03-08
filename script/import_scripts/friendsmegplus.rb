@@ -47,6 +47,10 @@ class ImportScripts::FMGP < ImportScripts::Base
     # CSV is map to downloaded images
     @images = {}
 
+    # G+ user IDs to filter out (spam, abuse) — no topics or posts, silence and suspend when creating
+    # loaded from blacklist.json as array of google ids `[ 92310293874, 12378491235293 ]`
+    @blacklist = Set[]
+
     # Tags to apply to every topic; empty Array to not have any tags applied everywhere
     @globaltags = [ "gplus" ]
 
@@ -83,6 +87,8 @@ class ImportScripts::FMGP < ImportScripts::Base
       elsif arg.end_with?('categories.json')
         @categories_filename = arg
         @categories = load_fmgp_json(arg)
+      elsif arg.end_with?('blacklist.json')
+        @blacklist = load_fmgp_json(arg).map{|i| i.to_s}.to_set
       elsif arg.end_with?('.json')
         @feeds << load_fmgp_json(arg)
       elsif arg == '--dry-run'
@@ -96,10 +102,17 @@ class ImportScripts::FMGP < ImportScripts::Base
     @cats = {}
     # remember google auth DB lookup results
     @emails = {}
+    @newusers = {}
     @users = {}
-    @google_ids = {}
     # remember uploaded images
     @uploaded = {}
+    # counters for post progress
+    @topics_imported = 0
+    @posts_imported = 0
+    @topics_skipped = 0
+    @posts_skipped = 0
+    @topics_blacklisted = 0
+    @posts_blacklisted = 0
     # count uploaded file size
     @totalsize = 0
 
@@ -143,6 +156,7 @@ class ImportScripts::FMGP < ImportScripts::Base
                  "community" => community["name"],
                  "category" => "",
                  "parent" => nil,
+                 "tags" => [],
                }
             elsif !@categories[category["id"]]["community"].present?
               @categories[category["id"]]["community"] = community["name"]
@@ -220,7 +234,7 @@ class ImportScripts::FMGP < ImportScripts::Base
     return if @dryrun
 
     # now create them all
-    create_users(@users) do |id, u|
+    create_users(@newusers) do |id, u|
       {
         id: id,
         email: u[:email],
@@ -256,22 +270,33 @@ class ImportScripts::FMGP < ImportScripts::Base
         # with GoogleUserInfo. If they didn't log in, they'll have an
         # @gplus.invalid address associated with their account
         email = "#{id}@gplus.invalid"
-        @users[id] = {
+        @newusers[id] = {
           :email => email,
           :name => name,
           :post_create_action => proc do |newuser|
             newuser.approved = true
             newuser.approved_by_id = @system_user.id
             newuser.approved_at = newuser.created_at
+            if @blacklist.include?(id.to_s)
+              now = DateTime.now
+              forever = 1000.years.from_now
+              newuser.suspended_at = now
+              newuser.suspended_till = forever
+              newuser.silenced_till = forever
+            end
             newuser.save
+            @users[id] = newuser
             ::GoogleUserInfo.create(google_user_id: id, user: newuser)
-            @google_ids[id] = newuser.id
           end
         }
       else
         # user already on system
-        @google_ids[id] = google_user_info.user_id
-        email = google_user_info.email
+        u = User.find(google_user_info.user_id)
+        if u.silenced? or u.suspended?
+            @blacklist.add(id)
+        end
+        @users[id] = u
+        email = u.email
       end
       @emails[id] = email
     end
@@ -281,8 +306,6 @@ class ImportScripts::FMGP < ImportScripts::Base
     # "post" is confusing:
     # - A google+ post is a discourse topic
     # - A google+ comment is a discourse post
-    topics = 0
-    posts = 0
 
     puts '', "Importing Google+ posts and comments..."
 
@@ -293,31 +316,57 @@ class ImportScripts::FMGP < ImportScripts::Base
             category["posts"].each do |post|
               # G+ post / Discourse topic
               import_topic(post, category)
+              print("\r#{@topics_imported}/#{@posts_imported} topics/posts (skipped: #{@topics_skipped}/#{@posts_skipped} blacklisted: #{@topics_blacklisted}/#{@posts_blacklisted})       ")
             end
           end
         end
       end
     end
+
+    puts ''
   end
 
   def import_topic(post, category)
     # no parent for discourse topics / G+ posts
-    postmap = make_postmap(post, category, nil)
-    p = create_post(postmap, postmap[:id]) if !@dryrun
+    if topic_id = post_id_from_imported_post_id(post["id"])
+      # already imported topic; might need to attach more comments/posts
+      p = Post.find_by(id: topic_id)
+      @topics_skipped += 1
+    else
+      # new post
+      postmap = make_postmap(post, category, nil)
+      if postmap.nil?
+        @topics_blacklisted += 1
+        return
+      end
+      p = create_post(postmap, postmap[:id]) if !@dryrun
+      @topics_imported += 1
+    end
     # iterate over comments in post
     post["comments"].each do |comment|
       # category is nil for comments
-      commentmap = make_postmap(comment, nil, p)
-      new_comment = create_post(commentmap, commentmap[:id]) if !@dryrun
+      if post_id_from_imported_post_id(comment["id"])
+        @posts_skipped += 1
+      else
+        commentmap = make_postmap(comment, nil, p)
+        if commentmap.nil?
+          @posts_blacklisted += 1
+        else
+          @posts_imported += 1
+          new_comment = create_post(commentmap, commentmap[:id]) if !@dryrun
+        end
+      end
     end
   end
 
   def make_postmap(post, category, parent)
-    created_at = Time.zone.parse(post["createdAt"])
+    post_author_id = post["author"]["id"]
+    return nil if @blacklist.include?(post_author_id.to_s)
 
-    user_id = user_id_from_imported_user_id(post["author"]["id"])
+    created_at = Time.zone.parse(post["createdAt"])
+    user_id = user_id_from_imported_user_id(post_author_id)
     if user_id.nil?
-      user_id = @google_ids[post["author"]["id"]]
+      user_id = @users[post["author"]["id"]].id
     end
 
     mapped = {

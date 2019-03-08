@@ -366,7 +366,7 @@ class ImportScripts::FMGP < ImportScripts::Base
     words = words[0..(@max_title_words-1)]
     lastword = nil
 
-    (3..(words.length-1)).each do |i|
+    (@min_title_words..(words.length-1)).each do |i|
       # prefer full stop
       if words[i].end_with?(".")
         lastword = i
@@ -375,7 +375,7 @@ class ImportScripts::FMGP < ImportScripts::Base
 
     if lastword.nil?
       # fall back on other punctuation
-      (3..(words.length-1)).each do |i|
+      (@min_title_words..(words.length-1)).each do |i|
         if words[i].end_with?(',', ';', ':', '?')
           lastword = i
         end

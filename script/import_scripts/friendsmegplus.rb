@@ -40,6 +40,7 @@ class ImportScripts::FMGP < ImportScripts::Base
     @min_title_words = 3
     @max_title_words = 14
     @min_title_characters = 12
+    @min_post_raw_characters = 12
 
     # JSON files produced by F+MG+E as an export of a community
     @feeds = []
@@ -363,6 +364,10 @@ class ImportScripts::FMGP < ImportScripts::Base
     post_author_id = post["author"]["id"]
     return nil if @blacklist.include?(post_author_id.to_s)
 
+    raw = formatted_message(post)
+    # if no message, image, or images, it's just empty
+    return nil if raw.length < @min_post_raw_characters
+
     created_at = Time.zone.parse(post["createdAt"])
     user_id = user_id_from_imported_user_id(post_author_id)
     if user_id.nil?
@@ -373,7 +378,7 @@ class ImportScripts::FMGP < ImportScripts::Base
       :id => post["id"],
       :user_id => user_id,
       :created_at => created_at,
-      :raw => formatted_message(post),
+      :raw => raw,
       :cook_method => Post.cook_methods[:regular],
     }
 

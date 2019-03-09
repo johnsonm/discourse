@@ -533,8 +533,8 @@ class ImportScripts::FMGP < ImportScripts::Base
         end
       end
     elsif fragment[0] == 4
-      # hashtag, the first hash is literal
-      return "##{fragment[1]}"
+      # hashtag, the octothorpe is included
+      return fragment[1]
     else
       raise RuntimeError.new("message code #{fragment[0]} not recognized!")
     end

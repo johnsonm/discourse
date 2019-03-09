@@ -278,8 +278,10 @@ class ImportScripts::FMGP < ImportScripts::Base
             if @blacklist.include?(id.to_s)
               now = DateTime.now
               forever = 1000.years.from_now
-              newuser.suspended_at = now
-              newuser.suspended_till = forever
+              # you can suspend as well if you want your blacklist to
+              # be hard to recover from
+              #newuser.suspended_at = now
+              #newuser.suspended_till = forever
               newuser.silenced_till = forever
             end
             newuser.save

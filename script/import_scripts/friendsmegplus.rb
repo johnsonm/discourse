@@ -275,6 +275,9 @@ class ImportScripts::FMGP < ImportScripts::Base
           :email => email,
           :name => name,
           :post_create_action => proc do |newuser|
+            newuser.approved = true
+            newuser.approved_by_id = @system_user.id
+            newuser.approved_at = newuser.created_at
             if @blacklist.include?(id.to_s)
               now = DateTime.now
               forever = 1000.years.from_now

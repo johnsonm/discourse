@@ -37,6 +37,7 @@ class ImportScripts::FMGP < ImportScripts::Base
     @system_user = Discourse.system_user
     SiteSetting.max_image_size_kb = 40960
     SiteSetting.max_attachment_size_kb = 40960
+    @invalid_bounce_score = 5.0
     @min_title_words = 3
     @max_title_words = 14
     @min_title_characters = 12
@@ -290,6 +291,11 @@ class ImportScripts::FMGP < ImportScripts::Base
             newuser.save
             @users[id] = newuser
             ::GoogleUserInfo.create(google_user_id: id, user: newuser)
+            # Do not send email to the invalid email addresses
+            s = UserStat.where(user_id: newuser.id).first
+            s.bounce_score = @invalid_bounce_score
+            s.reset_bounce_score_after = 1000.years.from_now
+            s.save
           end
         }
       else

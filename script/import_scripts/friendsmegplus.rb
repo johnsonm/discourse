@@ -195,16 +195,17 @@ class ImportScripts::FMGP < ImportScripts::Base
     puts "", "Mapping categories from Google+ to Discourse..."
 
     @categories.each do |id, cat|
-      # Two separate sub-categories can have the same name, so need to identify by parent
       if cat["parent"].present? and !cat["parent"].empty?
-        parent = Category.where(name: cat["parent"]).first
-        raise RuntimeError.new("Could not find parent category #{cat["parent"]}") if parent.nil?
-        category = Category.where(name: cat["category"], parent_category_id: parent.id).first
+        # Two separate sub-categories can have the same name, so need to identify by parent
+        Category.where(name: cat["category"]).each do |category|
+          parent = Category.where(id: category.parent_category_id).first
+          @cats[id] = category if parent.name == cat["parent"]
+        end
       else
         category = Category.where(name: cat["category"]).first
+        @cats[id] = category
       end
-      raise RuntimeError.new("Could not find category #{cat["category"]} for #{cat}") if category.nil?
-      @cats[id] = category
+      raise RuntimeError.new("Could not find category #{cat["category"]} for #{cat}") if @cats[id].nil?
     end
   end
 

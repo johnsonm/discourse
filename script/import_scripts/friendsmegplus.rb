@@ -99,6 +99,8 @@ class ImportScripts::FMGP < ImportScripts::Base
         @dryrun = true
       elsif arg.start_with?("--last-date=")
         @last_date = Time.zone.parse(arg.gsub(/.*=/, ''))
+      else
+        raise RuntimeError.new("unknown argument #{arg}")
       end
     end
 

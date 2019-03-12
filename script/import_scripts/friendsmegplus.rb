@@ -73,6 +73,8 @@ class ImportScripts::FMGP < ImportScripts::Base
     @categories_filename = nil
     # dry run parses but doesn't create
     @dryrun = false
+    # @last_date cuts off at a certain date, for late-spammed abandoned communities
+    @last_date = nil
     # every argument is a filename, do the right thing based on the file name
     ARGV.each do |arg|
       if arg.end_with?('.csv')
@@ -95,6 +97,8 @@ class ImportScripts::FMGP < ImportScripts::Base
         @feeds << load_fmgp_json(arg)
       elsif arg == '--dry-run'
         @dryrun = true
+      elsif arg.start_with?("--last-date=")
+        @last_date = Time.zone.parse(arg.gsub(/.*=/, ''))
       end
     end
 
@@ -378,6 +382,8 @@ class ImportScripts::FMGP < ImportScripts::Base
     return nil if raw.length < @min_post_raw_characters
 
     created_at = Time.zone.parse(post["createdAt"])
+    return nil if !@last_date.nil? and created_at > @last_date
+
     user_id = user_id_from_imported_user_id(post_author_id)
     if user_id.nil?
       user_id = @users[post["author"]["id"]].id

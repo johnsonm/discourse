@@ -270,13 +270,13 @@ class ImportScripts::FMGP < ImportScripts::Base
 
   def import_google_user(id, name)
     if !@emails[id].present?
-      google_user_info = ::GoogleUserInfo.find_by(google_user_id: id.to_i)
+      google_user_info = UserAssociatedAccount.find_by(provider_name: 'google_oauth2', provider_uid: id.to_i)
       if google_user_info.nil?
         # create new google user on system; expect this user to merge
         # when they later log in with google authentication
         # Note that because email address is not included in G+ data, we
         # don't know if they already have another account not yet associated
-        # with GoogleUserInfo. If they didn't log in, they'll have an
+        # with google ooauth2. If they didn't log in, they'll have an
         # @gplus.invalid address associated with their account
         email = "#{id}@gplus.invalid"
         @newusers[id] = {
@@ -297,8 +297,9 @@ class ImportScripts::FMGP < ImportScripts::Base
             end
             newuser.save
             @users[id] = newuser
-            ::GoogleUserInfo.create(google_user_id: id, user: newuser)
+            UserAssociatedAccount.create(provider_name: 'google_oauth2', user_id: newuser.id, provider_uid: id)
             # Do not send email to the invalid email addresses
+            # this can be removed after merging with #7162
             s = UserStat.where(user_id: newuser.id).first
             s.bounce_score = @invalid_bounce_score
             s.reset_bounce_score_after = 1000.years.from_now
@@ -539,7 +540,7 @@ class ImportScripts::FMGP < ImportScripts::Base
         # user was in this import's authors
         return "@#{user.username} "
       else
-        if google_user_info = ::GoogleUserInfo.find_by(google_user_id: fragment[2])
+        if google_user_info = UserAssociatedAccount.find_by(provider_name: 'google_oauth2', provider_uid: fragment[2])
           # user was not in this import, but has logged in or been imported otherwise
           user = User.find(google_user_info.user_id)
           return "@#{user.username} "

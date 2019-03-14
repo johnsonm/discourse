@@ -85,12 +85,7 @@ th:
       next_month: "เดือนถัดไป"
       placeholder: วัน
     share:
-      topic: "แบ่งปันลิงก์ไปยังกระทู้นี้"
-      post: "โพส #%{postNumber}"
       close: "ปิด"
-      twitter: "แบ่งปันลิงก์นี้บน Twitter"
-      facebook: "แบ่งปันลิงก์นี้บน Facebook"
-      email: "ส่งลิงก์นี้ทางอีเมล"
     action_codes:
       public_topic: "ทำให้กระทู้นี้เป็นสาธารณะ %{when} "
       private_topic: "ทำให้กระทู้นี้เป็นข้อความส่วนตัว"
@@ -134,7 +129,6 @@ th:
         cn_north_1: "จีน (ปักกิ่ง)"
         eu_central_1: "อียู (แฟรงก์เฟิร์ต)"
         eu_west_1: "อียู (ไอร์แลนด์)"
-        sa_east_1: "อเมริกาใต้ (ซาวเปาโล)"
         us_east_1: "สหรัฐอเมริกาซีกตะวันออก (เวอร์จิเนียเหนือ)"
         us_east_2: "สหรัฐอเมริกาตะวันออก (โอไฮโอ)"
         us_gov_west_1: "AWS GovCloud (อเมริกา)"
@@ -357,7 +351,6 @@ th:
           description: "คุณจะได้รับการแจ้งเตือนเมื่อใครก็ตามเอ่ยชื่อของคุณ @name หรือตอบคุณ"
         muted:
           title: "ปิด"
-          description: "คุณจะไม่ได้รับการแจ้งเตือนเกี่ยวกับกระทู้ใหม่ๆในกลุ่มนี้"
       flair_preview_icon: "ไอคอนตัวอย่าง"
       flair_preview_image: "รูปภาพตัวอย่าง"
     user_action_groups:
@@ -1392,8 +1385,6 @@ th:
       customize:
         title: "การปรับแต่ง"
         delete: "ลบ"
-        colors:
-          delete_confirm: "ลบชุดสีนี้?"
       email:
         sent: "ส่ง"
         incoming_emails:

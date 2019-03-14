@@ -129,12 +129,7 @@ bs_BA:
       next_month: "Sljedeći mjesec"
       placeholder: datum
     share:
-      topic: "podijeli link ka ovoj temi"
-      post: "podijeli link ka ovom postu #%{postNumber}"
       close: "zatvori"
-      twitter: "podijeli link na Twitteru"
-      facebook: "podijeli link na Facebook-u"
-      email: "pošalji ovaj link na email"
     action_codes:
       public_topic: "postavio ovu temu kao javno %{when}"
       private_topic: "postavio ovu temu kao privatno %{when}"
@@ -184,7 +179,6 @@ bs_BA:
         eu_west_1: "EU (Irska)"
         eu_west_2: "EU (London)"
         eu_west_3: "EU (Pariz)"
-        sa_east_1: "Južna Amerika (Sao Paulo)"
         us_east_1: "SAD Istok (Sjeverna Virdžinija)"
         us_east_2: "SAD Istok (Ohio)"
         us_gov_west_1: "AWS GovCloud (US)"
@@ -486,7 +480,6 @@ bs_BA:
           description: "Bićete obaviješteni ukoliko neko spomene vaše @ime ili nešto što je naslovljeno za vas"
         muted:
           title: "Utišano"
-          description: "Nećete biti obaviješteni zbog nove teme unutar ove grupe."
       flair_url: "Slika Avatara sposobnosti"
       flair_url_placeholder: "(Opciono) URL slike ili Font Awesome class"
       flair_bg_color: "Boja pozadine Slike Avatara sposobnosti"
@@ -831,9 +824,6 @@ bs_BA:
         expired: "Ova pozivnica je istekla."
         rescind: "Ukloni"
         rescinded: "Pozivnica uklonjena"
-        rescind_all: "Ukloni sve pozivnice"
-        rescinded_all: "Sve pozivnice su uklonjene!"
-        rescind_all_confirm: "Da li ste sigurni da želite ukloniti sve pozivnice?"
         reinvite: "Pošalji ponovno pozivnicu"
         reinvite_all: "Pošalji ponovno sve pozivnice"
         reinvite_all_confirm: "Da li ste sigurni da želite poslati ponovno sve pozivnice?"
@@ -1992,8 +1982,6 @@ bs_BA:
     category:
       can: "can&hellip; "
       none: "(no category)"
-      edit: "edit"
-      edit_long: "Edit"
       view: "View Topics in Category"
       general: "General"
       settings: "Settings"
@@ -2026,7 +2014,6 @@ bs_BA:
       email_in_disabled_click: 'enable the "email in" setting.'
       allow_badges_label: "Allow badges to be awarded in this category"
       edit_permissions: "Edit Permissions"
-      add_permission: "Add Permission"
       this_year: "this year"
       default_position: "Default Position"
       position_disabled: "Categories will be displayed in order of activity. To control the order of categories in lists, "
@@ -2331,14 +2318,10 @@ bs_BA:
         copy: "Copy"
         colors:
           title: "Colors"
-          long_title: "Color Schemes"
-          new_name: "New Color Scheme"
           copy_name_prefix: "Copy of"
-          delete_confirm: "Delete this color scheme?"
           undo: "undo"
           undo_title: "Undo your changes to this color since the last time it was saved."
           revert: "revert"
-          revert_title: "Reset this color to Discourse's default color scheme."
           primary:
             name: "primary"
             description: "Most text, icons, and borders."

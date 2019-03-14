@@ -35,7 +35,6 @@ sk:
   remove_posts_deleted_by_author: "Zmazané autorom"
   redirect_warning: "Neboli sme schopní overiť, či vami vybraný link bol pridaný na fórum. Ak chcete aj tak pokračovať, vyberte link nižšie."
   themes:
-    bad_color_scheme: "Nepodarilo sa aktualizovať tému, neplatná farebná schéma"
     other_error: "počas aktualizácie tému sa niečo nepodarilo"
     settings_errors:
       invalid_yaml: "Tento YAML nie je validný."
@@ -324,7 +323,6 @@ sk:
       email_already_used_in_group: "'%{email}' už je použité skupinou '%{group_name}'."
       email_already_used_in_category: "'%{email}' už je použité kategóriou '%{category_name}'."
     cannot_delete:
-      uncategorized: "Nemôžete vymazať kategóriu nezaradených"
       has_subcategories: "Nemôžete vymazať kategóriu pretože obsahuje podkategórie."
       topic_exists_no_oldest: "Nemôžete vymazať túto kategóriu pretože obsahuje %{count} tém."
     uncategorized_description: "Témy, ktoré nepotrebujú kategóriu, alebo sa do žiadnej existujúcej nehodia."

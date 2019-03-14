@@ -249,6 +249,7 @@ const User = RestModel.extend({
       "custom_fields",
       "user_fields",
       "muted_usernames",
+      "ignored_usernames",
       "profile_background",
       "card_background",
       "muted_tags",
@@ -367,20 +368,24 @@ const User = RestModel.extend({
     });
   },
 
-  toggleSecondFactor(token, enable, method) {
+  toggleSecondFactor(authToken, authMethod, targetMethod, enable) {
     return ajax("/u/second_factor.json", {
       data: {
-        second_factor_token: token,
-        second_factor_method: method,
+        second_factor_token: authToken,
+        second_factor_method: authMethod,
+        second_factor_target: targetMethod,
         enable
       },
       type: "PUT"
     });
   },
 
-  generateSecondFactorCodes(token) {
+  generateSecondFactorCodes(authToken, authMethod) {
     return ajax("/u/second_factors_backup.json", {
-      data: { second_factor_token: token },
+      data: {
+        second_factor_token: authToken,
+        second_factor_method: authMethod
+      },
       type: "PUT"
     });
   },
@@ -609,6 +614,20 @@ const User = RestModel.extend({
     } else {
       return Ember.RSVP.reject(I18n.t("user.delete_yourself_not_allowed"));
     }
+  },
+
+  ignore() {
+    return ajax(`${userPath(this.get("username"))}/ignore.json`, {
+      type: "PUT",
+      data: { ignored_user_id: this.get("id") }
+    });
+  },
+
+  unignore() {
+    return ajax(`${userPath(this.get("username"))}/ignore.json`, {
+      type: "DELETE",
+      data: { ignored_user_id: this.get("id") }
+    });
   },
 
   dismissBanner(bannerKey) {

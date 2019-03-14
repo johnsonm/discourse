@@ -109,12 +109,12 @@ de:
       next_month: "Nächster Monat"
       placeholder: Datum
     share:
-      topic: "Teile einen Link zu diesem Thema"
+      topic_html: 'Thema: <span class="topic-title">%{topicTitle}</span> '
       post: "Beitrag #%{postNumber}"
       close: "Schließen"
-      twitter: "diesen Link auf Twitter teilen"
-      facebook: "diesen Link auf Facebook teilen"
-      email: "diesen Link per E-Mail senden"
+      twitter: "Auf Twitter teilen"
+      facebook: "Auf Facebook teilen"
+      email: "Diesen Link per E-Mail senden"
     action_codes:
       public_topic: "hat das Thema öffentlich gemacht, %{when}"
       private_topic: "hat dieses Thema in eine Nachricht umgewandelt, %{when}"
@@ -160,19 +160,23 @@ de:
         ap_south_1: "Asien-Pazifik (Mumbai)"
         ap_southeast_1: "Asien-Pazifik (Singapur)"
         ap_southeast_2: "Asien-Pazifik (Sydney)"
+        ca_central_1: "Kanada (Zentral)"
         cn_north_1: "China (Peking)"
         cn_northwest_1: "China (Ningxia)"
         eu_central_1: "EU (Frankfurt)"
+        eu_north_1: "EU (Stockholm)"
         eu_west_1: "EU (Irland)"
         eu_west_2: "EU (London)"
         eu_west_3: "EU (Paris)"
-        sa_east_1: "Südamerika (São Paulo)"
+        sa_east_1: "Südamerika (Sao Paulo)"
         us_east_1: "USA Ost (Nord-Virginia)"
         us_east_2: "USA Ost (Ohio)"
+        us_gov_east_1: "AWS GovCloud (US-Ost)"
         us_gov_west_1: "AWS GovCloud (USA)"
         us_west_1: "USA West (Nordkalifornien)"
         us_west_2: "USA West (Oregon)"
     edit: "Titel und Kategorie dieses Themas ändern"
+    expand: "Aufklappen"
     not_implemented: "Entschuldige, diese Funktion wurde noch nicht implementiert!"
     no_value: "Nein"
     yes_value: "Ja"
@@ -477,7 +481,7 @@ de:
           description: "Du wirst über jeden neuen Beitrag in jeder Nachricht benachrichtigt und die Anzahl neuer Antworten wird angezeigt."
         watching_first_post:
           title: "Ersten Beitrag beobachten"
-          description: "Du wirst über neue Themen in dieser Gruppe informiert, aber nicht über Antworten auf diese Themen."
+          description: "Du wirst über neue Nachrichten in dieser Gruppe informiert, aber nicht über Antworten auf diese Nachrichten. "
         tracking:
           title: "Verfolgen"
           description: "Du wirst benachrichtigt, wenn jemand deinen @Namen erwähnt oder auf deinen Beitrag antwortet, und die Anzahl neuer Antworten wird angezeigt."
@@ -486,7 +490,7 @@ de:
           description: "Du wirst benachrichtigt, wenn jemand deinen @Namen erwähnt oder auf deinen Beitrag antwortet."
         muted:
           title: "Stummgeschaltet"
-          description: "Du erhältst keine Benachrichtigungen über neue Themen in dieser Gruppe."
+          description: "Du erhältst keine Benachrichtigungen im Zusammenhang mit Nachrichten in dieser Gruppe."
       flair_url: "Avatar-Hintergrund"
       flair_url_placeholder: "(Optional) Bild-URL oder Font Awesome-Klasse"
       flair_url_description: 'Verwende quadratische Bilder, die nicht kleiner als 20x20 Pixel sind oder FontAwesome-Icons (akzeptierte Formate: "fa-icon", "far fa-icon" oder "fab fa-icon").'
@@ -570,6 +574,8 @@ de:
       new_private_message: "Neue Nachricht"
       private_message: "Nachricht"
       private_messages: "Nachrichten"
+      ignore: "Ignorieren"
+      unignore: "Nicht mehr ignorieren"
       activity_stream: "Aktivität"
       preferences: "Einstellungen"
       profile_hidden: "Das öffentliche Profil des Benutzers ist ausgeblendet."
@@ -651,6 +657,8 @@ de:
       users: "Benutzer"
       muted_users: "Stummgeschaltet"
       muted_users_instructions: "Benachrichtigungen von diesen Benutzern werden unterdrückt."
+      ignored_users: "Ignoriert"
+      ignored_users_instructions: "Liste aller ignorierten Benutzer"
       muted_topics_link: "Zeige stummgeschaltete Themen"
       watched_topics_link: "Zeige beobachtete Themen"
       tracked_topics_link: "Zeige verfolgte Themen"
@@ -687,6 +695,7 @@ de:
         emails: "E-Mails"
         notifications: "Benachrichtigungen"
         categories: "Kategorien"
+        users: "Benutzer"
         tags: "Schlagwörter"
         interface: "Oberfläche"
         apps: "Apps"
@@ -708,6 +717,7 @@ de:
         copied_to_clipboard: "Wurde in Zwischenablage kopiert"
         copy_to_clipboard_error: "Beim Kopieren in die Zwischenablage trat ein Fehler auf"
         remaining_codes: "Du hast noch <strong>{{count}}</strong> Wiederherstellungscodes übrig."
+        use: "Wiederherstellungscode verwenden"
         codes:
           title: "Wiederherstellungscodes generiert"
           description: "Jeder dieser Wiederherstellungscodes kann nur einmal benutzt werden. Bewahre diese an einem sicheren aber verfügbaren Ort auf."
@@ -725,6 +735,7 @@ de:
         extended_description: |
           Zwei-Faktor-Authentifizierung (2FA) sichert dein Konto zusätzlich ab, indem sie zusätzlich zu deinem Passwort einen einmalig gültigen Code anfordert. Codes können auf <a href="https://www.google.com/search?q=authenticator+apps+for+android" target='_blank'>Android-</a> und <a href="https://www.google.com/search?q=authenticator+apps+for+ios">iOS-</a>-Geräten generiert werden.
         oauth_enabled_warning: "Beachte bitte, dass soziale Anmelde-Methoden deaktiviert werden, sobald die Zwei-Faktor-Authentifizierung für dein Konto aktiviert ist."
+        use: "Authentifizierungs-App verwenden"
       change_about:
         title: "„Über mich“ ändern"
         error: "Beim Ändern dieses Wertes ist ein Fehler aufgetreten."
@@ -822,6 +833,7 @@ de:
       website: "Website"
       email_settings: "E-Mail"
       hide_profile_and_presence: "Blende mein öffentliches Profil und Anwesenheitsfunktionen aus"
+      enable_physical_keyboard: "Unterstützung für physische Tastatur auf dem iPad aktivieren"
       text_size:
         title: "Schriftgröße"
         smaller: "Kleiner"
@@ -895,9 +907,9 @@ de:
         expired: "Diese Einladung ist abgelaufen."
         rescind: "Einladung zurücknehmen"
         rescinded: "Einladung zurückgenommen"
-        rescind_all: "Alle Eingeladungen entfernen"
-        rescinded_all: "Alle Einladungen wurden entfernt!"
-        rescind_all_confirm: "Alle Einladungen wirklich entfernen?"
+        rescind_all: "Alle ausgelaufenen Einladungen entfernen"
+        rescinded_all: "Alle ausgelaufenen Einladungen entfernt!"
+        rescind_all_confirm: "Sollen alle ausgelaufenen Einladungen entfernt werden?"
         reinvite: "Einladung erneut senden"
         reinvite_all: "Alle Einladungen erneut senden"
         reinvite_all_confirm: "Bist Du dir sicher alle Einladungen nochmals zu senden?"
@@ -1391,7 +1403,7 @@ de:
         other: "<span>{{username}}, {{username2}} und {{count}} andere</span> {{description}}"
       liked_consolidated_description:
         one: "gefällt {{count}} deiner Beiträge"
-        other: "gefällt {{count}} deiner Beiträge"
+        other: "gefallen {{count}} deiner Beiträge"
       liked_consolidated: "<span>{{username}}</span> {{description}}"
       private_message: "<span>{{username}}</span> {{description}}"
       invited_to_private_message: "<p><span>{{username}}</span> {{description}}"
@@ -1413,6 +1425,7 @@ de:
         posted: '{{username}} hat in "{{topic}}" - {{site_title}} einen Beitrag verfasst'
         private_message: '{{username}} hat dir eine Nachricht geschickt in „{{topic}}“ – {{site_title}}'
         linked: '{{username}} hat in "{{topic}}" - {{site_title}} einen Beitrag von dir verlinkt'
+        watching_first_post: '{{username}} hat ein neues Thema "{{topic}}" - {{site_title}} erstellt'
         confirm_title: "Benachrichtigungen aktiviert – %{site_title}"
         confirm_body: "Erfolgreich! Benachrichtigungen wurden aktiviert."
     upload_selector:
@@ -1636,6 +1649,7 @@ de:
         when: "Wann:"
         public_timer_types: Globale Zeitschaltuhren
         private_timer_types: Zeitschaltuhren für Benutzer
+        time_frame_required: Bitte wählen Sie einen Zeitrahmen aus
       auto_update_input:
         none: "Wähle einen Zeitbereich aus"
         later_today: "Im Laufe des Tages"
@@ -1774,6 +1788,7 @@ de:
         help: "Dieses Thema von der Themenliste loslösen, sodass es nicht mehr am Anfang der Liste steht."
       share:
         title: "Teilen"
+        extended_title: "Link teilen"
         help: "teile einen Link zu diesem Thema"
       print:
         title: "Drucken"
@@ -1941,6 +1956,9 @@ de:
       gap:
         one: "einen versteckten Beitrag anzeigen"
         other: "{{count}} versteckte Beiträge anzeigen"
+      notice:
+        first: "Es ist das erste Mal, dass {{user}} einen Beitrag schrieb - lasst ihn uns in unserer Community willkommenheissen!"
+        return: "Es ist eine Weile her, dass wir {{user}} gesehen haben. Der letzte Beitrag war in {{time}}."
       unread: "Beitrag ist ungelesen"
       has_replies:
         one: "{{count}} Antwort"
@@ -2136,8 +2154,8 @@ de:
       none: "(keine Kategorie)"
       all: "Alle Kategorien"
       choose: "Kategorie&hellip;"
-      edit: "bearbeiten"
-      edit_long: "Bearbeiten"
+      edit: "Bearbeiten"
+      edit_dialog_title: "%{categoryName}bearbeiten"
       view: "Zeige Themen dieser Kategorie"
       general: "Allgemeines"
       settings: "Einstellungen"
@@ -2174,6 +2192,8 @@ de:
       already_used: "Diese Farbe wird bereits für eine andere Kategorie verwendet."
       security: "Sicherheit"
       special_warning: "Warnung: Diese Kategorie wurde bei der Installation angelegt. Die Sicherheitseinstellungen können daher nicht verändert werden. Wenn du diese Kategorie nicht benötigst, dann solltest du sie löschen anstatt sie für andere Zwecke zu verwenden."
+      uncategorized_security_warning: "Diese Kategorie ist besonders. Sie ist als Sammelpunkt gedacht für Themen, die keine Kategorie haben. Sicherheitseinstellungen sind nicht möglich."
+      uncategorized_general_warning: 'Diese Kategorie ist besonders. Sie wird als Standard-Kategorie für neue Themen genutzt, für die keine Kategorie gewählt wurde. Wenn dies verhindert werden und eine Kategoriewahl erzwungen werden soll, bitte  <a href="{settingLink}"> diese Einstellung</a> deaktivieren. Falls Name oder Beschreibung geändert werden soll, kann dies unter<a href="%{customizeLink}">Anpassen / Textinhalte</a> vorgenommen werden.'
       images: "Bilder"
       email_in: "Benutzerdefinierte Adresse für eingehende E-Mails:"
       email_in_allow_strangers: "Akzeptiere E-Mails von anonymen Benutzern."
@@ -2191,7 +2211,6 @@ de:
       default_top_period: "Standard-Zeitraum für Top-Beiträge:"
       allow_badges_label: "Erlaube das Verleihen von Abzeichen in dieser Kategorie."
       edit_permissions: "Berechtigungen bearbeiten"
-      add_permission: "Berechtigung hinzufügen"
       require_topic_approval: "Erfordere Moderator-Genehmigung für alle neuen Themen"
       require_reply_approval: "Erfordere Moderator-Genehmigung für alle neuen Antworten"
       this_year: "dieses Jahr"
@@ -3018,6 +3037,7 @@ de:
         location:
           local: "Lokaler Speicherplatz"
           s3: "S3"
+        backup_storage_error: "Zugriff auf Backup-Speicher fehlgeschlagen: %{error_message}"
       export_csv:
         success: "Der Export wurde gestartet. Du erhältst eine Nachricht, sobald der Vorgang abgeschlossen ist."
         failed: "Der Export ist fehlgeschlagen. Bitte überprüfe die Logs."
@@ -3041,7 +3061,7 @@ de:
         save: "Speichern"
         new: "Neu"
         new_style: "Neuer Style"
-        import: "Importieren"
+        install: "Installieren"
         delete: "Löschen"
         delete_confirm: "Dieses Theme löschen?"
         color: "Farbe"
@@ -3065,17 +3085,15 @@ de:
           components: "Komponenten"
           theme_name: "Theme-Name"
           component_name: "Komponenten-Name"
-          themes_intro: "Wähle ein bestehendes Theme oder erstelle ein neues, um loszulegen"
+          themes_intro: "Wähle ein bestehendes Theme oder installiere ein neues, um anzufangen"
           beginners_guide_title: "Leitfaden für Einsteiger zur Verwendung von Discourse-Themes"
           developers_guide_title: "Leitfaden für Entwickler zur Verwendung von Discourse-Themes"
           browse_themes: "Community-Themes durchsuchen"
-          import_theme: "Design importieren"
           customize_desc: "Anpassen:"
           title: "Designs"
           create: "Erstelle"
-          create_type: "Typ:"
-          create_name: "Name:"
-          name_too_short: "Der Name muss mindestens 4 Zeichen lang sein."
+          create_type: "Typ"
+          create_name: "Name"
           long_title: "Farben, CSS und HTML-Inhalte deiner Seite erweitern"
           edit: "Bearbeiten"
           edit_confirm: "Dies ist ein Remote-Theme, wenn du CSS/HTML bearbeitest, werden deine Änderungen zurückgesetzt, wenn du das Theme das nächste Mal aktualisierst."
@@ -3083,10 +3101,14 @@ de:
           desktop: "Desktop"
           mobile: "Mobil"
           settings: "Einstellungen"
+          translations: "Übersetzungen"
           preview: "Vorschau"
+          show_advanced: "erweiterte Felder anzeigen"
+          hide_advanced: "erweiterte Felder verbergen"
+          hide_unused_fields: "unbenutzte Felder verbergen"
           is_default: "Theme ist standardmäßig aktiviert"
           user_selectable: "Theme kann von Benutzern ausgewählt werden"
-          color_scheme: "Farbschema"
+          color_scheme: "Farbpalette"
           color_scheme_select: "Wähle Farben für dieses Theme"
           custom_sections: "Benutzerdefinierte Abschnitte:"
           theme_components: "Theme-Komponenten"
@@ -3122,10 +3144,17 @@ de:
           edit_css_html_help: "Du hast kein CSS oder HTML bearbeitet"
           delete_upload_confirm: "Upload löschen? (Theme-CSS funktioniert eventuell nicht mehr!)"
           import_web_tip: "Repository mit dem Theme"
+          import_web_advanced: "Erweitert..."
           import_file_tip: ".tar.gz oder .dcstyle.json Datei mit dem Theme"
           is_private: "Theme ist in einem privaten Git-Repository"
           remote_branch: "Branch-Name (optional)"
           public_key: "Gewähre dem folgenden öffentlichen Schlüssel den Zugriff auf das Repository:"
+          install: "Installieren"
+          installed: "Installiert"
+          install_popular: "Beliebt"
+          install_upload: "Von deinem Gerät"
+          install_git_repo: "Aus einem Git-Repository"
+          install_create: "Neu erstellen"
           about_theme: "Über uns"
           license: "Lizenz"
           version: "Version:"
@@ -3180,16 +3209,16 @@ de:
             title: "Wähle Basis-Farbschema"
             description: "Basis-Schema:"
           title: "Farben"
-          edit: "Farbschemas bearbeiten"
-          long_title: "Farbschemata"
-          about: "Bearbeite die Farben, die von deinem Theme verwendet werden. Erstelle ein neues Farbschema um loszulegen."
-          new_name: "Neues Farbschema"
+          edit: "Farbpalette bearbeiten"
+          long_title: "Farbpaletten"
+          about: "Bearbeite die Farben, die von deinem Theme verwendet werden. Beginne mit dem Erstellen einer neuen Farbpalette."
+          new_name: "Neue Farbpalette"
           copy_name_prefix: "Kopie von"
-          delete_confirm: "Dieses Farbschema löschen?"
+          delete_confirm: "Diese Farbpalette löschen?"
           undo: "rückgängig"
           undo_title: "Die seit dem letzten Speichern an dieser Farbe vorgenommenen Änderungen rückgängig machen."
           revert: "verwerfen"
-          revert_title: "Diese Farbe auf das Discourse-Standard-Farbschema zurücksetzen."
+          revert_title: "Diese Farbe auf den Standardwert aus der Farbpalette zurücksetzen."
           primary:
             name: "erste"
             description: "Die meisten Texte, Bilder und Ränder."
@@ -3393,6 +3422,7 @@ de:
             merge_user: "Benutzer zusammenführen"
             entity_export: "Entität exportieren"
             change_name: "Name ändern"
+            topic_timestamps_changed: "Themen-Zeitstempel geändert"
         screened_emails:
           title: "Gefilterte E-Mails"
           description: "Wenn jemand ein Konto erstellt, werden die folgenden E-Mail-Adressen überprüft und es wird die Anmeldung blockiert oder eine andere Aktion ausgeführt."
@@ -3847,9 +3877,9 @@ de:
             with_post_time: "<span class=\"username\">%{username}</span> für Beitrag in %{link} um <span class=\"time\">%{time}</span>"
             with_time: "<span class=\"username\">%{username}</span> um <span class=\"time\">%{time}</span>"
         badge_intro:
-          title: 'Wähle ein bestehendes Abzeichen oder erstelle ein neues, um loszulegen'
-          what_are_badges_title: 'Was sind Abzeichen?'
-          badge_query_examples_title: 'Beispiele für Abzeichen-Abfragen'
+          title: "Wähle ein bestehendes Abzeichen oder erstelle ein neues, um loszulegen"
+          what_are_badges_title: "Was sind Abzeichen?"
+          badge_query_examples_title: "Beispiele für Abzeichen-Abfragen"
       emoji:
         title: "Emoji"
         help: "Neues Emoji hinzufügen, das für alle verfügbar sein wird. (Tipp: per Drag & Drop kannst du gleichzeitig mehrere Dateien hinzufügen)"

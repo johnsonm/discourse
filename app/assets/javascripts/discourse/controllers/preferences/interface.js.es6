@@ -10,6 +10,7 @@ import {
   setLocalTheme
 } from "discourse/lib/theme-selector";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { safariHacksDisabled, isiPad } from "discourse/lib/utilities";
 
 const USER_HOMES = {
   1: "latest",
@@ -45,6 +46,16 @@ export default Ember.Controller.extend(PreferencesTabController, {
   },
 
   preferencesController: Ember.inject.controller("preferences"),
+
+  @computed()
+  isiPad() {
+    return isiPad();
+  },
+
+  @computed()
+  disableSafariHacks() {
+    return safariHacksDisabled();
+  },
 
   @computed()
   availableLocales() {
@@ -137,6 +148,16 @@ export default Ember.Controller.extend(PreferencesTabController, {
           }
 
           this.homeChanged();
+
+          if (this.get("isiPad")) {
+            if (safariHacksDisabled() !== this.get("disableSafariHacks")) {
+              Discourse.set("assetVersion", "forceRefresh");
+            }
+            localStorage.setItem(
+              "safari-hacks-disabled",
+              this.get("disableSafariHacks").toString()
+            );
+          }
         })
         .catch(popupAjaxError);
     },

@@ -35,7 +35,6 @@ he:
   anonymous: "אלמוני"
   remove_posts_deleted_by_author: "נמחק על ידי הכותב"
   themes:
-    bad_color_scheme: "לא ניתן לעדכן את התמה, סכמת צבעים שגויה"
     other_error: "ארעה שגיאה בזמן עדכון התמה"
     settings_errors:
       invalid_yaml: "ה־YAML שסופק שגוי."
@@ -161,6 +160,11 @@ he:
     permalink: "קישור"
     imported_from: "זה נושא דיון מלווה לערך המקורי ב- %{link}"
     in_reply_to: "◄ %{username}"
+    replies:
+      one: "%{count} הודעות"
+      two: "%{count} הודעות"
+      many: "%{count} הודעות"
+      other: "%{count} הודעות"
   no_mentions_allowed: "מצטערים, אך אינכם יכולים לאזכר משתמשים אחרים."
   too_many_mentions:
     one: "מצטערים, אתם יכולים לאזכר רק משתמש אחד בפוסט"
@@ -404,7 +408,6 @@ he:
       email_already_used_in_category: "'%{email}' כבר בשימוש על ידי הקטגוריה '%{category_name}'."
       description_incomplete: "לתיאור קטגוריה זו צריכה להיות לפחות פסקה אחת."
     cannot_delete:
-      uncategorized: "לא ניתן להסיר תוכן ללא קטגוריה"
       has_subcategories: "לא ניתן להסיר קטגוריה זו משום שיש בה תת-קטגוריות."
       topic_exists_no_oldest: "לא ניתן להסיר קטגוריה זו משום שסך הנושאים הוא %{count}."
     uncategorized_description: "נושאים שלא דורשים קטגוריה מסויימת, או שאינם מתאימים לאף קטגוריה קיימת."
@@ -1113,7 +1116,6 @@ he:
     attachment_filename_blacklist: "רשימת מילות מפתח לרשימה שחורה של שמות קבצים מצורפים."
     enable_forwarded_emails: "[בטא] אפשרו למשתמשים ליצור נושא על ידי העברת מייל."
     always_show_trimmed_content: "תמיד הציגו חלק מקוצר של מיילים נכנסים. אזהרה: עלול לחשוף כתובות מייל."
-    private_email: "לא לכלול תוכן מפוסטים או נושאים במיילים לשיפור הפרטיות."
     manual_polling_enabled: "דחיפת מיילים באמצעות ה API לתגובות מייל."
     pop3_polling_enabled: "משיכה דרך POP3 לתגובות דוא\"ל."
     pop3_polling_ssl: "שימוש ב-SSL בעת חיבור לשרת POP3. (מומלץ)"
@@ -1221,7 +1223,6 @@ he:
     allow_user_api_key_scopes: "רשימת אזורים מותרים למפתחות API של משתמשים"
     max_api_keys_per_user: "מספר מקסימלי של מפתחות API של משתמש לכל משתמש"
     min_trust_level_for_user_api_key: "רמת אמון נדרשת לייצור של מפתחות API של משתמש"
-    allowed_user_api_auth_redirects: "URL מורשה להפניה מחדש לאימות עבור מפתחות API של משתמש"
     allowed_user_api_push_urls: "URLים מורשים לדחיפת שרת ל API של משתמשים."
     tagging_enabled: "לאפשר תגיות על נושאים?"
     min_trust_to_create_tag: "רמת האמון המינימלית שנדרשת כדי ליצור תג."
@@ -1940,7 +1941,6 @@ he:
     spam_hosts: "משתמש חדש זה ניסה ליצור מספר פוסטים עם קישורים לאותה הכתובת (%{domain}). ראו את הגדרת האתר <a href='%{base_path}/admin/site_settings/category/spam'>`newuser_spam_host_threshold`</a>."
   color_schemes:
     base_theme_name: "בסיס"
-    dark: "סכמה כהה"
     light_theme_name: "בהיר"
     dark_theme_name: "כהה"
   about: "אודות"
@@ -2293,14 +2293,6 @@ he:
         title: "ארגון"
       colors:
         title: "תמה"
-        fields:
-          theme_id:
-            description: "האם אתם מעדיפים להתחיל עם סכמת צבעים בהירה או כהה? תוכלו בהמשך להתאים אישית את הנראות של האתר שלכם תחת ניהול, התאמה-אישית."
-            choices:
-              default:
-                label: "בהיר פשוט"
-              dark:
-                label: "כהה פשוט"
       logos:
         title: "לוגואים"
       icons:

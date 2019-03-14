@@ -140,9 +140,14 @@
       }
     }
 
-    .remote-url,
-    .about-url,
-    .license-url {
+    div.remote-url {
+      font-size: $font-down-1;
+      margin-bottom: 7px;
+    }
+
+    a.remote-url,
+    a.about-url,
+    a.license-url {
       display: inline-block;
       margin-right: 10px;
     }
@@ -421,6 +426,11 @@
         label {
           padding: 6px 12px;
           margin-bottom: 0;
+        }
+
+        a.active {
+          background: $primary-medium;
+          color: $secondary;
         }
 
         a.blank:not(.active) {

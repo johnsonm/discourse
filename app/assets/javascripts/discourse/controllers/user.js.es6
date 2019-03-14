@@ -145,6 +145,16 @@ export default Ember.Controller.extend(CanCheckEmails, {
 
     adminDelete() {
       this.get("adminTools").deleteUser(this.get("model.id"));
+    },
+
+    ignoreUser() {
+      const user = this.get("model");
+      user.ignore().then(() => user.set("ignored", true));
+    },
+
+    unignoreUser() {
+      const user = this.get("model");
+      user.unignore().then(() => user.set("ignored", false));
     }
   }
 });

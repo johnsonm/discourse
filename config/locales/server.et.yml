@@ -310,7 +310,6 @@ et:
       email_already_used_in_group: "Grupp '%{group_name}' juba kasutab meiliaadressi '%{email}'."
       email_already_used_in_category: "'%{email}' on juba liigi '%{category_name}' poolt kasutusse võetud."
     cannot_delete:
-      uncategorized: "Ei saa kustutada Liigitamata liiki"
       has_subcategories: "Seda foorumit ei saa kustutada, kuna tal on alamfoorumid."
       topic_exists_no_oldest: "Seda foorumit ei saa kustutada, kuna teemade arv on %{count}."
     uncategorized_description: "Teemad, mis ei vaja või mida ei saa liigitada ühegi olemasoleva foorumi alla."
@@ -800,7 +799,6 @@ et:
   upload:
     pasted_image_filename: "Asetatud pilt"
   color_schemes:
-    dark: "Tume skeem"
     default_theme_name: "Hele"
     light_theme_name: "Hele"
     dark_theme_name: "Tume"
@@ -996,13 +994,6 @@ et:
         title: "Organisatsioon"
       colors:
         title: "Kujundusteema"
-        fields:
-          theme_id:
-            choices:
-              default:
-                label: "Lihtne hele"
-              dark:
-                label: "Lihtne tume"
       logos:
         title: "Logod"
       icons:

@@ -149,12 +149,7 @@ pl_PL:
       next_month: "Następny miesiąc"
       placeholder: data
     share:
-      topic: "udostępnij odnośnik do tego tematu"
-      post: "wpis #%{postNumber}"
       close: "zamknij"
-      twitter: "udostępnij ten odnośnik na Twitterze"
-      facebook: "udostępnij ten odnośnik na Facebooku"
-      email: "wyślij ten odnośnik przez email"
     action_codes:
       public_topic: "Upublicznij ten temat %{when}"
       private_topic: "przekształcił ten temat w wiadomość prywatną %{when}"
@@ -206,7 +201,6 @@ pl_PL:
         eu_west_1: "EU (Irlandia)"
         eu_west_2: "Europa (Londyn)"
         eu_west_3: "EU (Paris)"
-        sa_east_1: "Ameryka Południowa (Sao Paulo)"
         us_east_1: "US East (N. Virginia)"
         us_east_2: "Wschodnie USA (Ohio)"
         us_gov_west_1: "AWS GovCloud (US)"
@@ -536,7 +530,6 @@ pl_PL:
           description: "Dostaniesz powiadomienie, gdy ktoś ci odpowie lub wspomni twoją @nazwę."
         muted:
           title: "Wyciszony"
-          description: "Nie otrzymasz powiadomień o nowych tematach w tej grupie."
       flair_url: "Awatar "
       flair_url_placeholder: "(Opcjonalne) Link do obrazka lub klasa Font Awesome"
       flair_bg_color: "Kolor tła odznaki grupowej"
@@ -614,6 +607,7 @@ pl_PL:
       new_private_message: "Nowa wiadomość"
       private_message: "Wiadomość"
       private_messages: "Wiadomości"
+      ignore: "Ignoruj"
       activity_stream: "Aktywność"
       preferences: "Ustawienia"
       profile_hidden: "Publiczny profil użytkownika jest ukryty."
@@ -844,6 +838,8 @@ pl_PL:
       location: "Lokalizacja"
       website: "Strona internetowa"
       email_settings: "Email"
+      text_size:
+        title: "Rozmiar tekstu"
       like_notification_frequency:
         title: "Powiadom o lajkach"
         always: "Zawsze"
@@ -912,9 +908,6 @@ pl_PL:
         expired: "To zaproszenie wygasło."
         rescind: "Usuń"
         rescinded: "Zaproszenie usunięte"
-        rescind_all: "Usuń wszystkie Zaproszenia"
-        rescinded_all: "Wszystkie Zaproszenia usunięte!"
-        rescind_all_confirm: "Jesteś pewny, że chcesz usunąć wszystkie zaproszenia?"
         reinvite: "Ponów zaproszenie"
         reinvite_all: "Wyślij ponownie wszystkie zaproszenia"
         reinvite_all_confirm: "Jesteś pewny, że chcesz ponownie wysłać wszystkie zaproszenia?"
@@ -1340,6 +1333,8 @@ pl_PL:
       composer_actions:
         reply: Odpowiedź
         edit: Edycja
+        create_topic:
+          label: "Nowy temat"
     notifications:
       tooltip:
         regular:
@@ -1551,6 +1546,8 @@ pl_PL:
       move_to_inbox:
         title: "Przenieś do skrzynki odbiorczej"
         help: "Przenieś wiadomość z powrotem do skrzynki odbiorczej"
+      edit_message:
+        title: "Edytuj wiadomość"
       list: "Tematy"
       new: "nowy temat"
       unread: "nieprzeczytane"
@@ -1673,6 +1670,7 @@ pl_PL:
         jump_prompt_of: "%{count} postów"
         jump_prompt_long: "Do którego postu chcesz się przenieść ?"
         jump_bottom_with_number: "przeskocz do wpisu %{post_number}"
+        jump_prompt_or: "lub"
         total: w sumie wpisów
         current: obecny wpis
       notifications:
@@ -1821,6 +1819,9 @@ pl_PL:
           many: "{{count}} wpisów"
           other: "{{count}} wpisów"
         cancel: "Usuń filtr"
+      move_to:
+        title: "Przenieś do"
+        action: "przenieś do"
       split_topic:
         title: "Przenieś do nowego tematu"
         action: "przenieś do nowego tematu"
@@ -1839,6 +1840,8 @@ pl_PL:
           few: "Wybierz temat, do którego chcesz przenieść wybrane <b>{{count}}</b> wpisy."
           many: "Wybierz temat, do którego chcesz przenieść <b>{{count}}</b> wybranych wpisów."
           other: "Wybierz temat, do którego chcesz przenieść <b>{{count}}</b> wybranych wpisów."
+      move_to_new_message:
+        radio_label: "Nowa wiadomość"
       merge_posts:
         title: "Scal wybrane posty"
         action: "scal wybrane posty"
@@ -1961,6 +1964,9 @@ pl_PL:
         rebake: "Odśwież HTML"
         unhide: "Wycofaj ukrycie"
         change_owner: "Zmiana właściciela"
+        lock_post: "Zablokuj Wpis"
+        unlock_post: "Odblokuj Wpis"
+        delete_topic: "usuń temat"
       actions:
         flag: "Oflaguj"
         defer_flags:
@@ -2104,8 +2110,6 @@ pl_PL:
       can: "może&hellip; "
       none: "(brak kategorii)"
       all: "Wszystkie kategorie"
-      edit: "edytuj"
-      edit_long: "Edytuj"
       view: "Pokaż Tematy w Kategorii"
       general: "Ogólne"
       settings: "Ustawienia"
@@ -2156,7 +2160,6 @@ pl_PL:
       default_top_period: "Domyślny okres wyświetlania najlepszych postów:"
       allow_badges_label: "Włącz przyznawanie odznak na podstawie aktywności w tej kategorii"
       edit_permissions: "Edytuj uprawnienia"
-      add_permission: "Dodaj uprawnienie"
       this_year: "ten rok"
       default_position: "Domyślna pozycja"
       position_disabled: "Kolejność kategorii będzie uzależniona od aktywności. Aby kontrolować ich kolejność,"
@@ -2522,6 +2525,7 @@ pl_PL:
       sort_by_name: "nazwa"
       manage_groups: "Zarządzaj grupą tagów"
       manage_groups_description: "Definiowanie grup do organizowania tagów"
+      cancel_delete_unused: "Anuluj"
       filters:
         without_category: "%{filter} %{tag} tematy"
         with_category: "%{filter} %{tag} tematy w %{category}"
@@ -2881,7 +2885,6 @@ pl_PL:
         save: "Zapisz"
         new: "Nowy"
         new_style: "Nowy styl"
-        import: "Import"
         delete: "Usuń"
         delete_confirm: "Usunąć ten motyw?"
         color: "Kolor"
@@ -2900,7 +2903,6 @@ pl_PL:
           revert: "Cofnij zmiany"
           revert_confirm: "Czy na pewno chcesz wycofać swoje zmiany?"
         theme:
-          import_theme: "Importuj motyw"
           customize_desc: "Personalizacja:"
           title: "Motywy"
           long_title: "Zmodyfikuj kolory, kod CSS i kod HTML zawartości Twojej strony"
@@ -2912,7 +2914,6 @@ pl_PL:
           preview: "Podgląd"
           is_default: "Motyw ustawiony jako domyślny"
           user_selectable: "Motyw może być ustawiany przez użytkowników"
-          color_scheme: "Schemat kolorów"
           color_scheme_select: "Wybierz kolory, jakie mają być użyte w motywie"
           custom_sections: "Spersonalizowane sekcje:"
           theme_components: "Komponenty motywu"
@@ -2960,20 +2961,11 @@ pl_PL:
             text: "</body>"
             title: "HTML, który zostanie umieszczony przed tagiem </body>"
         colors:
-          select_base:
-            title: "Wybierz podstawowy schemat kolorów"
-            description: "Podstawowy schemat:"
           title: "Kolory"
-          edit: "Edytuj schemat kolorów"
-          long_title: "Schematy kolorów"
-          about: "Modyfikuj kolory użyte w Twoim motywie. Stwórz nowy schemat kolorów, aby rozpocząć."
-          new_name: "Nowy schemat kolorów"
           copy_name_prefix: "Kopia"
-          delete_confirm: "Usunąć ten schemat kolorów?"
           undo: "cofnij"
           undo_title: "Cofnij zmiany tego koloru od ostatniego zapisu"
           revert: "przywróć"
-          revert_title: "Zresetuj  ten kolor do wartości domyślnej."
           primary:
             name: "podstawowy"
             description: "Większość tekstu, ikon oraz krawędzi."

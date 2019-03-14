@@ -35,7 +35,6 @@ hu:
   anonymous: "Anonim"
   remove_posts_deleted_by_author: "Szerző által törölve"
   themes:
-    bad_color_scheme: "Nem lehet az oldal stílust frissíteni, érvénytelen szín séma."
     other_error: "Hiba történt az oldal stílusának frissítése közben"
     settings_errors:
       invalid_yaml: "Az adott YAML érvénytelen."
@@ -263,7 +262,6 @@ hu:
       email_already_used_in_group: "'%{email}' már használva van a '%{group_name}' csoport által."
       email_already_used_in_category: "'%{email}' már használva van a '%{category_name}' kategória által."
     cannot_delete:
-      uncategorized: "Nem kategorizált elemet nem lehet törrölni"
       has_subcategories: "Nem lehet kitörölni ezt a kategóriát, mert vannak alkategóriái."
       topic_exists_no_oldest: "Nem lehet törölni ezt a kategóriát, mert benne a témák száma %{count}."
     uncategorized_description: "Témák, amelyeknek nincs szükségük kategóriára, vagy nem férnek bele semmilyen más létező kategóriába."
@@ -885,14 +883,6 @@ hu:
     images:
       size_not_found: "Sajnáljuk, de nem tudtuk megállapítani a kép méretét. Lehetséges hogy megsérült?"
   color_schemes:
-    light: "Light Scheme"
-    dark: "Dark Scheme"
-    neutral: "Neutral Scheme"
-    grey_amber: "Grey Amber Scheme"
-    shades_of_blue: "Shades of Blue Scheme"
-    latte: "Latte Scheme"
-    summer: "Summer Scheme"
-    dark_rose: "Dark Rose Scheme"
     default_theme_name: "Light"
     light_theme_name: "Light"
     dark_theme_name: "Dark"
@@ -979,13 +969,6 @@ hu:
         title: "Szervezet"
       colors:
         title: "Téma"
-        fields:
-          theme_id:
-            choices:
-              default:
-                label: "Simple Light"
-              dark:
-                label: "Simple Dark"
       logos:
         title: "Logók"
       icons:

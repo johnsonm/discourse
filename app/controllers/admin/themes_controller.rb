@@ -107,6 +107,7 @@ class Admin::ThemesController < Admin::AdminController
                                           :remote_theme,
                                           :theme_settings,
                                           :settings_field,
+                                          :locale_fields,
                                           :user,
                                           :color_scheme,
                                           theme_fields: :upload

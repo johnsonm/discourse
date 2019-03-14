@@ -427,9 +427,9 @@ describe User do
 
       UserAssociatedAccount.create(user_id: user.id, provider_name: "twitter", provider_uid: "1", info: { nickname: "sam" })
       UserAssociatedAccount.create(user_id: user.id, provider_name: "facebook", provider_uid: "1234", info: { email: "test@example.com" })
-      GoogleUserInfo.create(user_id: user.id, email: "sam@sam.com", google_user_id: 1)
+      UserAssociatedAccount.create(user_id: user.id, provider_name: "instagram", provider_uid: "examplel123123", info: { nickname: "sam" })
+      UserAssociatedAccount.create(user_id: user.id, provider_name: "google_oauth2", provider_uid: "1", info: { email: "sam@sam.com" })
       GithubUserInfo.create(user_id: user.id, screen_name: "sam", github_user_id: 1)
-      InstagramUserInfo.create(user_id: user.id, screen_name: "sam", instagram_user_id: "examplel123123")
 
       user.reload
       expect(user.associated_accounts.map { |a| a[:name] }).to contain_exactly('twitter', 'facebook', 'google_oauth2', 'github', 'instagram')
@@ -1088,7 +1088,7 @@ describe User do
 
       context "with a reply" do
         before do
-          SiteSetting.queue_jobs = false
+          run_jobs_synchronously!
           PostCreator.new(Fabricate(:user),
                             raw: 'whatever this is a raw post',
                             topic_id: topic.id,

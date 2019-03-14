@@ -136,7 +136,7 @@ en:
       placeholder: date
     share:
       topic_html: 'Topic: <span class="topic-title">%{topicTitle}</span>'
-      post_html: '<span class="post-number">Post #%{postNumber}</span>, <span class="post-date">%{postDate}</span>'
+      post: "post #%{postNumber}"
       close: "close"
       twitter: "Share this link on Twitter"
       facebook: "Share this link on Facebook"
@@ -192,15 +192,18 @@ en:
         ap_south_1: "Asia Pacific (Mumbai)"
         ap_southeast_1: "Asia Pacific (Singapore)"
         ap_southeast_2: "Asia Pacific (Sydney)"
+        ca_central_1: "Canada (Central)"
         cn_north_1: "China (Beijing)"
         cn_northwest_1: "China (Ningxia)"
         eu_central_1: "EU (Frankfurt)"
+        eu_north_1: "EU (Stockholm)"
         eu_west_1: "EU (Ireland)"
         eu_west_2: "EU (London)"
         eu_west_3: "EU (Paris)"
-        sa_east_1: "South America (Sao Paulo)"
+        sa_east_1: "South America (São Paulo)"
         us_east_1: "US East (N. Virginia)"
         us_east_2: "US East (Ohio)"
+        us_gov_east_1: "AWS GovCloud (US-East)"
         us_gov_west_1: "AWS GovCloud (US)"
         us_west_1: "US West (N. California)"
         us_west_2: "US West (Oregon)"
@@ -636,6 +639,8 @@ en:
       new_private_message: "New Message"
       private_message: "Message"
       private_messages: "Messages"
+      ignore: "Ignore"
+      unignore: "Unignore"
       activity_stream: "Activity"
       preferences: "Preferences"
       profile_hidden: "This user's public profile is hidden."
@@ -720,6 +725,8 @@ en:
       users: "Users"
       muted_users: "Muted"
       muted_users_instructions: "Suppress all notifications from these users."
+      ignored_users: "Ignored"
+      ignored_users_instructions: "Lists all your ignored users."
       muted_topics_link: "Show muted topics"
       watched_topics_link: "Show watched topics"
       tracked_topics_link: "Show tracked topics"
@@ -759,6 +766,7 @@ en:
         emails: "Emails"
         notifications: "Notifications"
         categories: "Categories"
+        users: "Users"
         tags: "Tags"
         interface: "Interface"
         apps: "Apps"
@@ -782,6 +790,7 @@ en:
         copied_to_clipboard: "Copied to Clipboard"
         copy_to_clipboard_error: "Error copying data to Clipboard"
         remaining_codes: "You have <strong>{{count}}</strong> backup codes remaining."
+        use: "<a href>Use a backup code</a>"
         codes:
           title: "Backup Codes Generated"
           description: "Each of these backup codes can only be used once. Keep them somewhere safe but accessible."
@@ -800,6 +809,7 @@ en:
         extended_description: |
           Two factor authentication adds extra security to your account by requiring a one-time token in addition to your password. Tokens can be generated on <a href="https://www.google.com/search?q=authenticator+apps+for+android" target='_blank'>Android</a> and <a href="https://www.google.com/search?q=authenticator+apps+for+ios">iOS</a> devices.
         oauth_enabled_warning: "Please note that social logins will be disabled once two factor authentication has been enabled on your account."
+        use: "<a href>Use Authenticator app</a>"
 
       change_about:
         title: "Change About Me"
@@ -911,6 +921,7 @@ en:
       website: "Web Site"
       email_settings: "Email"
       hide_profile_and_presence: "Hide my public profile and presence features"
+      enable_physical_keyboard: "Enable physical keyboard support on iPad"
 
       text_size:
         title: "Text Size"
@@ -992,9 +1003,9 @@ en:
         expired: "This invite has expired."
         rescind: "Remove"
         rescinded: "Invite removed"
-        rescind_all: "Remove all Invites"
-        rescinded_all: "All Invites removed!"
-        rescind_all_confirm: "Are you sure you want to remove all invites?"
+        rescind_all: "Remove all Expired Invites"
+        rescinded_all: "All Expired Invites removed!"
+        rescind_all_confirm: "Are you sure you want to remove all expired invites?"
         reinvite: "Resend Invite"
         reinvite_all: "Resend all Invites"
         reinvite_all_confirm: "Are you sure you want to resend all invites?"
@@ -1801,6 +1812,7 @@ en:
         when: "When:"
         public_timer_types: Topic Timers
         private_timer_types: User Topic Timers
+        time_frame_required: Please select a time frame
       auto_update_input:
         none: "Select a timeframe"
         later_today: "Later today"
@@ -2137,6 +2149,10 @@ en:
         one: "view 1 hidden reply"
         other: "view {{count}} hidden replies"
 
+      notice:
+        first: "This is the first time {{user}} has posted — let's welcome them to our community!"
+        return: "It's been a while since we've seen {{user}} — their last post was in {{time}}."
+
       unread: "Post is unread"
       has_replies:
         one: "{{count}} Reply"
@@ -2347,8 +2363,8 @@ en:
       none: "(no category)"
       all: "All categories"
       choose: "category&hellip;"
-      edit: "edit"
-      edit_long: "Edit"
+      edit: "Edit"
+      edit_dialog_title: "Edit: %{categoryName}"
       view: "View Topics in Category"
       general: "General"
       settings: "Settings"
@@ -2357,6 +2373,7 @@ en:
       tags_allowed_tags: "Only allow these tags to be used in this category:"
       tags_allowed_tag_groups: "Only allow tags from these groups to be used in this category:"
       tags_placeholder: "(Optional) list of allowed tags"
+      tags_tab_description: "Tags and tag groups specified here will only be available in this category and other categories that also specify them. They won't be available for use in other categories."
       tag_groups_placeholder: "(Optional) list of allowed tag groups"
       topic_featured_link_allowed: "Allow featured links in this category"
       delete: "Delete Category"
@@ -2385,6 +2402,8 @@ en:
       already_used: "This color has been used by another category"
       security: "Security"
       special_warning: "Warning: This category is a pre-seeded category and the security settings cannot be edited. If you do not wish to use this category, delete it instead of repurposing it."
+      uncategorized_security_warning: "This category is special. It is intended as holding area for topics that have no category; it cannot have security settings."
+      uncategorized_general_warning: 'This category is special. It is used as the default category for new topics that do not have a category selected. If you want to prevent this behavior and force category selection, <a href="%{settingLink}">please disable the setting here</a>. If you want to change the name or description, go to <a href="%{customizeLink}">Customize / Text Content</a>.'
       images: "Images"
       email_in: "Custom incoming email address:"
       email_in_allow_strangers: "Accept emails from anonymous users with no accounts"
@@ -3670,6 +3689,7 @@ en:
             entity_export: "export entity"
             change_name: "change name"
             topic_timestamps_changed: "topic timestamps changed"
+            approve_user: "approved user"
         screened_emails:
           title: "Screened Emails"
           description: "When someone tries to create a new account, the following email addresses will be checked and the registration will be blocked, or some other action performed."
@@ -4015,6 +4035,7 @@ en:
         go_back: "Back to Search"
         recommended: "We recommend customizing the following text to suit your needs:"
         show_overriden: "Only show overridden"
+        more_than_50_results: "There are more than 50 results. Please refine your search."
 
       settings: # used by theme and site settings
         show_overriden: "Only show overridden"

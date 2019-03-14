@@ -34,7 +34,6 @@ da:
   anonymous: "Anonym"
   remove_posts_deleted_by_author: "Slettet af forfatteren"
   themes:
-    bad_color_scheme: "Kan ikke opdatere tema, ugyldigt farveskema"
     other_error: "Der opstod en fejl under opdatering af temaet"
   emails:
     incoming:
@@ -365,7 +364,6 @@ da:
       email_already_used_in_group: "'%{email}' anvendes allerede af gruppen '%{group_name}'."
       email_already_used_in_category: "'%{email}' bruges allerede af kategorien '%{category_name}'."
     cannot_delete:
-      uncategorized: "Kan ikke slette Ukategoriseret"
       has_subcategories: "Kan ikke slette denne kategori, fordi den har under kategorier."
       topic_exists_no_oldest: "Kan ikke slette denne kategori fordi antallet af emner er %{count}"
     uncategorized_description: "Emner der ikke behøver kategori, eller ikke passer i eksisterende kategori."
@@ -1481,13 +1479,6 @@ da:
         title: "Organisation"
       colors:
         title: "Tema"
-        fields:
-          theme_id:
-            choices:
-              default:
-                label: "Enkel og lyst"
-              dark:
-                label: "Enkelt og mørkt"
       logos:
         title: "Logoer"
       icons:

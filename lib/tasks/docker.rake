@@ -118,12 +118,26 @@ task 'docker:test' do
         puts "travis_fold:start:ruby_tests" if ENV["TRAVIS"]
         unless ENV["SKIP_CORE"]
           params = []
+          params << "--profile"
+          params << "--fail-fast"
           if ENV["BISECT"]
             params << "--bisect"
           end
           if ENV["RSPEC_SEED"]
             params << "--seed #{ENV["RSPEC_SEED"]}"
           end
+
+          if ENV['PARALLEL']
+            parts = ENV['PARALLEL'].split("/")
+            total = parts[1].to_i
+            subset = parts[0].to_i - 1
+
+            spec_partials = Dir["spec/**/*_spec.rb"].sort.in_groups(total, false)
+            params << spec_partials[subset].join(' ')
+
+            puts "Running spec subset #{subset + 1} of #{total}"
+          end
+
           @good &&= run_or_fail("bundle exec rspec #{params.join(' ')}".strip)
         end
 

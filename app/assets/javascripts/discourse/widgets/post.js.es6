@@ -2,7 +2,6 @@ import PostCooked from "discourse/widgets/post-cooked";
 import DecoratorHelper from "discourse/widgets/decorator-helper";
 import { createWidget, applyDecorators } from "discourse/widgets/widget";
 import { iconNode } from "discourse-common/lib/icon-library";
-import { nativeShare } from "discourse/lib/pwa-utils";
 import { transformBasicPost } from "discourse/lib/transform-post";
 import { postTransformCallbacks } from "discourse/widgets/post-stream";
 import { h } from "virtual-dom";
@@ -14,7 +13,7 @@ import {
   formatUsername
 } from "discourse/lib/utilities";
 import hbs from "discourse/widgets/hbs-compiler";
-import showModal from "discourse/lib/show-modal";
+import { relativeAge } from "discourse/lib/formatter";
 
 function transformWithCallbacks(post) {
   let transformed = transformBasicPost(post);
@@ -221,72 +220,6 @@ function showReplyTab(attrs, siteSettings) {
   );
 }
 
-createWidget("post-date", {
-  tagName: "div.post-info.post-date",
-
-  buildClasses(attrs) {
-    let classes = "post-date";
-
-    const lastWikiEdit =
-      attrs.wiki && attrs.lastWikiEdit && new Date(attrs.lastWikiEdit);
-
-    if (lastWikiEdit) {
-      classes = `${classes} last-wiki-edit`;
-    }
-
-    return classes;
-  },
-
-  html(attrs) {
-    return h(
-      "a",
-      {
-        attributes: {
-          class: "post-date",
-          href: attrs.shareUrl,
-          "data-share-url": attrs.shareUrl,
-          "data-post-number": attrs.post_number
-        }
-      },
-      dateNode(this._date(attrs))
-    );
-  },
-
-  _date(attrs) {
-    const lastWikiEdit =
-      attrs.wiki && attrs.lastWikiEdit && new Date(attrs.lastWikiEdit);
-    const createdAt = new Date(attrs.created_at);
-    return lastWikiEdit ? lastWikiEdit : createdAt;
-  },
-
-  click(event) {
-    event.preventDefault();
-
-    const post = this.findAncestorModel();
-
-    const modalFallback = () => {
-      showModal("share-and-invite", {
-        modalClass: "share-and-invite",
-        panels: [
-          {
-            id: "share",
-            title: "topic.share.extended_title",
-            model: {
-              postNumber: this.attrs.post_number,
-              shareUrl: this.attrs.shareUrl,
-              date: this._date(this.attrs),
-              postId: post.get("id"),
-              topic: post.get("topic")
-            }
-          }
-        ]
-      });
-    };
-
-    nativeShare({ url: this.attrs.shareUrl }).then(null, modalFallback);
-  }
-});
-
 createWidget("post-meta-data", {
   tagName: "div.topic-meta-data",
 
@@ -309,6 +242,21 @@ createWidget("post-meta-data", {
       );
     }
 
+    const lastWikiEdit =
+      attrs.wiki && attrs.lastWikiEdit && new Date(attrs.lastWikiEdit);
+    const createdAt = new Date(attrs.created_at);
+    const date = lastWikiEdit ? dateNode(lastWikiEdit) : dateNode(createdAt);
+    const attributes = {
+      class: "post-date",
+      href: attrs.shareUrl,
+      "data-share-url": attrs.shareUrl,
+      "data-post-number": attrs.post_number
+    };
+
+    if (lastWikiEdit) {
+      attributes["class"] += " last-wiki-edit";
+    }
+
     if (attrs.via_email) {
       postInfo.push(this.attach("post-email-indicator", attrs));
     }
@@ -329,7 +277,7 @@ createWidget("post-meta-data", {
       postInfo.push(this.attach("reply-to-tab", attrs));
     }
 
-    postInfo.push(this.attach("post-date", attrs));
+    postInfo.push(h("div.post-info.post-date", h("a", { attributes }, date)));
 
     postInfo.push(
       h(
@@ -451,31 +399,6 @@ createWidget("post-contents", {
     return lastWikiEdit ? lastWikiEdit : createdAt;
   },
 
-  share() {
-    const post = this.findAncestorModel();
-
-    const modalFallback = () => {
-      showModal("share-and-invite", {
-        modalClass: "share-and-invite",
-        panels: [
-          {
-            id: "share",
-            title: "topic.share.extended_title",
-            model: {
-              postNumber: this.attrs.post_number,
-              shareUrl: this.attrs.shareUrl,
-              date: this._date(this.attrs),
-              postId: post.get("id"),
-              topic: post.get("topic")
-            }
-          }
-        ]
-      });
-    };
-
-    nativeShare({ url: this.attrs.shareUrl }).then(null, modalFallback);
-  },
-
   toggleRepliesBelow(goToPost = "false") {
     if (this.state.repliesBelow.length) {
       this.state.repliesBelow = [];
@@ -502,6 +425,29 @@ createWidget("post-contents", {
   expandFirstPost() {
     const post = this.findAncestorModel();
     return post.expand().then(() => (this.state.expandedFirstPost = true));
+  }
+});
+
+createWidget("post-notice", {
+  tagName: "div.post-notice",
+
+  html(attrs) {
+    let text, icon;
+    if (attrs.postNoticeType === "first") {
+      icon = "hands-helping";
+      text = I18n.t("post.notice.first", { user: attrs.username });
+    } else if (attrs.postNoticeType === "returning") {
+      icon = "far-smile";
+      text = I18n.t("post.notice.return", {
+        user: attrs.username,
+        time: relativeAge(attrs.postNoticeTime, {
+          format: "tiny",
+          addAgo: true
+        })
+      });
+    }
+
+    return h("p", [iconNode(icon), text]);
   }
 });
 
@@ -581,6 +527,10 @@ createWidget("post-article", {
           ])
         )
       );
+    }
+
+    if (attrs.postNoticeType) {
+      rows.push(h("div.row", [this.attach("post-notice", attrs)]));
     }
 
     rows.push(
@@ -685,6 +635,9 @@ export default createWidget("post", {
       classNames.push("moderator");
     } else {
       classNames.push("regular");
+    }
+    if (attrs.ignored) {
+      classNames.push("post-ignored");
     }
     if (addPostClassesCallbacks) {
       for (let i = 0; i < addPostClassesCallbacks.length; i++) {

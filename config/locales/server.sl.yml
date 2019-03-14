@@ -16,6 +16,7 @@ sl:
       short_no_year: "%B %-d"
       date_only: "%B %-d, %Y"
       long: "%B %-d, %Y, %l:%M%P"
+      no_day: "%B %Y"
   date:
     month_names: [~, Januar, Februar, Marec, April, Maj, Junij, Julij, Avgust, September, Oktober, November, December]
     <<: *datetime_formats
@@ -27,12 +28,24 @@ sl:
   topics: "Teme"
   posts: "prispevkov"
   loading: "Nalagam"
+  powered_by_html: 'Uporablja tehnologijo <a href="https://www.discourse.org">Discourse</a>, za ogled te strani se priporoča omogočen JavaScript.'
   log_in: "Vpis"
+  submit: "Pošlji"
+  anonymous: "Anonimni"
+  on_another_topic: "Na drugi temi"
   emails:
     incoming:
+      default_subject: "Tema potrebuje naslov"
+      show_trimmed_content: "Prikaži obrezano vsebino"
       maximum_staged_user_per_email_reached: "Dosegli največje število prirejenih uporabnikov na e-sporočilo."
+      no_subject: "(ni naslova)"
+      no_body: "(ni vsebine)"
+      missing_attachment: "(priponka %{filename} manjka)"
   errors: &errors
+    format: "%{attribute} %{message}"
+    format_with_full_message: "<b>%{attribute}</b>: %{message}"
     messages:
+      too_long_validation: "je omejeno na %{max} znakov; vnesli ste %{length}."
       taken: "je že uporabljeno"
       exclusion: je rezervirano
       has_already_been_used: "je že v uporabi"
@@ -43,6 +56,7 @@ sl:
       not_a_number: ni številka
       not_an_integer: mora biti celo število
       odd: mora biti liho število
+      emojis_disabled: "ne more imeti emoji"
       too_long:
         one: je predolgo (največ %{count} znak)
         two: je predolgo (največ %{count} znaka)
@@ -69,14 +83,22 @@ sl:
       <p>Če poznate svoje geslo, potem se lahko <a href="%{base_url}/login">prijavite</a>.</p>
 
       <p>Drugače lahko<a href="%{base_url}/password-reset">zamenjate geslo</a>.</p>
+    error_message: "Prišlo je do napake med sprejemom povabila. Kontaktirajte administratorja strani."
     user_exists: "Ni potrebe za povabilo <b>%{email}</b>, ker <a href='%{base_path}/u/%{username}/summary'>je že prijavljen!</a>"
     confirm_email: "<p>Ste skoraj na koncu! Poslali smo vam aktivacijsko e-sporočilo na vaš e-naslov. Sledite navodilom v e-sporočilu za aktivacijo računa.</p><p>Če e-sporočila ne prejmete, preverite predal z vsiljeno pošto.</p>"
   topic_invite:
     failed_to_invite: "Uporabnika ne moremo povabiti v to temo ker ni član ene od naslednjih skupin uporabnikov: %{group_names}."
     user_exists: "Uporabnik je bil že povabljen. Uporabnika lahko povabite na vsako temo samo enkrat."
+  backup:
+    file_exists: "Datoteka, ki jo hočete naložiti, že obstaja."
   invalid_grant_badge_reason_link: "Zunanja ali neustrezna discourse povezava ni dovoljena kot razlog za značko"
   reading_time: "Čas branja"
   likes: "Všečki"
+  max_consecutive_replies:
+    one: "Ne morete dodati več kot %{count} zaporedni odgovor. Uredite svoj obstoječi odgovor ali počakajte, da vam nekdo odgovori."
+    two: "Ne morete dodati več kot %{count} zaporedna odgovora. Uredite svoj obstoječi odgovor ali počakajte, da vam nekdo odgovori."
+    few: "Ne morete dodati več kot %{count} zaporedne odgovore. Uredite svoj obstoječi odgovor ali počakajte, da vam nekdo odgovori."
+    other: "Ne morete dodati več kot %{count} zaporednih odgovorov. Uredite svoj obstoječi odgovor ali počakajte, da vam nekdo odgovori."
   embed:
     start_discussion: "Začni razpravo"
     continue: "Nadaljuj razpravo"
@@ -116,6 +138,8 @@ sl:
     few: "Novi uporabniki lahko v prispevek dodajo samo %{count} povezave."
     other: "Novi uporabniki lahko v prispevek dodajo samo %{count} povezav."
   user_is_suspended: "Suspendirani uporabniki ne morejo objavljati."
+  pm_reached_recipients_limit: "Ne morete imeti več kot %{recipients_limit} prejemnikov v sporočilu."
+  removed_direct_reply_full_quotes: "Samodejno odstranjen citat celotnega prejšnega prispevka."
   next_page: "naslednja stran →"
   prev_page: "← prejšnja stran"
   page_num: "Stran %{num}"
@@ -128,6 +152,7 @@ sl:
     latest: "Zadnje teme"
     hot: "Vroče teme"
     badge: "%{display_name} značka na %{site_title}"
+  edit_conflict: "Ta prispevek je bil spremenjen s strani drugega uporabnika zato ne moremo shraniti vaših sprememb."
   excerpt_image: "slika"
   groups:
     default_names:
@@ -144,7 +169,7 @@ sl:
     "new-topic": |
       Dobrodošli na %{site_name} &mdash; **hvala za novo temo!**
 
-      - Ali je naslov teme dovolj zanimiv če ga preberete naglas? Ali je dober povzetek vsebine?
+      - Ali je naslov teme dovolj zanimiv, če ga preberete naglas? Ali je dober povzetek vsebine?
 
       - Koga bo to zanimalo? Zakaj je pomembno? Kakšne odzive želite?
 
@@ -154,7 +179,7 @@ sl:
     "new-reply": |
       Dobrodošli na %{site_name} &mdash; **hvala za vaš prispevek!**
 
-      - Ali vaš odgovor prispeva k boljšemu pogovoru?
+      - Ali vaš odgovor prispeva k boljši razpravi?
 
       - Bodite prijazni do ostalih uporabnikov v skupnosti.
 
@@ -169,10 +194,45 @@ sl:
       Ste razmišljali, da bi **[obiskali svoj uporabniški profil](%{profile_path})** in bi naložili sliko, ki vas bolje predstavlja?
 
       Veliko lažje je spremljati pogovore in najti zanimive osebe v debatah, ko imajo vsi udeleženci edinstveno profilno sliko!
+    sequential_replies: |
+      ### Odgovorite na več prispevkov naenkrat
+
+      Namesto ločenih odgovorov na posamezne prispevke, lahko objavite samo en odgovor, ki vključuje citate iz prejšnih prispevkov ali omembo @ime uporabnika.
+
+      Vašem prejšnem odgovoru lahko dodate citat tako da označite besedilo in izberete gumb <b>Citiraj</b>, ki se bo pojavil nad označenim besedilom.
+
+      Lažje je slediti razpravi, kjer je manj bolj poglobljenih prispevkov, kot pa tam kjer je več manjših, ločenih prispevkov.
+    dominating_topic: |
+      ### Dovolite drugim, da sodelujejo v razpravi
+
+      Ta tema vam je očitno zelo pomembna &ndash; objavili ste več kot %{percent}% vseh odgovorov v tej temi.
+
+      Ali ste prepričani, da pustite dovolj časa tudi ostalim, da z nami delijo svoje poglede?
+    get_a_room: |
+      ### Odgovorite tudi ostalim
+
+      Odgovorili ste %{count} krat @%{reply_username} v tej temi.
+
+      Ali ste razmišljali, da bi odgovorili tudi *ostalim* ljudem v razpravi? Dobra razprava vključuje veliko mnenj in pogledov.
+
+      Če hočete nadaljevati pogovor z tem uporabnikom v večjem obsegu, lahko [pošljete zasebno sporočilo](%{base_path}/u/%{reply_username}).
+    too_many_replies: |
+      ### Dosegli ste omejitev odgovorov v tej temi
+
+      Novi uporabniki so začasno omejeni na %{newuser_max_replies_per_topic} odgovorov v posamezni temi.
+
+      Namesto, da dodate nov odgovor, razmislite o spremembi obstoječega odgovora ali preberite še kakšno drugo temo.
+    reviving_old_topic: |
+      ### Oživi to temo?
+
+      Zadnji odgovor na to temo je bil **%{time_ago}**. Vaš odgovor bo izpostavil to temo na vrh seznama in bo samodejno obvestil vse, ki so bili prej vpleteni v razpravo.
+
+      Ali ste prepričani da hočete nadaljevati to staro razpravo?
   activerecord:
     attributes:
       topic:
         featured_link: "Izpostavljena povezava"
+        category_id: "Kategorija"
     errors:
       <<: *errors
       models:
@@ -184,11 +244,59 @@ sl:
               same_as_email: "je enako kot vaš e-naslov. Uporabite bolj varno geslo."
               same_as_current: "je enako kot vaše trenutno geslo."
               unique_characters: "vsebuje preveč enakih znakov. Uporabite bolj varno geslo."
+  uncategorized_category_name: "Neuvrščeno"
   staff_category_name: "Osebje"
   staff_category_description: "Privatna kategorija za diskusije osebja foruma. Teme so vidne samo administratorjem in moderatorjem."
+  discourse_welcome_topic:
+    body: |2
+
+      Prvi odstavek te pripete teme bo viden kot pozdravno sporočilo vsem novim uporabnikom na vaši domači strani. Zato je pomembno!
+
+      **Uredite** to vsebino kot kratek opis vaše skupnosti:
+
+      - Za koga je ta skupnost?
+      - Kaj lahko tukaj najdejo?
+      - Zakaj naj obiskujejo to stran?
+      - Kje lahko preberejo več (povezave, vsebine, ...)?
+
+      <img src="%{base_path}/images/welcome/discourse-edit-post-animated.gif" width="508" height="106">
+
+      To temo lahko zaprete z administratorsko :wrench: (zgoraj desno ali spodaj), tako da se odgovori ne bodo nabirali pod to objavo.
   lounge_welcome:
     title: "Dobrodošli v loži"
+    body: |2
+
+      Čestitamo! :confetti_ball:
+
+      Če vidite to temo, ste bili nedavno promovirani v **redni** (nivo zaupanja 3).
+
+      Sedaj lahko &hellip;
+
+      * Urejate katerikoli prispevek
+      * Spremenite kategorijo katerekoli teme
+      * Imate samodejno sledenje vašim povezavam ([samodejni nofollow](https://en.wikipedia.org/wiki/Nofollow) je odstranjen)
+      * Dostop do privatne Loža kategorije, ki je dostopna samo uporabnikom na nivoju zaupnja 3 ali višje
+      * Skrivanje spama z samo eno prijavo
+
+      Tukaj je [trenutni seznam vseh rednih uporabnikov](%{base_path}/badges/3/regular). Vsekakor jih pozdravite.
+
+      Hvala, ker ste pomemben del te skupnosti!
+
+      (Za več informacij o nivojih zaupanja [preberite temo][trust]. Samo uporabniki, ki tudi v naprej dosegajo kriterije ostanejo redni uporabniki.)
+
+      [trust]: https://blog.discourse.org/2018/06/understanding-discourse-trust-levels/
   category:
+    replace_paragraph: "(Zamenjajte ta prvi odstavek z kratkim opisom vaše nove kategorije. Ta opis se bo pojavil v izbiri kategorije, tako da poskrbite, da je krajši od 200 znakov.)"
+    errors:
+      permission_conflict: "Vsaka skupina ki ima dostop do podkategorije mora imeti dostop tudi do nadrejene kategorije."
+      disallowed_topic_tags: "Ta tema vsebuje oznake, ki niso dovoljene na tej kategoriji: '%{tags}'"
+    cannot_delete:
+      uncategorized: "Ta kategorija je posebna. Namenjena je za shranjevanje tem, ki nimajo kategorije. Zato ne more biti izbrisana."
+      topic_exists:
+        one: "Ne moremo odstraniti to kategorijo ker ima %{count} temo. Najstarejša tema je %{topic_link}."
+        two: "Ne moremo odstraniti to kategorijo ker ima %{count} temi. Najstarejša tema je %{topic_link}."
+        few: "Ne moremo odstraniti to kategorijo ker ima %{count} teme. Najstarejša tema je %{topic_link}."
+        other: "Ne moremo odstraniti to kategorijo ker ima %{count} tem. Najstarejša tema je %{topic_link}."
     uncategorized_description: "Teme, ki ne potrebujejo kategorijo ali ne sodijo v nobeno obstoječo kategorijo."
   trust_levels:
     newuser:
@@ -217,6 +325,7 @@ sl:
       two: "%{count} sekundi"
       few: "%{count} sekunde"
       other: "%{count} sekund"
+    short_time: "nekaj sekund"
   datetime:
     distance_in_words_verbose:
       half_a_minute: "pravkar"
@@ -287,8 +396,43 @@ sl:
   email_login:
     invalid_token: "Povezava za prijavo je potekla. Izberite gumb Prijava in uporabite 'Pozabil sem geslo' da dobite novo povezavo."
     title: "Prijava z e-naslovom"
+  user_auth_tokens:
+    browser:
+      chrome: "Google Chrome"
+      safari: "Safari"
+      firefox: "Firefox"
+      opera: "Opera"
+      ie: "Internet Explorer"
+      edge: "Microsoft Edge"
+      unknown: "neznan brskalnik"
+    device:
+      android: "Android naprava"
+      ipad: "iPad"
+      iphone: "iPhone"
+      ipod: "iPod"
+      mobile: "Mobilna naprava"
+      mac: "Mac"
+      linux: "GNU/Linux računalnik"
+      windows: "Windows računalnik"
+      unknown: "neznana naprava"
+    os:
+      android: "Android"
+      ios: "iOS"
+      macos: "macOS"
+      linux: "Linux"
+      windows: "Microsoft Windows"
+      unknown: "neznan operacijski sistem"
   change_email:
+    confirmed: "Vaš e-naslov je bil spremenjen."
+    please_continue: "Nadaljujte na %{site_name}"
+    error: "Prišlo je do napake med spremembo vašega e-naslova. Mogoče je e-naslov že uporabljen?"
     error_staged: "Prišlo je do napake pri menjavi vašega e-naslova. E-naslov je že v uporabi s strani prirejenega uporabnika."
+    already_done: "Oprostite, vendar povezava za potrditev ni več veljavna. Mogoče je bil vaš e-naslov že spremenjen?"
+    authorizing_old:
+      title: "Zahvaljujemo se vam za potrditev vašega trenutnega e-naslova"
+      description: "Na nov e-naslov smo vam poslali povezavo za potrditev."
+  associated_accounts:
+    revoke_failed: "Nismo uspeli razveljaviti vaš račun pri %{provider_name}."
   activation:
     please_continue: "Vaš nov uporabniški račun je potrjen - preusmerjeni boste na začetno stran."
     welcome_to: "Dobrodošli na %{site_name}!"
@@ -301,6 +445,7 @@ sl:
       short_description: "To je oglas ali vandalizem"
     inappropriate:
       description: 'Prispevek vključuje vsebino, ki bi jo razumna oseba označila kot žaljivo, nesramno ali kot kršitev <a href="%{base_path}/guidelines">pravil skupnosti</a>.'
+      short_description: 'Kršitev <a href="%{base_path}/guidelines">pravil skupnosti</a>'
     notify_user:
       title: "Pošlji zasebno sporočilo uporabniku @{{username}}"
       description: "Rad bi osebno opozoril uporabnika o njegovem prispevku preko zasebnega sporočila."
@@ -333,6 +478,8 @@ sl:
       title: "Drug razlog"
       description: 'Prispevek potrebuje pregled osebja na podlagi <a href="%{base_path}/guidelines">pravil skupnosti</a>, <a href="%{tos_url}">pogojev uporabe</a>, ali iz drugega razloga, ki ni naveden zgoraj.'
       short_description: "Potrebuje pregled osebja iz drugega razloga"
+  ignored:
+    hidden_content: '<p>Skrita vsebina</p>'
   archetypes:
     banner:
       title: "Tema na oglasnem traku"
@@ -365,15 +512,25 @@ sl:
       other: "%{count} prispevkov združenih od %{username}"
   move_posts:
     new_topic_moderator_post:
-      one: "%{count} prispevek razdružen v novo %{entity}: %{topic_link}"
-      two: "%{count} prispevka razdružena v novo %{entity}: %{topic_link}"
-      few: "%{count} prispevki razdruženi v novo %{entity}: %{topic_link}"
-      other: "%{count} prispevkov razdruženih v novo %{entity}: %{topic_link}"
+      one: "%{count} prispevek je bil prestavljen v novo temo: %{topic_link}"
+      two: "%{count} prispevka sta bila prestavljena v novo temo:  %{topic_link}"
+      few: "%{count} prispevki so bili prestavljeni v novo temo:  %{topic_link}"
+      other: "%{count} prispevkov je bilo prestavljeno v novo temo: %{topic_link}"
+    new_message_moderator_post:
+      one: "%{count} prispevek je bil prestavljen v novo sporočilo: %{topic_link}"
+      two: "%{count} prispevka sta bila prestavljena v novo sporočilo: %{topic_link}"
+      few: "%{count} prispevki so bili prestavljeni v novo sporočilo: %{topic_link}"
+      other: "%{count} prispevkov je bilo prestavljeno v novo sporočilo: %{topic_link}"
     existing_topic_moderator_post:
-      one: "%{count} prispevek združen v obstoječo %{entity}: %{topic_link}"
-      two: "%{count} prispevka združena v obstoječo %{entity}: %{topic_link}"
-      few: "%{count} prispevki združeni v obstoječo %{entity}: %{topic_link}"
-      other: "%{count} prispevkov združenih v obstoječo %{entity}: %{topic_link}"
+      one: "%{count} prispevek je bil združen v obstoječo temo: %{topic_link}"
+      two: "%{count} prispevka sta bila združena v obstoječo temo: %{topic_link}"
+      few: "%{count} prispevki so bili združeni v obstoječo temo: %{topic_link}"
+      other: "%{count} prispevkov je bilo združeno v obstoječo temo: %{topic_link}"
+    existing_message_moderator_post:
+      one: "%{count} prispevek je bil združen v obstoječe sporočilo:  %{topic_link}"
+      two: "%{count} prispevka sta bila združena v obstoječe sporočilo: %{topic_link}"
+      few: "%{count} prispevki so bili združeni v obstoječe sporočilo: %{topic_link}"
+      other: "%{count} prispevkov je bilo združeno v obstoječe sporočilo: %{topic_link}"
   topic_statuses:
     autoclosed_message_max_posts:
       one: "To sporočilo je bilo samodejno zaprto, ko je doseglo največjo omejitev %{count} odgovor."
@@ -654,7 +811,7 @@ sl:
       text_body_template: |
         Pozdravljeni! Vidimo da ste pridno spremljali naš forum, kar je super. Zato smo vam povišali [nivo zaupanja!](https://blog.discourse.org/2018/06/understanding-discourse-trust-levels/)
 
-        Vesili smo, da ste med nami in bi radi več vedeli o vas. Vzemite si čas in [izpolnite svoj profil](%{base_url}/my/preferences/profile) ali [začnite novo temo](%{base_url}/categories).
+        Veseli smo, da ste med nami in bi radi več vedeli o vas. Vzemite si čas in [izpolnite svoj profil](%{base_url}/my/preferences/profile) ali [začnite novo temo](%{base_url}/categories).
     welcome_invite:
       title: "Dobrodošel povabljeni"
       subject_template: "Dobrodošli na %{site_name}!"
@@ -748,6 +905,176 @@ sl:
       title: "CSV izvoz ni uspel"
       subject_template: "Izvoz podatkov ni uspel"
       text_body_template: "Izvoz podatkov ni uspel. Preverite dnevnike ali [kontaktirajte člana osebja foruma](%{base_url}/about)."
+    email_reject_insufficient_trust_level:
+      title: "E-sporočilo zavrnjeno - neustrezen nivo zaupanja"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezen nivo zaupanja"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaš uporabniški račun nima dovolj visok nivo zaupanja, ki omogoča objavljanje novih tem preko tega e-naslova. Če menite, da je prišlo do napake, [kontaktirajte naše osebje](%{base_url}/about).
+    email_reject_user_not_found:
+      title: "E-sporočilo zavrnjeno - uporabnik ne obstaja"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- uporabnik ne obstaja"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaše sporočilo je bilo poslano na neznan e-naslov.  Poskusite poslati na drug e-naslov ali [kontaktirajte osebje](%{base_url}/about).
+    email_reject_screened_email:
+      title: "E-sporočilo zavrnjeno - nadzorovan e-naslov"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- blokiran e-naslov"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaše e-sporočilo je bilo poslano na blokiran e-naslov. Poskusite poslati na drug e-naslov ali [kontaktirajte osebje](%{base_url}/about).
+    email_reject_not_allowed_email:
+      title: "E-sporočilo zavrnjeno - nedovoljen e-naslov"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- blokiran e-naslov"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaše e-sporočilo je bilo poslano na blokiran e-naslov. Poskusite poslati na drug e-naslov ali [kontaktirajte osebje](%{base_url}/about).
+    email_reject_inactive_user:
+      title: "E-sporočilo zavrnjeno - uporabnik ni aktiviran"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- uporabnik ni aktiviran"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaš uporabniški račun z tem e-naslovom še ni aktiviran. Aktivirajte vaš račun preden pošiljate nova e-sporočila.
+    email_reject_silenced_user:
+      title: "E-sporočilo zavrnjeno - utišan uporabnik"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- utišan uporabnik"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaš uporabniški račun z tem e-naslovom je bil utišan.
+    email_reject_reply_user_not_matching:
+      title: "E-sporočilo zavrnjeno - uporabnik se ne ujema"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- nepričakovan e-naslov"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaše e-sporočilo je bilo poslano iz drugega e-naslova, kot je bilo pričakovano, tako da nismo prepričani ali gre za istega uporabnika. Poskusite poslati iz drugega e-naslova ali [kontaktirajte osebje](%{base_url}/about).
+    email_reject_no_account:
+      title: "E-sporočilo zavrnjeno - ni računa"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- ni računa"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Ne najdemo nobenega uporabniškega računa s tem e-naslovom. Poskusite poslati iz drugega e-naslova ali [kontaktirajte osebje](%{base_url}/about).
+    email_reject_empty:
+      title: "E-sporočilo zavrnjeno - ni vsebine"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- ni vsebine"
+      text_body_template: "Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.\n\nNismo našli nobene vsebine odgovora v vašem e-sporočilu. \n\nČe ste to prejeli in _ste_ vključili odgovor, potem poskusite ponovno z enostavnejšim oblikovanjem besedila.\n"
+    email_reject_parsing:
+      title: "E-sporočilo zavrnjeno - vsebina neznana"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- vsebina neznana"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Nismo našli odgovora v vašem e-sporočilu. **Poskrbite, da je vaš odgovor na vrhu e-sporočila** -- ne moremo sprejeti odgovorov med vrsticami.
+    email_reject_invalid_access:
+      title: "E-sporočilo zavrnjeno - neustrezen dostop"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezen dostop"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaš uporabniški račun nima dovolj pravic za objavo nove teme v tej kategoriji. Če mislite, da je to napaka, [kontaktirajte osebje](%{base_url}/about).
+    email_reject_strangers_not_allowed:
+      title: "E-sporočilo zavrnjeno - neznanci niso dovoljeni"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezen dostop"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Kategorija, na katero ste poslali e-sporočilo, dovoljuje odgovore samo registriranim uporabnikom in poznanim e-naslovom. Če menite, da je prišlo do napake, [kontaktirajte osebje](%{base_url}/about).
+    email_reject_invalid_post:
+      title: "E-sporočilo zavrnjeno - neustrezen prispevek"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezen prispevek"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Nekaj možnih težav: prezahtevno oblikovanje, predolgo besedilo, prekratko besedilo. Poskusite znova ali objavite preko spletne strani, če se napaka ponovi.
+    email_reject_invalid_post_specified:
+      title: "E-sporočilo zavrnjeno - neustrezno"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezno"
+      text_body_template: "Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.\n\nRazlog: \n\n%{post_errorl}\n\nČe znate odpraviti težavo, poskusite znova.\n"
+    email_reject_post_too_short:
+      title: "E-sporočilo zavrnjeno - vsebina prekratka"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- vsebina prekratka"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Ker želimo spodbujati poglobljene razprave, ne dovolimo prekratkih odgovorov. Ali lahko odgovorite z vsaj %{count} znaki? Lahko pa tudi samo včeškate prispevek, tako da odgovorite z "+1".
+    email_reject_invalid_post_action:
+      title: "E-sporočilo zavrnjeno - neustrezna objava"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezna objava"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Način objave ni bil razpoznan. Poskusite znova ali objavite preko spletne strani, če se ponovi.
+    email_reject_reply_key:
+      title: "E-sporočilo zavrnjeno - neustrezen ključ odgovora"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezen ključ odgovora"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Ključ odgovora v vašem e-sporočilu je neustrezen ali neznan, tako da ne moremo vedeti na kaj odgovarjate. [Kontaktirajte osebje](%{base_url}/about).
+    email_reject_bad_destination_address:
+      title: "E-sporočilo zavrnjeno - neustrezen naslov"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neustrezen naslov"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Nobeno od prejemnih e-naslovo ni prepoznan ali je prišlo do spremembe Message-ID vrstice. Zagotovite, da pošiljate na ustrezen e-naslov, ki vam ga je posredovalo osebje.
+    email_reject_old_destination:
+      title: "E-sporočilo zavrnjeno - star naslov"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- star naslov"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Sprejemamo samo odgovore na e-obvestila prvih %{number_of_days} dni. [Obiščite temo](%{short_url}) za nadaljevanje pogovora.
+    email_reject_topic_not_found:
+      title: "E-sporočilo zavrnjeno - tema ne obstaja"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- tema ne obstaja"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Tema, na katero odgovarjate, ne obstaja več -- mogoče je bila izbrisana? Če menite, da je prišlo do napake, [kontaktirajte osebje](%{base_url}/about).
+    email_reject_topic_closed:
+      title: "E-sporočilo zavrnjeno - tema zaprta"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- tema zaprta"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Tema, na katero odgovarjate, je trenutno zaprta in ne sprejema odgovorov. Če menite, da je prišlo do napake, [kontaktirajte osebje](%{base_url}/about).
+    email_reject_auto_generated:
+      title: "E-sporočilo zavrnjeno - samodejno ustvarjeno"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- samodejno ustvarjeno"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Vaše e-sporočilo je bilo poslano označeno kot "samodejno ustvarjeno", kar pomeni da je bilo narejno s strani računalnika in ne osebe. Takšnih prispevkov ne sprejemamo. Če menite, da je prišlo do napake, [kontaktirajte osebje](%{base_url}/about).
+    email_reject_unrecognized_error:
+      title: "E-sporočilo zavrnjeno - neznana napaka"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- neznana napaka"
+      text_body_template: |
+        Žal nam je, ampak vaše e-sporočilo poslano na %{destination} (z naslovom %{former_title}) ni bilo sprejeto.
+
+        Prišlo je do neznane napake med obdelavo vašega e-sporočila in ni bilo sprejeto.Poskusite ponovno ali [kontaktirajte osebje](%{base_url}/about).
+    email_reject_attachment:
+      title: "E-sporočilo - zavrnjena priponka"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- zavrnjena priponka"
+      text_body_template: |
+        Žal nam je, ampak nekatere priponke v vašem e-sporočilu poslanem na %{destination} (z naslovom %{former_title}) niso bile sprejete.
+
+        Podrobnosti:
+        %{rejected_errors}
+
+        Če menite, da je prišlo do napake, [kontaktirajte osebje](%{base_url}/about).
+    email_error_notification:
+      title: "E-pošta napaka"
+      subject_template: "[%{email_prefix}] Napaka e-pošte -- napaka pri POP avtentikaciji"
+    email_revoked:
+      title: "E-naslov preklican"
     too_many_spam_flags:
       text_body_template: |
         Pozdravljeni,
@@ -805,6 +1132,8 @@ sl:
 
         [Preverite jih v Admin delu](%{base_url}/admin/users/list/pending).
     new_user_of_the_month:
+      title: "Vi ste nov uporabnik meseca!"
+      subject_template: "Vi ste nov uporabnik meseca!"
       text_body_template: |
         Čestitamo, osvojili ste **Nov uporabnik meseca %{month_year}**. :trophy:
 
@@ -833,12 +1162,12 @@ sl:
     unsubscribe:
       title: "Odjavi"
       description: "Nočete prejemati takšnih e-sporočil? Ni problema! Kliknite spodaj za takojšno odjavo:"
-    reply_by_email: "[Pojdi na temo](%{base_url}%{url}) ali odgovori na to e-sporočilo da odgovorite."
-    reply_by_email_pm: "[Pojdi na sporočilo](%{base_url}%{url}) ali odgovori na to e-sporočilo da odgovorite %{participants}."
-    only_reply_by_email: "Odgovori na to e-sporočilo da odgovorite."
-    only_reply_by_email_pm: "Odgovori na to e-sporočilo da odgovorite %{participants}."
-    visit_link_to_respond: "[Pojdi na temo](%{base_url}%{url}) da odgovorite."
-    visit_link_to_respond_pm: "[Pojdi na sporočilo](%{base_url}%{url}) da odgovorite %{participants}."
+    reply_by_email: "[Pojdi na temo](%{base_url}%{url}) ali odgovori na to e-sporočilo za odgovor."
+    reply_by_email_pm: "[Pojdi na sporočilo](%{base_url}%{url}) ali odgovori na to e-sporočilo za odgovor %{participants}."
+    only_reply_by_email: "Odgovori na to e-sporočilo za odgovor."
+    only_reply_by_email_pm: "Odgovori na to e-sporočilo za odgovor %{participants}."
+    visit_link_to_respond: "[Pojdi na temo](%{base_url}%{url}) za odgovor."
+    visit_link_to_respond_pm: "[Pojdi na sporočilo](%{base_url}%{url}) za odgovor %{participants}."
     posted_by: "Objavljeno od %{username}ob %{post_date}"
     pm_participants: "Sodelujoči: %{participants}"
     invited_group_to_private_message_body: |
@@ -1160,7 +1489,7 @@ sl:
         Do vašega računa lahko dostopate s prijavo na:
         %{base_url}
 
-        Če zgornja povezava ne deluje, poizkusite kopirati povezavo v naslov v vašem spletnem brskalniku.
+        Če zgornja povezava ne deluje, poskusite kopirati povezavo v naslov v vašem spletnem brskalniku.
 
         %{new_user_tips}
 
@@ -1469,7 +1798,24 @@ sl:
         other: '"%{tag_name}" oznaka je omejena samo za naslednje kategorije: %{category_names}'
   finish_installation:
     confirm_email:
+      title: "Potrdite e-naslov"
       message: "<p>Poslali smo vam aktivacijsko e-sporočilo na <b>%{email}</b>. Sledite navodilom v e-sporočilu za aktivacijo računa.</p><p>Če e-sporočila niste prejeli, preverite da ste pravilno nastavili e-pošto v Discourse in preverite predal z vsiljeno pošto .</p>"
     resend_email:
       title: "Ponovno pošlji aktivacijsko e-sporočilo"
       message: "<p>Ponovno smo poslali aktivacijsko e-sporočilo na<b>%{email}</b>"
+  discourse_push_notifications:
+    popup:
+      mentioned: '%{username} vas je omenil v "%{topic}" - %{site_title}'
+      group_mentioned: '%{username} vas je omenil v "%{topic}" - %{site_title}'
+      quoted: '%{username} vas je citiral v "%{topic}" - %{site_title}'
+      replied: '%{username} vam je odgovoril v "%{topic}" - %{site_title}'
+      posted: '%{username} je objavil v "%{topic}" - %{site_title}'
+      private_message: '%{username} vam je poslal zasebno sporočilo v "%{topic}" - %{site_title}'
+      linked: '%{username} je objavil povezavo na vaš prispevek v "%{topic}" - %{site_title}'
+      confirm_title: "Obvestila omogočena - %{site_title}"
+      confirm_body: "Uspelo! Obvestila so bila omogočena."
+  staff_action_logs:
+    not_found: "ni mogoče najti"
+    unknown: "neznano"
+    user_merged: "%{username} je bil združen v ta račun"
+    user_delete_self: "Izbrisan s strani sebe preko %{url}"

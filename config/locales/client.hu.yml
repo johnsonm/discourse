@@ -109,7 +109,7 @@ hu:
       next_month: "Következő hónap"
       placeholder: dátum
     share:
-      topic: "link megosztása ebbe a témába"
+      topic_html: 'Témakör: <span class="topic-title">%{topicTitle}</span>'
       post: "bejegyzés #%{postNumber}"
       close: "bezár"
       twitter: "a hivatkozás megosztása a Twitteren"
@@ -124,6 +124,7 @@ hu:
       user_left: "%{who}eltávolította magát %{when}-kor ebből az üzenetből"
       removed_user: "törölve %{who} %{when}"
       removed_group: "törölte %{who} %{when}"
+      autobumped: "automatikusan előrehozva: %{when}"
       autoclosed:
         enabled: "lezárva: %{when}"
         disabled: "megnyitva %{when}"
@@ -165,13 +166,13 @@ hu:
         eu_west_1: "EU (Írország)"
         eu_west_2: "EU (London)"
         eu_west_3: "EU (Párizs)"
-        sa_east_1: "Dél-Amerika (Sao Paolo)"
         us_east_1: "US Kelet (N. Virginia)"
         us_east_2: "US Kelet (Ohio)"
         us_gov_west_1: "AWS GovCloud (US)"
         us_west_1: "US Nyugat (N. California)"
         us_west_2: "US Nyugat (Oregon)"
     edit: "a témakör címének és kategóriájának szerkesztése"
+    expand: "Kibővítés"
     not_implemented: "Sajnáljuk, de még megvalósításra vár ez a funkció!"
     no_value: "Nem"
     yes_value: "Igen"
@@ -196,6 +197,7 @@ hu:
     privacy: "Adatvédelem"
     tos: "Szolgáltatási feltételek"
     rules: "Szabályok"
+    conduct: "Magatartási Kódex"
     mobile_view: "Mobil nézet"
     desktop_view: "Asztali nézet"
     you: "Te"
@@ -216,6 +218,8 @@ hu:
     character_count:
       one: "{{count}} karakter"
       other: "{{count}} karakter"
+    related_messages:
+      title: "Kapcsolódó üzenetek"
     suggested_topics:
       title: "Ajánlott témakörök"
       pm_title: "Ajánlott üzenetek"
@@ -253,6 +257,9 @@ hu:
       new_topic: "Új téma vázlat"
       new_private_message: "Új személyes üzenet besorolása"
       topic_reply: "Választervezet"
+      abandon:
+        yes_value: "Igen, visszavonom"
+        no_value: "Nem, tartsd meg"
     topic_count_latest:
       one: "Megnézni {{count}} új vagy frissített témát"
       other: "Megnézni {{count}} új vagy frissített témákat"
@@ -270,6 +277,7 @@ hu:
     upload: "Feltöltés"
     uploading: "Feltöltés..."
     uploading_filename: "Feltöltés: {{filename}}..."
+    clipboard: "vágólap"
     uploaded: "Feltöltve!"
     pasting: "Beillesztés..."
     enable: "Engedélyezés"
@@ -286,6 +294,12 @@ hu:
     choose_topic:
       none_found: "Nem találhatók témák."
       title:
+        search: "Témakör keresése név, URL-cím vagy azonosító alapján."
+        placeholder: "ide írd be a témakör címét"
+    choose_message:
+      none_found: "Nem található üzenet."
+      title:
+        search: "Témakör keresése cím alapján:"
         placeholder: "ide írd be a témakör címét"
     queue:
       topic: "Téma:"
@@ -301,7 +315,7 @@ hu:
         one: "Ebben a témakörben <b>{{count}}</b> hozzászólás vár jóváhagyásra"
         other: "Ebben a témakörben <b>{{count}}</b> hozzászólás vár jóváhagyásra"
       confirm: "Módosítások mentése"
-      delete_prompt: "Biztos vagy benne, hogy törölni akarod <b>%{username}<b> felhasználót? Ezzel törlöd minden bejegyzését és blokkolod az e-mail és IP-címét."
+      delete_prompt: "Biztos vagy benne, hogy le akarod törölni <b>%{username}<b> felhasználót? Ezzel letörlöd minden posztját és blokkolod az e-mail és IP címét."
       approval:
         title: "A bejegyzés jóváhagyásra vár."
         description: "Megkaptuk a bejegyzésedet, de egy moderátornak jóvá kell hagynia, mielőtt megjelenne. Köszönjük a türelmedet."
@@ -469,7 +483,6 @@ hu:
           description: "Csak akkor leszel értesítve, ha valaki megemlíti a @nevedet vagy válaszol neked."
         muted:
           title: "Némítás"
-          description: "Egyáltalán nem fogsz értesítést kapni az ebben a csoportban lévő új témákról."
       flair_url: "Avatar Flair kép"
       flair_url_placeholder: "(Opcionális) Kép url címe vagy Font Awesome css osztálya"
       flair_bg_color: "Avatar Flair háttér szín"
@@ -834,9 +847,6 @@ hu:
         expired: "Ez a meghívó lejárt!"
         rescind: "Törlés"
         rescinded: "Meghívó törölve"
-        rescind_all: "Összes meghívó törlése"
-        rescinded_all: "Összes meghívó törölve!"
-        rescind_all_confirm: "Biztosan törölni szeretnél minden meghívót?"
         reinvite: "Meghívó újraküldése"
         reinvite_all: "Összes meghívó újraküldése"
         reinvite_all_confirm: "Biztosan szeretnél újraküldeni minden meghívót?"
@@ -1614,6 +1624,9 @@ hu:
         action: "tulajdonjog módosítása"
         error: "Hiba történt a bejegyzések átruházásakor."
         placeholder: "az új tulajdonos felhasználóneve"
+      change_timestamp:
+        title: "Időbélyeg szerkesztése…"
+        action: "Időbélyeg módosítása"
       multi_select:
         select: "kiválasztás"
         selected: "kiválasztva ({{count}})"
@@ -1748,8 +1761,6 @@ hu:
     category:
       none: "(nincs kategória)"
       all: "Minden kategória"
-      edit: "szerkesztés"
-      edit_long: "Szerkesztés"
       view: "Témakörök megjelenítése a kategóriában"
       general: "Általános"
       settings: "Beállítások"
@@ -1786,7 +1797,6 @@ hu:
       default_view: "Alapértelmezett témakörök"
       allow_badges_label: "Kitűzök elnyerésének engedélyezése ebben a kategóriában"
       edit_permissions: "Jogok szerkesztése"
-      add_permission: "Jogok hozzáadása"
       this_year: "ez az év"
       position: "Pozíció:"
       default_position: "Alapértelmezett pozíció"
@@ -2192,6 +2202,7 @@ hu:
         active_posts: "Megjelölt bejegyzés"
         old_posts: "Rég megjelölt bejegyzések"
         topics: "Megjelölt témák"
+        moderation_history: "Moderálási előzmények"
         agree: "Elfogadás"
         agree_flag_hide_post: "Bejegyzés elrejtése"
         agree_flag_restore_post: "Elfogadott és visszaállított bejegyzés"
@@ -2440,7 +2451,6 @@ hu:
         save: "Mentés"
         new: "Új"
         new_style: "Új stílus"
-        import: "Importálás"
         delete: "Törlés"
         delete_confirm: "Töröljük ezt a témát?"
         color: "Szín"
@@ -2453,7 +2463,6 @@ hu:
           subject: "Tárgy"
           body: "Test"
         theme:
-          import_theme: "Téma importálása"
           customize_desc: "Személyre szabás:"
           title: "Témák"
           edit: "Szerkesztés"
@@ -2464,7 +2473,6 @@ hu:
           preview: "Előnézet"
           is_default: "Ez a téma alapértelmezetten van bekapcsolva."
           user_selectable: "A téma a felhasználók által választható"
-          color_scheme: "Szín sablon"
           color_scheme_select: "Válassz színeket a témához"
           custom_sections: "Egyéni részek:"
           theme_components: "Téma elemek"
@@ -2498,15 +2506,8 @@ hu:
             text: "YAML"
             title: "Téma beállításainak megadása YAML formátumban"
         colors:
-          select_base:
-            description: "Alap sablon:"
           title: "Színek"
-          edit: "Szín sablon szerkesztése"
-          long_title: "Szín sémák"
-          about: "Módosítsd a témáid által használt színeket. Kezdésként készíts egy új színösszeállítást."
-          new_name: "Új szín séma"
           copy_name_prefix: "másolata"
-          delete_confirm: "Törlöd ezt a szín sémát?"
           undo: "Visszavonás"
           revert: "Visszaállítás"
           primary:
@@ -2585,6 +2586,7 @@ hu:
             user_placeholder: "felhasználónév"
             address_placeholder: "name@example.com"
       moderation_history:
+        no_results: "Nincsenek moderálási előzmények."
         actions:
           delete_user: "Felhasználó törölve"
           suspend_user: "Felhasználó felfüggesztve"
@@ -2679,6 +2681,7 @@ hu:
             change_badge: "Jelvény megváltoztatása"
             delete_badge: "Jelvény törlése"
             merge_user: "Felhasználók eggyesíétse"
+            topic_timestamps_changed: "téma időbélyege módosítva"
         screened_emails:
           email: "E-mail cím"
           actions:

@@ -34,7 +34,6 @@ ar:
   anonymous: "متخفي"
   remove_posts_deleted_by_author: "حذفها الكاتب"
   themes:
-    bad_color_scheme: "لا يمكن تحديث الواجهة ، مخطط ألوان غير صحيح"
     other_error: "حصل خطأ عند تحديث الواجهة"
   emails:
     incoming:
@@ -373,7 +372,6 @@ ar:
       email_already_used_in_category: "'%{email}' مستخدم من قبل القسم '%{category_name}'."
       description_incomplete: "منشور وصف القسم يجب علي الاقل ان يحتوي علي فقرة واحدة."
     cannot_delete:
-      uncategorized: "لا يمكن حذف قسم  \"غير مصنف\""
       has_subcategories: "لا يمكن حذف هذا القسم لأن له أقسام فرعيّة."
       topic_exists_no_oldest: "لا يمكن حذف هذا القسم لأن عدد الموضوعات به هو %{count}."
     uncategorized_description: "الموضوعات التي لا تحتاج الي ان تصنف تحت قسم معين, او لا تندرج تحت الأقسام الأخري."

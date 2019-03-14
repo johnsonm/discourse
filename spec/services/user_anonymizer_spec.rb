@@ -136,7 +136,7 @@ describe UserAnonymizer do
     end
 
     it "updates the avatar in posts" do
-      SiteSetting.queue_jobs = false
+      run_jobs_synchronously!
       upload = Fabricate(:upload, user: user)
       user.user_avatar = UserAvatar.new(user_id: user.id, custom_upload_id: upload.id)
       user.uploaded_avatar_id = upload.id # chosen in user preferences
@@ -190,16 +190,13 @@ describe UserAnonymizer do
     end
 
     it "removes external auth assocations" do
-      user.google_user_info = GoogleUserInfo.create(user_id: user.id, google_user_id: "google@gmail.com")
       user.github_user_info = GithubUserInfo.create(user_id: user.id, screen_name: "example", github_user_id: "examplel123123")
       user.user_associated_accounts = [UserAssociatedAccount.create(user_id: user.id, provider_uid: "example", provider_name: "facebook")]
       user.single_sign_on_record = SingleSignOnRecord.create(user_id: user.id, external_id: "example", last_payload: "looks good")
       user.oauth2_user_infos = [Oauth2UserInfo.create(user_id: user.id, uid: "example", provider: "example")]
-      user.instagram_user_info = InstagramUserInfo.create(user_id: user.id, screen_name: "example", instagram_user_id: "examplel123123")
       UserOpenId.create(user_id: user.id, email: user.email, url: "http://example.com/openid", active: true)
       make_anonymous
       user.reload
-      expect(user.google_user_info).to eq(nil)
       expect(user.github_user_info).to eq(nil)
       expect(user.user_associated_accounts).to be_empty
       expect(user.single_sign_on_record).to eq(nil)
@@ -217,7 +214,7 @@ describe UserAnonymizer do
 
     context "executes job" do
       before do
-        SiteSetting.queue_jobs = false
+        run_jobs_synchronously!
       end
 
       it "removes invites" do
@@ -305,7 +302,7 @@ describe UserAnonymizer do
     end
 
     it "exhaustively replaces all user ips" do
-      SiteSetting.queue_jobs = false
+      run_jobs_synchronously!
       link = IncomingLink.create!(current_user_id: user.id, ip_address: old_ip, post_id: post.id)
 
       screened_email = ScreenedEmail.create!(email: user.email, ip_address: old_ip)

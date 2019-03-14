@@ -1011,6 +1011,68 @@ RSpec.describe TopicsController do
           end
         end
 
+        context 'updating to a category with restricted tags' do
+          let!(:category) { Fabricate(:category) }
+          let!(:restricted_category) { Fabricate(:category) }
+          let!(:tag1) { Fabricate(:tag) }
+          let!(:tag2) { Fabricate(:tag) }
+          let!(:tag_group_1) { Fabricate(:tag_group, tag_names: [tag1.name]) }
+          let!(:tag_group_2) { Fabricate(:tag_group) }
+
+          before do
+            SiteSetting.tagging_enabled = true
+            topic.update!(tags: [tag1])
+          end
+
+          it 'can’t change to a category disallowing this topic current tags' do
+            restricted_category.allowed_tags = [tag2.name]
+
+            put "/t/#{topic.slug}/#{topic.id}.json", params: { category_id: restricted_category.id }
+
+            result = ::JSON.parse(response.body)
+
+            expect(response.status).to eq(422)
+            expect(result['errors']).to be_present
+            expect(topic.reload.category_id).not_to eq(restricted_category.id)
+          end
+
+          it 'can’t change to a category disallowing this topic current tag (through tag_group)' do
+            tag_group_2.tags = [tag2]
+            restricted_category.allowed_tag_groups = [tag_group_2.name]
+
+            put "/t/#{topic.slug}/#{topic.id}.json", params: { category_id: restricted_category.id }
+
+            result = ::JSON.parse(response.body)
+
+            expect(response.status).to eq(422)
+            expect(result['errors']).to be_present
+            expect(topic.reload.category_id).not_to eq(restricted_category.id)
+          end
+
+          it 'can change to a category allowing this topic current tags' do
+            restricted_category.allowed_tags = [tag1.name]
+
+            put "/t/#{topic.slug}/#{topic.id}.json", params: { category_id: restricted_category.id }
+
+            expect(response.status).to eq(200)
+          end
+
+          it 'can change to a category allowing this topic current tags (through tag_group)' do
+            tag_group_1.tags = [tag1]
+            restricted_category.allowed_tag_groups = [tag_group_1.name]
+
+            put "/t/#{topic.slug}/#{topic.id}.json", params: { category_id: restricted_category.id }
+
+            expect(response.status).to eq(200)
+          end
+
+          it 'can change to a category allowing any tag' do
+            put "/t/#{topic.slug}/#{topic.id}.json", params: { category_id: category.id }
+
+            expect(response.status).to eq(200)
+          end
+        end
+
         context "allow_uncategorized_topics is false" do
           before do
             SiteSetting.allow_uncategorized_topics = false

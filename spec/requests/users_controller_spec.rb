@@ -2020,6 +2020,76 @@ describe UsersController do
     end
   end
 
+  describe '#ignore' do
+    it 'raises an error when not logged in' do
+      put "/u/#{user.username}/ignore.json", params: { ignored_user_id: "" }
+      expect(response.status).to eq(403)
+    end
+
+    context 'while logged in' do
+      let(:user) { Fabricate(:user) }
+      let(:another_user) { Fabricate(:user) }
+      before do
+        sign_in(user)
+      end
+
+      describe 'when SiteSetting.ignore_user_enabled is false' do
+        it 'raises an error' do
+          SiteSetting.ignore_user_enabled = false
+          put "/u/#{user.username}/ignore.json"
+          expect(response.status).to eq(404)
+        end
+      end
+
+      describe 'when SiteSetting.ignore_user_enabled is true' do
+        it 'creates IgnoredUser record' do
+          SiteSetting.ignore_user_enabled = true
+          put "/u/#{user.username}/ignore.json", params: { ignored_user_id: another_user.id }
+          expect(response.status).to eq(200)
+          expect(IgnoredUser.find_by(user_id: user.id,
+                                     ignored_user_id: another_user.id)).to be_present
+        end
+      end
+    end
+  end
+
+  describe '#watch' do
+    it 'raises an error when not logged in' do
+      delete "/u/#{user.username}/ignore.json"
+      expect(response.status).to eq(403)
+    end
+
+    context 'while logged in' do
+      let(:user) { Fabricate(:user) }
+      let(:another_user) { Fabricate(:user) }
+      before do
+        sign_in(user)
+      end
+
+      describe 'when SiteSetting.ignore_user_enabled is false' do
+        it 'raises an error' do
+          SiteSetting.ignore_user_enabled = false
+          delete "/u/#{user.username}/ignore.json", params: { ignored_user_id: another_user.id }
+          expect(response.status).to eq(404)
+        end
+      end
+
+      describe 'when SiteSetting.ignore_user_enabled is true' do
+        before do
+          Fabricate(:ignored_user, user_id: user.id, ignored_user_id: another_user.id)
+        end
+
+        it 'destroys IgnoredUser record' do
+          SiteSetting.ignore_user_enabled = true
+          delete "/u/#{user.username}/ignore.json", params: { ignored_user_id: another_user.id }
+          expect(response.status).to eq(200)
+          expect(IgnoredUser.find_by(user_id: user.id,
+                                     ignored_user_id: another_user.id)).to be_blank
+        end
+      end
+    end
+  end
+
   describe "for user with period in username" do
     let(:user_with_period) { Fabricate(:user, username: "myname.test") }
 
@@ -3107,6 +3177,7 @@ describe UsersController do
             put "/users/second_factor.json", params: {
               second_factor_token: '000000',
               second_factor_method: UserSecondFactor.methods[:totp],
+              second_factor_target: UserSecondFactor.methods[:totp],
               enable: 'true',
             }
 
@@ -3122,8 +3193,9 @@ describe UsersController do
           it 'should allow second factor for the user to be enabled' do
             put "/users/second_factor.json", params: {
               second_factor_token: ROTP::TOTP.new(user_second_factor.data).now,
-              enable: 'true',
-              second_factor_method: UserSecondFactor.methods[:totp]
+              second_factor_method: UserSecondFactor.methods[:totp],
+              second_factor_target: UserSecondFactor.methods[:totp],
+              enable: 'true'
             }
 
             expect(response.status).to eq(200)
@@ -3133,7 +3205,8 @@ describe UsersController do
           it 'should allow second factor for the user to be disabled' do
             put "/users/second_factor.json", params: {
               second_factor_token: ROTP::TOTP.new(user_second_factor.data).now,
-              second_factor_method: UserSecondFactor.methods[:totp]
+              second_factor_method: UserSecondFactor.methods[:totp],
+              second_factor_target: UserSecondFactor.methods[:totp]
             }
 
             expect(response.status).to eq(200)
@@ -3146,7 +3219,7 @@ describe UsersController do
         context 'when token is missing' do
           it 'returns the right response' do
             put "/users/second_factor.json", params: {
-              second_factor_method: UserSecondFactor.methods[:backup_codes],
+              second_factor_target: UserSecondFactor.methods[:backup_codes]
             }
 
             expect(response.status).to eq(400)
@@ -3157,7 +3230,8 @@ describe UsersController do
           it 'returns the right response' do
             put "/users/second_factor.json", params: {
               second_factor_token: '000000',
-              second_factor_method: UserSecondFactor.methods[:backup_codes],
+              second_factor_method: UserSecondFactor.methods[:totp],
+              second_factor_target: UserSecondFactor.methods[:backup_codes]
             }
 
             expect(response.status).to eq(200)
@@ -3172,7 +3246,8 @@ describe UsersController do
           it 'should allow second factor backup for the user to be disabled' do
             put "/users/second_factor.json", params: {
               second_factor_token: ROTP::TOTP.new(user_second_factor.data).now,
-              second_factor_method: UserSecondFactor.methods[:backup_codes]
+              second_factor_method: UserSecondFactor.methods[:totp],
+              second_factor_target: UserSecondFactor.methods[:backup_codes]
             }
 
             expect(response.status).to eq(200)
@@ -3189,7 +3264,8 @@ describe UsersController do
     context 'when not logged in' do
       it 'should return the right response' do
         put "/users/second_factors_backup.json", params: {
-          second_factor_token: 'wrongtoken'
+          second_factor_token: 'wrongtoken',
+          second_factor_method: UserSecondFactor.methods[:totp]
         }
 
         expect(response.status).to eq(403)
@@ -3204,7 +3280,8 @@ describe UsersController do
       describe 'create 2fa request' do
         it 'fails on incorrect password' do
           put "/users/second_factors_backup.json", params: {
-            second_factor_token: 'wrongtoken'
+            second_factor_token: 'wrongtoken',
+            second_factor_method: UserSecondFactor.methods[:totp]
           }
 
           expect(response.status).to eq(200)
@@ -3219,7 +3296,8 @@ describe UsersController do
             SiteSetting.enable_local_logins = false
 
             put "/users/second_factors_backup.json", params: {
-              second_factor_token: ROTP::TOTP.new(user_second_factor.data).now
+              second_factor_token: ROTP::TOTP.new(user_second_factor.data).now,
+              second_factor_method: UserSecondFactor.methods[:totp]
             }
 
             expect(response.status).to eq(404)
@@ -3232,7 +3310,8 @@ describe UsersController do
             SiteSetting.enable_sso = true
 
             put "/users/second_factors_backup.json", params: {
-              second_factor_token: ROTP::TOTP.new(user_second_factor.data).now
+              second_factor_token: ROTP::TOTP.new(user_second_factor.data).now,
+              second_factor_method: UserSecondFactor.methods[:totp]
             }
 
             expect(response.status).to eq(404)
@@ -3243,7 +3322,8 @@ describe UsersController do
           user_second_factor
 
           put "/users/second_factors_backup.json", params: {
-            second_factor_token: ROTP::TOTP.new(user_second_factor.data).now
+            second_factor_token: ROTP::TOTP.new(user_second_factor.data).now,
+            second_factor_method: UserSecondFactor.methods[:totp]
           }
 
           expect(response.status).to eq(200)

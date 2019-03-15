@@ -486,9 +486,10 @@ class ImportScripts::FMGP < ImportScripts::Base
 
   def formatted_message(post)
     lines = []
+    urls_seen = Set[]
     if post["message"].present?
       post["message"].each do |fragment|
-        lines << formatted_message_fragment(fragment, post)
+        lines << formatted_message_fragment(fragment, post, urls_seen)
       end
     end
     # yes, both "image" and "images" :(
@@ -500,10 +501,19 @@ class ImportScripts::FMGP < ImportScripts::Base
         lines << "\n#{formatted_link(image["proxy"])}\n"
       end
     end
+    if post["link"].present? and post["link"]["url"].present?
+      url = post["link"]["url"]
+      if !urls_seen.include?(url)
+        # add the URL only if it wasn't already referenced, because
+        # they are often redundant
+        lines << "\n#{post["link"]["url"]}\n"
+        urls_seen.add(url)
+      end
+    end
     lines.join("")
   end
 
-  def formatted_message_fragment(fragment, post)
+  def formatted_message_fragment(fragment, post, urls_seen)
     # markdown does not nest reliably the same as either G+'s markup or what users intended in G+, so generate HTML codes
     # this method uses return to make sure it doesn't fall through accidentally
     if fragment[0] == 0
@@ -528,6 +538,7 @@ class ImportScripts::FMGP < ImportScripts::Base
     elsif fragment[0] == 1
       return "\n"
     elsif fragment[0] == 2
+      urls_seen.add(fragment[2])
       return formatted_link_text(fragment[2], fragment[1])
     elsif fragment[0] == 3
       # reference to a user

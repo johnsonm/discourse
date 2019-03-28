@@ -34,9 +34,13 @@ class ImportScripts::FMGP < ImportScripts::Base
   def initialize
     super
 
+    # Set this to the base URL for the site; required for importing videos
+    @site_base_url = 'http://localhost:3000/'
     @system_user = Discourse.system_user
     SiteSetting.max_image_size_kb = 40960
     SiteSetting.max_attachment_size_kb = 40960
+    # handle the same video extension as the rest of Discourse
+    SiteSetting.authorized_extensions = (SiteSetting.authorized_extensions.split("|") + ['mp4', 'mov', 'webm', 'ogv']).uniq.join("|")
     @invalid_bounce_score = 5.0
     @min_title_words = 3
     @max_title_words = 14
@@ -46,7 +50,7 @@ class ImportScripts::FMGP < ImportScripts::Base
     # JSON files produced by F+MG+E as an export of a community
     @feeds = []
 
-    # CSV is map to downloaded images
+    # CSV is map to downloaded images and/or videos (exported separately)
     @images = {}
 
     # G+ user IDs to filter out (spam, abuse) — no topics or posts, silence and suspend when creating
@@ -502,13 +506,21 @@ class ImportScripts::FMGP < ImportScripts::Base
         lines << formatted_message_fragment(fragment, post, urls_seen)
       end
     end
-    # yes, both "image" and "images" :(
-    if post["image"].present?
+    # yes, both "image" and "images"; "video" and "videos" :(
+    if post["video"].present?
+      lines << "\n#{formatted_link(post["video"]["proxy"])}\n"
+    elsif post["image"].present?
+      # if both image and video, image is a cover image for the video
       lines << "\n#{formatted_link(post["image"]["proxy"])}\n"
     end
     if post["images"].present?
       post["images"].each do |image|
         lines << "\n#{formatted_link(image["proxy"])}\n"
+      end
+    end
+    if post["videos"].present?
+      post["videos"].each do |video|
+        lines << "\n#{formatted_link(video["proxy"])}\n"
       end
     end
     if post["link"].present? and post["link"]["url"].present?
@@ -587,7 +599,11 @@ class ImportScripts::FMGP < ImportScripts::Base
   def embedded_image_md(upload)
     # remove unnecessary size logic relative to embedded_image_html
     upload_name = upload.short_url || upload.url
-    "![#{upload.original_filename}](#{upload_name})"
+    if upload_name =~ /\.(mov|mp4|webm|ogv)$/i
+      @site_base_url + upload.url
+    else
+      "![#{upload.original_filename}](#{upload_name})"
+    end
   end
 
   def formatted_link_text(url, text)
@@ -611,6 +627,7 @@ class ImportScripts::FMGP < ImportScripts::Base
         # upload.id can be nil for at least videos, and possibly deleted images
         return "<i>missing/deleted image from Google+</i>"
       end
+      upload.save
       @totalsize += @images[url][:filesize].to_i
       @uploaded[url] = upload
       return "\n#{embedded_image_md(upload)}"

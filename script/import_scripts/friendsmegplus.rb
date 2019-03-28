@@ -547,15 +547,16 @@ class ImportScripts::FMGP < ImportScripts::Base
         return text
       else
         if fragment[2]["italic"].present?
-          return "<i>#{text}</i>"
-        elsif fragment[2]["bold"].present?
-          return "<b>#{text}</b>"
-        elsif fragment[2]["strikethrough"].present?
-          # s more likely than del to represent user intent?
-          return "<s>#{text}</s>"
-        else
-          raise RuntimeError.new("markdown code #{fragment[2]} not recognized!")
+          text = "<i>#{text}</i>"
         end
+        if fragment[2]["bold"].present?
+          text = "<b>#{text}</b>"
+        end
+        if fragment[2]["strikethrough"].present?
+          # s more likely than del to represent user intent?
+          text = "<s>#{text}</s>"
+        end
+        return text
       end
     elsif fragment[0] == 1
       return "\n"

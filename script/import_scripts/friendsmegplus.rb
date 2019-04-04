@@ -35,7 +35,8 @@ class ImportScripts::FMGP < ImportScripts::Base
     super
 
     # Set this to the base URL for the site; required for importing videos
-    @site_base_url = 'http://localhost:3000/'
+    # typically just 'https:' in production
+    @site_base_url = 'http://localhost:3000'
     @system_user = Discourse.system_user
     SiteSetting.max_image_size_kb = 40960
     SiteSetting.max_attachment_size_kb = 40960
@@ -52,6 +53,13 @@ class ImportScripts::FMGP < ImportScripts::Base
 
     # CSV is map to downloaded images and/or videos (exported separately)
     @images = {}
+
+    # map from Google ID to local system users where necessary
+    # {
+    #   "128465039243871098234": "handle"
+    # }
+    # GoogleID 128465039243871098234 will show up as @handle
+    @usermap = {}
 
     # G+ user IDs to filter out (spam, abuse) — no topics or posts, silence and suspend when creating
     # loaded from blacklist.json as array of google ids `[ 92310293874, 12378491235293 ]`
@@ -99,6 +107,8 @@ class ImportScripts::FMGP < ImportScripts::Base
       elsif arg.end_with?('categories.json')
         @categories_filename = arg
         @categories = load_fmgp_json(arg)
+      elsif arg.end_with?("usermap.json")
+        @usermap = load_fmgp_json(arg)
       elsif arg.end_with?('blacklist.json')
         @blacklist = load_fmgp_json(arg).map{|i| i.to_s}.to_set
       elsif arg.end_with?('whitelist.json')
@@ -565,6 +575,9 @@ class ImportScripts::FMGP < ImportScripts::Base
       return formatted_link_text(fragment[2], fragment[1])
     elsif fragment[0] == 3
       # reference to a user
+      if @usermap.include?(fragment[2].to_s)
+        return "@#{@usermap[fragment[2].to_s]}"
+      end
       if fragment[2].nil?
         # deleted G+ users show up with a null ID
         return "<b>+#{fragment[1]}</b>"

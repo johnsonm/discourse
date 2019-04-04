@@ -91,6 +91,8 @@ class ImportScripts::FMGP < ImportScripts::Base
     @dryrun = false
     # @last_date cuts off at a certain date, for late-spammed abandoned communities
     @last_date = nil
+    # @first_date starts at a certain date, for early-spammed rescued communities
+    @first_date = nil
     # every argument is a filename, do the right thing based on the file name
     ARGV.each do |arg|
       if arg.end_with?('.csv')
@@ -119,6 +121,8 @@ class ImportScripts::FMGP < ImportScripts::Base
         @dryrun = true
       elsif arg.start_with?("--last-date=")
         @last_date = Time.zone.parse(arg.gsub(/.*=/, ''))
+      elsif arg.start_with?("--first-date=")
+        @first_date = Time.zone.parse(arg.gsub(/.*=/, ''))
       else
         raise RuntimeError.new("unknown argument #{arg}")
       end
@@ -410,6 +414,7 @@ class ImportScripts::FMGP < ImportScripts::Base
 
     created_at = Time.zone.parse(post["createdAt"])
     return nil if !@last_date.nil? and created_at > @last_date
+    return nil if !@frst_date.nil? and created_at < @first_date
 
     user_id = user_id_from_imported_user_id(post_author_id)
     if user_id.nil?

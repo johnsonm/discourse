@@ -47,6 +47,10 @@ class ImportScripts::FMGP < ImportScripts::Base
     @max_title_words = 14
     @min_title_characters = 12
     @min_post_raw_characters = 12
+    # Set to true to create categories in categories.json.  Does
+    # not honor parent relationships; expects categories to be
+    # rearranged after import.
+    @create_categories = false
 
     # JSON files produced by F+MG+E as an export of a community
     @feeds = []
@@ -232,8 +236,16 @@ class ImportScripts::FMGP < ImportScripts::Base
           @cats[id] = category if parent.name == cat["parent"]
         end
       else
-        category = Category.where(name: cat["category"]).first
-        @cats[id] = category
+        if category = Category.where(name: cat["category"]).first
+          @cats[id] = category
+        elsif @create_categories
+          params = {}
+          params[:name] = cat['category']
+          params[:id] = id
+          puts "Creating #{cat['category']}"
+          category = create_category(params, id)
+          @cats[id] = category
+        end
       end
       raise RuntimeError.new("Could not find category #{cat["category"]} for #{cat}") if @cats[id].nil?
     end

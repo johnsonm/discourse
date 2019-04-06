@@ -639,12 +639,14 @@ class ImportScripts::FMGP < ImportScripts::Base
       upload = @uploaded[url]
       return "\n#{embedded_image_md(upload)}"
     elsif @images[url].present?
+      missing = "<i>missing/deleted image from Google+</i>"
+      return missing if !Pathname.new(@images[url][:filepath]).exist?
       @imagefiles.write("#{@images[url][:filepath]}\n") if !@imagefiles.nil?
       upload = create_upload(@system_user.id, @images[url][:filepath], @images[url][:filename])
       if upload.nil? or upload.id.nil?
         # upload can be nil if the image conversion fails
         # upload.id can be nil for at least videos, and possibly deleted images
-        return "<i>missing/deleted image from Google+</i>"
+        return missing
       end
       upload.save
       @totalsize += @images[url][:filesize].to_i

@@ -5,6 +5,10 @@ class UserSecondFactor < ActiveRecord::Base
     where(method: UserSecondFactor.methods[:backup_codes], enabled: true)
   end
 
+  scope :totps, -> do
+    where(method: UserSecondFactor.methods[:totp], enabled: true)
+  end
+
   def self.methods
     @methods ||= Enum.new(
       totp: 1,
@@ -33,5 +37,6 @@ end
 #
 # Indexes
 #
-#  index_user_second_factors_on_user_id  (user_id)
+#  index_user_second_factors_on_method_and_enabled  (method,enabled)
+#  index_user_second_factors_on_user_id             (user_id)
 #

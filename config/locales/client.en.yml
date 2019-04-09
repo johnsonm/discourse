@@ -222,7 +222,6 @@ en:
     age: "Age"
     joined: "Joined"
     admin_title: "Admin"
-    flags_title: "Flags"
     show_more: "show more"
     show_help: "options"
     links: "Links"
@@ -249,8 +248,8 @@ en:
     every_hour: "every hour"
     daily: "daily"
     weekly: "weekly"
-    every_two_weeks: "every two weeks"
-    every_three_days: "every three days"
+    every_month: "every month"
+    every_six_months: "every six months"
     max_of_count: "max of {{count}}"
     alternation: "or"
     character_count:
@@ -359,23 +358,105 @@ en:
         search: "Search for a Message by title:"
         placeholder: "type the message title here"
 
-    queue:
+    review:
+      settings:
+        saved: "Saved"
+        save_changes: "Save Changes"
+        title: "Settings"
+        score_bonuses:
+          title: "Score Bonuses"
+          description: "Bonuses allow certain types to be scored higher than others so they can be prioritized. Note: changing these values will not apply to previously scored items."
+
+      moderation_history: "Moderation History"
+      view_all: "View All"
+      grouped_by_topic: "Grouped by Topic"
+      none: "There are no items to review."
+      view_pending: "view pending"
+      topic_has_pending:
+        one: "This topic has <b>1</b> post pending approval"
+        other: "This topic has <b>{{count}}</b> posts pending approval"
+      title: "Needs Review"
       topic: "Topic:"
-      approve: "Approve"
-      reject: "Reject"
-      delete_user: "Delete User"
-      title: "Needs Approval"
-      none: "There are no posts to review."
+      filtered_topic: "You have filtered to reviewable content in a single topic."
+      filtered_user: "User:"
+      show_all_topics: "show all topics"
+      deleted_user: "(deleted user)"
+      user:
+        username: "Username"
+        email: "Email"
+        name: "Name"
+        fields: "Fields"
+
+      user_percentage:
+        summary:
+          one: "{{agreed}}, {{disagreed}}, {{ignored}} ({{count}} total flag)"
+          other: "{{agreed}}, {{disagreed}}, {{ignored}} ({{count}} total flags)"
+        agreed:
+          one: "{{count}}% agree"
+          other: "{{count}}% agree"
+        disagreed:
+          one: "{{count}}% disagree"
+          other: "{{count}}% disagree"
+        ignored:
+          one: "{{count}}% ignore"
+          other: "{{count}}% ignore"
+      topics:
+        topic: "Topic"
+        reviewable_count: "Count"
+        reported_by: "Reported by"
+        details: "details"
+        unique_users:
+          one: "1 user"
+          other: "{{count}} users"
+      replies:
+        one: "1 reply"
+        other: "{{count}} replies"
       edit: "Edit"
+      save: "Save"
       cancel: "Cancel"
-      view_pending: "view pending posts"
-      has_pending_posts:
-        one: "This topic has <b>1</b> post awaiting approval"
-        other: "This topic has <b>{{count}}</b> posts awaiting approval"
+      new_topic: "New Topic:"
 
-      confirm: "Save Changes"
-      delete_prompt: "Are you sure you want to delete <b>%{username}</b>? This will remove all of their posts and block their email and IP address."
+      filters:
+        type:
+          title: "Type:"
+          all: "(all types)"
+        minimum_score: "Minimum Score:"
+        refresh: "Refresh"
+        status: "Status:"
+        category: "Category:"
+      conversation:
+        view_full: "view full conversation"
+      history:
+        title: "History"
+        edited: "Edited"
+      scores:
+        description: "Description"
+        score: "Score"
+        submitted_by: "Submitted By"
+      statuses:
+        pending:
+          title: "Pending"
+        approved:
+          title: "Approved"
+        rejected:
+          title: "Rejected"
+        ignored:
+          title: "Ignored"
+        deleted:
+          title: "Deleted"
+        reviewed:
+          title: "(All Reviewed)"
+        all:
+          title: "(Everything)"
 
+      types:
+        reviewable_flagged_post:
+          title: "Flagged Post"
+          flagged_by: "Flagged By"
+        reviewable_queued_post:
+          title: "Queued Post"
+        reviewable_user:
+          title: "User"
       approval:
         title: "Post Needs Approval"
         description: "We've received your new post but it needs to be approved by a moderator before it will appear. Please be patient."
@@ -432,10 +513,19 @@ en:
 
     groups:
       member_added: "Added"
+      member_requested: "Requested at"
       add_members:
         title: "Add Members"
         description: "Manage the membership of this group"
         usernames: "Usernames"
+      requests:
+        title: "Requests"
+        reason: "Reason"
+        accept: "Accept"
+        accepted: "accepted"
+        deny: "Deny"
+        denied: "denied"
+        undone: "request undone"
       manage:
         title: "Manage"
         name: "Name"
@@ -466,6 +556,7 @@ en:
       empty:
         posts: "There are no posts by members of this group."
         members: "There are no members in this group."
+        requests: "There are no membership requests for this group."
         mentions: "There are no mentions of this group."
         messages: "There are no messages for this group."
         topics: "There are no topics by members of this group."
@@ -639,8 +730,18 @@ en:
       new_private_message: "New Message"
       private_message: "Message"
       private_messages: "Messages"
-      ignore: "Ignore"
-      unignore: "Unignore"
+      user_notifications:
+        ignore_duration_title: "Ignore Timer"
+        ignore_duration_when: "Duration:"
+        ignore_duration_save: "Ignore"
+        ignore_duration_note: "Please note that all ignores are automatically removed after the ignore duration expires."
+        ignore_duration_time_frame_required: "Please select a time frame"
+        ignore_option: "Ignored"
+        ignore_option_title: "You will not receive notifications related to this user and all of their topics and replies will be hidden."
+        mute_option: "Muted"
+        mute_option_title: "You will not receive any notifications related to this user."
+        normal_option: "Normal"
+        normal_option_title: "You will be notified if this user replies to you, quotes you, or mentions you."
       activity_stream: "Activity"
       preferences: "Preferences"
       profile_hidden: "This user's public profile is hidden."
@@ -726,7 +827,7 @@ en:
       muted_users: "Muted"
       muted_users_instructions: "Suppress all notifications from these users."
       ignored_users: "Ignored"
-      ignored_users_instructions: "Lists all your ignored users."
+      ignored_users_instructions: "Suppress all posts and notifications from these users."
       muted_topics_link: "Show muted topics"
       watched_topics_link: "Show watched topics"
       tracked_topics_link: "Show tracked topics"
@@ -803,13 +904,14 @@ en:
         label: "Code"
         rate_limit: "Please wait before trying another authentication code."
         enable_description: |
-          Scan this QR code in a supported app (<a href="https://www.google.com/search?q=authenticator+apps+for+android" target="_blank">Android</a> – <a href="https://www.google.com/search?q=authenticator+apps+for+ios" target="_blank">iOS</a> and enter your authentication code.
+          Scan this QR code in a supported app (<a href="https://www.google.com/search?q=authenticator+apps+for+android" target="_blank">Android</a> – <a href="https://www.google.com/search?q=authenticator+apps+for+ios" target="_blank">iOS</a>) and enter your authentication code.
         disable_description: "Please enter the authentication code from your app"
         show_key_description: "Enter manually"
         extended_description: |
           Two factor authentication adds extra security to your account by requiring a one-time token in addition to your password. Tokens can be generated on <a href="https://www.google.com/search?q=authenticator+apps+for+android" target='_blank'>Android</a> and <a href="https://www.google.com/search?q=authenticator+apps+for+ios">iOS</a> devices.
         oauth_enabled_warning: "Please note that social logins will be disabled once two factor authentication has been enabled on your account."
         use: "<a href>Use Authenticator app</a>"
+        enforced_notice: "You are required to enable two factor authentication before accessing this site."
 
       change_about:
         title: "Change About Me"
@@ -854,7 +956,8 @@ en:
         primary: "Primary Email"
         secondary: "Secondary Emails"
         no_secondary: "No secondary emails"
-        instructions: "never shown to the public"
+        sso_override_instructions: "Email can be updated from SSO provider."
+        instructions: "Never shown to the public."
         ok: "We will email you to confirm"
         invalid: "Please enter a valid email address"
         authenticated: "Your email has been authenticated by {{provider}}"
@@ -946,15 +1049,17 @@ en:
         every_30_minutes: "every 30 minutes"
         every_hour: "hourly"
         daily: "daily"
-        every_three_days: "every three days"
         weekly: "weekly"
-        every_two_weeks: "every two weeks"
-
+        every_month: "every month"
+        every_six_months: "every six months"
+      email_level:
+        title: "Send me an email when someone quotes me, replies to my post, mentions my @username, or invites me to a topic"
+        always: "always"
+        only_when_away: "only when away"
+        never: "never"
+      email_messages_level: "Send me an email when someone messages me"
       include_tl0_in_digests: "Include content from new users in summary emails"
       email_in_reply_to: "Include an excerpt of replied to post in emails"
-      email_direct: "Send me an email when someone quotes me, replies to my post, mentions my @username, or invites me to a topic"
-      email_private_messages: "Send me an email when someone messages me"
-      email_always: "Send me email notifications even when I am active on the site"
 
       other_settings: "Other"
       categories_settings: "Categories"
@@ -1290,10 +1395,6 @@ en:
         name: "Facebook"
         title: "with Facebook"
         message: "Authenticating with Facebook (make sure pop up blockers are not enabled)"
-      yahoo:
-        name: "Yahoo"
-        title: "with Yahoo"
-        message: "Authenticating with Yahoo (make sure pop up blockers are not enabled)"
       github:
         name: "GitHub"
         title: "with GitHub"
@@ -1338,6 +1439,9 @@ en:
     conditional_loading_section:
       loading: Loading...
 
+    category_row:
+      topic_count: "{{count}} topics in this category"
+
     select_kit:
       default_header_text: Select...
       no_content: No matches found
@@ -1353,13 +1457,15 @@ en:
 
     emoji_picker:
       filter_placeholder: Search for emoji
-      people: People
-      nature: Nature
-      food: Food
-      activity: Activity
-      travel: Travel
+      smileys_&_emotion: Smileys and Emotion
+      people_&_body: People and Body
+      animals_&_nature: Animals and Nature
+      food_&_drink: Food and Drink
+      travel_&_places: Travel and Places
+      activities: Activities
       objects: Objects
-      celebration: Celebration
+      symbols: Symbols
+      flags: Flags
       custom: Custom emojis
       recent: Recently used
       default_tone: No skin tone
@@ -1822,7 +1928,9 @@ en:
         next_week: "Next week"
         two_weeks: "Two Weeks"
         next_month: "Next month"
+        two_months: "Two Months"
         three_months: "Three Months"
+        four_months: "Four Months"
         six_months: "Six Months"
         one_year: "One Year"
         forever: "Forever"
@@ -1927,36 +2035,21 @@ en:
 
       actions:
         recover: "Un-Delete Topic"
-        recover_tooltip: "Restores the topic."
         delete: "Delete Topic"
-        delete_tooltip: "Marks the topic as deleted."
         open: "Open Topic"
-        open_tooltip: "Marks the topic as open and allows new replies."
         close: "Close Topic"
-        close_tooltip: "Marks the topic as closed and prevents new replies."
         multi_select: "Select Posts…"
-        multi_select_tooltip: "Toggles multiselect mode in which multiple posts can be selected."
         timed_update: "Set Topic Timer..."
-        timed_update_tooltip: "Opens a new window in which a timer for different actions can be set."
         pin: "Pin Topic…"
-        pin_tooltip: "Opens a window in which the topic can be featured in different ways."
         unpin: "Un-Pin Topic…"
-        unpin_tooltip: "Unpins the topic and it will no longer be featured."
         unarchive: "Unarchive Topic"
-        unarchive_tooltip: "Unfreezes the topic and allows interacting with it."
         archive: "Archive Topic"
-        archive_tooltip: "Freezes the topic and prevents interacting with it."
         invisible: "Make Unlisted"
-        invisible_tooltip: "Prevents the inclusion of the topic in lists and digest emails."
         visible: "Make Listed"
-        visible_tooltip: "Marks the topic as visible and includes the topic in lists and digest emails."
         reset_read: "Reset Read Data"
         make_public: "Make Public Topic"
-        make_public_tooltip: "Converts to public topic and makes it visible for other users."
         make_private: "Make Personal Message"
-        make_private_tooltip: "Converts to personal message and makes it invisible for other users."
         reset_bump_date: "Reset Bump Date"
-        reset_bump_date_tooltip: "Puts the topic back into chronological order according to when it was originally created."
 
       feature:
         pin: "Pin Topic"
@@ -2114,7 +2207,6 @@ en:
 
       change_timestamp:
         title: "Change Timestamp..."
-        tooltip: "Opens a window in which the timestamp can be changed."
         action: "change timestamp"
         invalid_timestamp: "Timestamp cannot be in the future."
         error: "There was an error changing the timestamp of the topic."
@@ -2143,10 +2235,15 @@ en:
           one: You have selected <b>1</b> post.
           other: "You have selected <b>{{count}}</b> posts."
 
+      deleted_by_author:
+        one: "(topic withdrawn by author, will be automatically deleted in %{count} hour unless flagged)"
+        other: "(topic withdrawn by author, will be automatically deleted in %{count} hours unless flagged)"
+
     post:
       quote_reply: "Quote"
       edit_reason: "Reason: "
       post_number: "post {{number}}"
+      ignored: "Hidden content"
       wiki_last_edited_on: "wiki last edited on"
       last_edited_on: "post last edited on"
       reply_as_new_topic: "Reply as linked Topic"
@@ -2166,16 +2263,13 @@ en:
         other: "view {{count}} hidden replies"
 
       notice:
-        first: "This is the first time {{user}} has posted — let's welcome them to our community!"
-        return: "It's been a while since we've seen {{user}} — their last post was in {{time}}."
+        first: "This is the first time {{user}} has posted — let’s welcome them to our community!"
+        return: "It’s been a while since we’ve seen {{user}} — their last post was {{time}}."
 
       unread: "Post is unread"
       has_replies:
         one: "{{count}} Reply"
         other: "{{count}} Replies"
-      has_likes:
-        one: "{{count}} Like"
-        other: "{{count}} Likes"
 
       has_likes_title:
         one: "1 person liked this post"
@@ -2190,7 +2284,7 @@ en:
         create: "Sorry, there was an error creating your post. Please try again."
         edit: "Sorry, there was an error editing your post. Please try again."
         upload: "Sorry, there was an error uploading that file. Please try again."
-        file_too_large: "Sorry, that file is too big (maximum size is {{max_size_kb}}kb). Why not upload your large file to a cloud sharing service, then share the link?"
+        file_too_large: "Sorry, that file is too big (maximum size is {{max_size_kb}}kb). Why not upload your large file to a cloud sharing service, then paste the link?"
         too_many_uploads: "Sorry, you can only upload one file at a time."
         too_many_dragged_and_dropped_files: "Sorry, you can only upload {{max}} files at a time."
         upload_not_authorized: "Sorry, the file you are trying to upload is not authorized (authorized extensions: {{authorized_extensions}})."
@@ -2386,11 +2480,13 @@ en:
       settings: "Settings"
       topic_template: "Topic Template"
       tags: "Tags"
-      tags_allowed_tags: "Only allow these tags to be used in this category:"
-      tags_allowed_tag_groups: "Only allow tags from these groups to be used in this category:"
+      tags_allowed_tags: "Restrict these tags to this category:"
+      tags_allowed_tag_groups: "Restrict these tag groups to this category:"
       tags_placeholder: "(Optional) list of allowed tags"
       tags_tab_description: "Tags and tag groups specified here will only be available in this category and other categories that also specify them. They won't be available for use in other categories."
       tag_groups_placeholder: "(Optional) list of allowed tag groups"
+      manage_tag_groups_link: "Manage tag groups here."
+      allow_global_tags_label: "Also allow other tags"
       topic_featured_link_allowed: "Allow featured links in this category"
       delete: "Delete Category"
       create: "New Category"
@@ -2464,6 +2560,15 @@ en:
         muted:
           title: "Muted"
           description: "You will never be notified of anything about new topics in these categories, and they will not appear in latest."
+      search_priority:
+        label: "Search Priority"
+        options:
+          normal: "Normal"
+          ignore: "Ignore"
+          very_low: "Very Low"
+          low: "Low"
+          high: "High"
+          very_high: "Very High"
       sort_options:
         default: "default"
         likes: "Likes"
@@ -2949,6 +3054,7 @@ en:
         moderation_tab: "Moderation"
         security_tab: "Security"
         reports_tab: "Reports"
+        report_filter_any: "any"
         disabled: Disabled
         timeout_error: Sorry, query is taking too long, please pick a shorter interval
         exception_error: Sorry, an error occurred while executing the query
@@ -2983,103 +3089,6 @@ en:
       commits:
         latest_changes: "Latest changes: please update often!"
         by: "by"
-
-      flags:
-        title: "Flags"
-        active_posts: "Flagged Posts"
-        old_posts: "Old Flagged Posts"
-        topics: "Flagged Topics"
-        moderation_history: "Moderation History"
-        moderation_history_tooltip: "Shows the moderation history."
-
-        agree: "Agree"
-        agree_title: "Confirm this flag as valid and correct"
-        agree_flag_hide_post: "Hide Post"
-        agree_flag_hide_post_title: "Hide this post and automatically send the user a message urging them to edit it."
-        agree_flag_restore_post: "Agree and Restore Post"
-        agree_flag_restore_post_title: "Restore the post so that all users can see it."
-        agree_flag_suspend: "Suspend User"
-        agree_flag_suspend_title: "Agree with flag and suspend the user."
-        agree_flag_silence: "Silence User"
-        agree_flag_silence_title: "Agree with flag and silence the user."
-
-        agree_flag: "Keep Post"
-        agree_flag_title: "Agree with flag and keep the post unchanged."
-        ignore_flag: "Ignore"
-        ignore_flag_title: "Remove this flag; it requires no action at this time."
-        delete: "Delete"
-        delete_title: "Delete the post this flag refers to."
-        delete_post_defer_flag: "Delete Post and Ignore flag"
-        delete_post_defer_flag_title: "Delete post; if the first post, delete the topic"
-        delete_post_agree_flag: "Delete Post and Agree with flag"
-        delete_post_agree_flag_title: "Delete post; if the first post, delete the topic"
-        delete_flag_modal_title: "Delete and..."
-        delete_spammer: "Delete Spammer"
-        delete_spammer_title: "Remove the user and all posts and topics by this user."
-        disagree_flag_unhide_post: "Disagree (unhide post)"
-        disagree_flag_unhide_post_title: "Remove any flags from this post and make the post visible again"
-        disagree_flag: "Disagree"
-        disagree_flag_title: "Deny this flag as invalid or incorrect"
-        clear_topic_flags: "Done"
-        clear_topic_flags_title: "The topic has been investigated and issues have been resolved. Click Done to remove the flags."
-        more: "(more replies...)"
-        suspend_user: "Suspend User"
-        suspend_user_title: "Suspend user for this post"
-        replies:
-          one: "[1 reply]"
-          other: "[%{count} replies]"
-        delete_replies:
-          one: "Also delete the %{count} reply to this post?"
-          other: "Also delete the %{count} replies to this post?"
-
-        dispositions:
-          agreed: "agreed"
-          disagreed: "disagreed"
-          deferred: "ignored"
-
-        flagged_by: "Flagged by"
-        resolved_by: "Resolved by"
-        took_action: "Took action"
-        system: "System"
-        error: "Something went wrong"
-        reply_message: "Reply"
-        no_results: "There are no flagged posts."
-        topic_flagged: "This <strong>topic</strong> has been flagged."
-        show_full: "show full post"
-        visit_topic: "Visit the topic to take action"
-        was_edited: "Post was edited after the first flag"
-        previous_flags_count: "This post has already been flagged {{count}} times."
-        show_details: "Show flag details"
-
-        user_percentage:
-          summary:
-            one: "{{agreed}}, {{disagreed}}, {{ignored}} ({{count}} total flag)"
-            other: "{{agreed}}, {{disagreed}}, {{ignored}} ({{count}} total flags)"
-          agreed:
-            one: "{{count}}% agree"
-            other: "{{count}}% agree"
-          disagreed:
-            one: "{{count}}% disagree"
-            other: "{{count}}% disagree"
-          ignored:
-            one: "{{count}}% ignore"
-            other: "{{count}}% ignore"
-
-        details: "details"
-
-        flagged_topics:
-          topic: "Topic"
-          type: "Type"
-          users: "Users"
-          last_flagged: "Last Flagged"
-          no_results: "There are no flagged topics."
-
-        short_names:
-          off_topic: "off-topic"
-          inappropriate: "inappropriate"
-          spam: "spam"
-          notify_user: "custom"
-          notify_moderators: "custom"
 
       groups:
         new:
@@ -3218,6 +3227,7 @@ en:
           inactive: "Inactive"
           failed: "Failed"
           successful: "Successful"
+          disabled: "Disabled"
         events:
           none: "There are no related events."
           redeliver: "Redeliver"
@@ -3707,6 +3717,12 @@ en:
             change_name: "change name"
             topic_timestamps_changed: "topic timestamps changed"
             approve_user: "approved user"
+            web_hook_create: "webhook create"
+            web_hook_update: "webhook update"
+            web_hook_destroy: "webhook destroy"
+            embeddable_host_create: "embeddable host create"
+            embeddable_host_update: "embeddable host update"
+            embeddable_host_destroy: "embeddable host destroy"
         screened_emails:
           title: "Screened Emails"
           description: "When someone tries to create a new account, the following email addresses will be checked and the registration will be blocked, or some other action performed."
@@ -3793,22 +3809,16 @@ en:
         id_not_found: "Sorry, that user id doesn't exist in our system."
         active: "Activated"
         show_emails: "Show Emails"
+        hide_emails: "Hide Emails"
         nav:
           new: "New"
           active: "Active"
-          pending: "Pending"
           staff: "Staff"
           suspended: "Suspended"
           silenced: "Silenced"
           suspect: "Suspect"
           staged: "Staged"
         approved: "Approved?"
-        approved_selected:
-          one: "approve user"
-          other: "approve users ({{count}})"
-        reject_selected:
-          one: "reject user"
-          other: "reject users ({{count}})"
         titles:
           active: "Active Users"
           new: "New Users"
@@ -3825,12 +3835,6 @@ en:
           suspended: "Suspended Users"
           suspect: "Suspect Users"
           staged: "Staged Users"
-        reject_successful:
-          one: "Successfully rejected 1 user."
-          other: "Successfully rejected %{count} users."
-        reject_failures:
-          one: "Failed to reject 1 user."
-          other: "Failed to reject %{count} users."
         not_verified: "Not verified"
         check_email:
           title: "Reveal this user's email address"
@@ -4231,6 +4235,18 @@ en:
           label: "New:"
           add: "Add"
           filter: "Search (URL or External URL)"
+
+      reseed:
+        action:
+          label: "Replace Text…"
+          title: "Replace text of categories and topics with translations"
+
+        modal:
+          title: "Replace Text"
+          subtitle: "Replace text of system generated categories and topics with latest translations"
+          categories: "Categories"
+          topics: "Topics"
+          replace: "Replace"
 
   wizard_js:
     wizard:

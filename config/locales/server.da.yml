@@ -203,8 +203,6 @@ da:
   too_late_to_edit: "Dette indlæg er gammelt og kan ikke længere redigeres eller slettes."
   revert_version_same: "Den nuværende udgave er den samme udgave/version som den du prøver at vende tilbage til."
   excerpt_image: "billede"
-  queue:
-    delete_reason: "Slettet via køen til moderation af indlæg."
   groups:
     errors:
       can_not_modify_automatic: "Du kan ikke modificere en automatisk gruppe"
@@ -776,7 +774,6 @@ da:
     polling_interval: "Når der ikke hentes data langsomt, hvor tit skal en klient der er logget på hente ny data i millisekunder"
     anon_polling_interval: "Hvor ofte skal anonyme brugere polle, i millisekunder."
     background_polling_interval: "Hvor tit skal klienter hente data i millisekunder (når vinduet er i baggrunden)"
-    flags_required_to_hide_post: "Antal flag der forårsager at et indlæg automatisk skjules, og en bresked sendt til brugeren (0 for never)"
     cooldown_minutes_after_hiding_posts: "Antal minutter en bruger må vente indtil de kan redigere et indlæg der er blevet gemt via et flag"
     max_topics_in_first_day: "Det maksimale antal af emner en bruger må lave i en 24 timers periode efter at have skrevet det første indlæg"
     max_replies_in_first_day: "Det maksimale antal af svar en bruger må foretage i 24 timers perioden efter at have skrevet deres første indlæg"
@@ -788,7 +785,6 @@ da:
     must_approve_users: "Personale skal godkende alle nye bruger konti inden de kan tilgå sitet. ADVARSEL: aktivering af dette for et live site vil medføre en ophævning af adgang for eksisterende ikke-personale brugere."
     pending_users_reminder_delay: "Underret moderatorer hvis nye brugere har ventet på godkendelse i længere end så mange timer. Skriv -1 for at deaktivere notifikationer."
     maximum_session_age: "Bruger vil forblive logget in for n hours siden sidste besøg"
-    allow_moderators_to_create_categories: "Tillad moderatorer at skabe nye kategorier"
     use_admin_ip_whitelist: "Admins kan kun logge ind hvis de logger på fra en prædefineret IP liste:  (Admin > Logs > Screened Ips)."
     top_menu: "Afklar hvilke ting fremgår af sidens navigations bar, og i hvilken rækkefølge. Eksempel: latest|new|unread|categories|top|read|posted|bookmarks"
     post_menu: "Angiv hvilke elementer der skal vises i indlægsmenuen, og i hvilken rækkefølge. Eksempel: like|edit|flag|delete|share|bookmark|reply."
@@ -841,7 +837,6 @@ da:
     staff_like_weight: "Hvor meget ekstra vægt har hjælperteamets likes."
     max_new_accounts_per_registration_ip: "Hvis der allerede er (n) kontoer med tillidsniveau 0 fra en IP (og ingen er en del af hjælperteamet eller på TL2 eller højere), så accepteres nye kontooprettelser fra denne IP ikke."
     num_flaggers_to_close_topic: "Minimum antal flagmarkeringer fra unikke brugere, der skal til for automatisk at pause et emne til ingriben"
-    num_flags_to_close_topic: "Minimum antal aktive flagmarkeringer, der skal til for automatisk at pause et emne til indgriben"
     auto_respond_to_flag_actions: "Aktivér automatisk besvarelse, når en flagmarkering fjernes."
     reply_by_email_enabled: "Aktivér muligheden for at svare til emner via email."
     reply_by_email_address: "Skabelon for e-mail-adressen i formularen, for eksempel: %%{reply_key}@reply.myforum.com."
@@ -872,9 +867,7 @@ da:
     emoji_set: "Hvordan kunne du tænke dig din emoji?"
     default_email_digest_frequency: "Hvor ofte brugere som standard modtager mails med sammendrag."
     default_include_tl0_in_digests: "Inkluder som standard indlæg fra nye brugre i mails med sammendrag. Brugere kan ændre dette i deres indstillinger."
-    default_email_direct: "Send som standard en email når nogen citerer/svarer/nævner/inviterer brugeren."
     default_email_mailing_list_mode: "Send som standard en email for hvert nyt indlæg."
-    default_email_always: "Send som standard en email-notifikation selv hvis brugeren er aktiv."
     default_other_new_topic_duration_minutes: "Global standardkriterium for hvornår et emne regnes for nyt."
     default_other_auto_track_topics_after_msecs: "Globalt standardtidsrum før et emne automatisk spores. "
     default_other_external_links_in_new_tab: "Åbn som standard links på et nyt faneblad."
@@ -972,10 +965,6 @@ da:
     ip_address:
       blocked: "Nye registreringer er ikke tilladt fra din IP adresse."
       max_new_accounts_per_registration_ip: "Nye kontoer kan ikke oprettes fra din IP-adresse (max antal er nået). Kontakt et medlem af hjælperteamet."
-  flags_reminder:
-    subject_template:
-      one: "1 flag venter på at blive håndteret"
-      other: "%{count} flag venter på at blive håndteret"
   unsubscribe_mailer:
     subject_template: "Bekræft at du ikke længere ønsker at modtage email opdateringer fra %{site_title}"
     text_body_template: |
@@ -1024,8 +1013,6 @@ da:
     agreed: "Tak for din henvendelse. Vi er enige i, at der er et problem, og vi kigger på det."
     agreed_and_deleted: "Tak for din henvendelse. Vi er enige i, at der er et problem, og vi har fjernet indlægget."
     disagreed: "Tak for din henvendelse. Vi kigger på det."
-    deferred: "Tak for din henvendelse. Vi kigger på det."
-    deferred_and_deleted: "Tak for din henvendelse. Vi har fjernet indlægget."
   system_messages:
     private_topic_title: "Emne #%{id}"
     contents_hidden: "Gå venligst til indlægget for at se indholdet."

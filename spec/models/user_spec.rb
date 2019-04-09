@@ -124,48 +124,58 @@ describe User do
     end
   end
 
-  describe '.approve' do
-    let(:user) { Fabricate(:user) }
+  describe 'reviewable' do
+    let(:user) { Fabricate(:user, active: false) }
     let(:admin) { Fabricate(:admin) }
 
-    it "enqueues a 'signup after approval' email if must_approve_users is true" do
+    before do
+      Jobs.run_immediately!
+    end
+
+    it "creates a reviewable for the user if must_approve_users is true and activate is called" do
       SiteSetting.must_approve_users = true
-      Jobs.expects(:enqueue).with(
-        :critical_user_email, has_entries(type: :signup_after_approval)
-      )
-      user.approve(admin)
+      user
+
+      # Inactive users don't have reviewables
+      reviewable = ReviewableUser.find_by(target: user)
+      expect(reviewable).to be_blank
+
+      user.activate
+      reviewable = ReviewableUser.find_by(target: user)
+      expect(reviewable).to be_present
+      expect(reviewable.score > 0).to eq(true)
+      expect(reviewable.reviewable_scores).to be_present
     end
 
-    it "doesn't enqueue a 'signup after approval' email if must_approve_users is false" do
-      SiteSetting.must_approve_users = false
-      Jobs.expects(:enqueue).never
-      user.approve(admin)
+    it "creates a reviewable for the user if must_approve_users is true and their token is confirmed" do
+      SiteSetting.must_approve_users = true
+      user
+
+      # Inactive users don't have reviewables
+      reviewable = ReviewableUser.find_by(target: user)
+      expect(reviewable).to be_blank
+
+      EmailToken.confirm(user.email_tokens.first.token)
+      expect(user.reload.active).to eq(true)
+      reviewable = ReviewableUser.find_by(target: user)
+      expect(reviewable).to be_present
     end
 
-    it 'triggers a extensibility event' do
-      user && admin # bypass the user_created event
-      event = DiscourseEvent.track_events { user.approve(admin) }.first
-
-      expect(event[:event_name]).to eq(:user_approved)
-      expect(event[:params].first).to eq(user)
+    it "doesn't create a reviewable if must_approve_users is false" do
+      user
+      expect(ReviewableUser.find_by(target: user)).to be_blank
     end
 
-    context 'after approval' do
-      before do
-        user.approve(admin)
-      end
+    it "will reject a reviewable if the user is deactivated" do
+      SiteSetting.must_approve_users = true
+      user
 
-      it 'marks the user as approved' do
-        expect(user).to be_approved
-      end
+      user.activate
+      reviewable = ReviewableUser.find_by(target: user)
+      expect(reviewable.pending?).to eq(true)
 
-      it 'has the admin as the approved by' do
-        expect(user.approved_by).to eq(admin)
-      end
-
-      it 'has a value for approved_at' do
-        expect(user.approved_at).to be_present
-      end
+      user.deactivate(admin)
+      expect(reviewable.reload.rejected?).to eq(true)
     end
   end
 
@@ -176,19 +186,19 @@ describe User do
 
     it "creates a bookmark with the true parameter" do
       expect {
-        PostAction.act(@post.user, @post, PostActionType.types[:bookmark])
+        PostActionCreator.create(@post.user, @post, :bookmark)
       }.to change(PostAction, :count).by(1)
     end
 
     describe 'when removing a bookmark' do
       before do
-        PostAction.act(@post.user, @post, PostActionType.types[:bookmark])
+        PostActionCreator.create(@post.user, @post, :bookmark)
       end
 
       it 'reduces the bookmark count of the post' do
         active = PostAction.where(deleted_at: nil)
         expect {
-          PostAction.remove_act(@post.user, @post, PostActionType.types[:bookmark])
+          PostActionDestroyer.destroy(@post.user, @post, :bookmark)
         }.to change(active, :count).by(-1)
       end
     end
@@ -202,7 +212,7 @@ describe User do
       @post3 = Fabricate(:post, user: @user)
       @posts = [@post1, @post2, @post3]
       @guardian = Guardian.new(Fabricate(:admin))
-      @queued_post = Fabricate(:queued_post, user: @user)
+      Fabricate(:reviewable_queued_post, created_by: @user)
     end
 
     it 'deletes only one batch of posts' do
@@ -215,7 +225,7 @@ describe User do
     it 'correctly deletes posts and topics' do
       @user.delete_posts_in_batches(@guardian, 20)
       expect(Post.where(id: @posts.map(&:id))).to be_empty
-      expect(QueuedPost.where(user_id: @user.id).count).to eq(0)
+      expect(Reviewable.where(created_by: @user).count).to eq(0)
       @posts.each do |p|
         if p.is_first_post?
           expect(Topic.find_by(id: p.topic_id)).to be_nil
@@ -265,8 +275,8 @@ describe User do
         expect(subject.email_tokens).to be_present
         expect(subject.user_stat).to be_present
         expect(subject.user_profile).to be_present
-        expect(subject.user_option.email_private_messages).to eq(true)
-        expect(subject.user_option.email_direct).to eq(true)
+        expect(subject.user_option.email_messages_level).to eq(UserOption.email_level_types[:always])
+        expect(subject.user_option.email_level).to eq(UserOption.email_level_types[:only_when_away])
       end
     end
 
@@ -920,16 +930,15 @@ describe User do
     end
 
     it "does not flags post as spam if the previous flag for that post was disagreed" do
+      results = user.flag_linked_posts_as_spam
+
+      expect(post.reload.spam_count).to eq(1)
+
+      results.each { |result| result.reviewable.perform(admin, :disagree) }
+
       user.flag_linked_posts_as_spam
 
-      post.reload
-      expect(post.spam_count).to eq(1)
-
-      PostAction.clear_flags!(post, admin)
-      user.flag_linked_posts_as_spam
-
-      post.reload
-      expect(post.spam_count).to eq(0)
+      expect(post.reload.spam_count).to eq(0)
     end
 
   end
@@ -1071,7 +1080,7 @@ describe User do
     before do
       # To make testing easier, say 1 reply is too much
       SiteSetting.newuser_max_replies_per_topic = 1
-      UserActionCreator.enable
+      UserActionManager.enable
     end
 
     context "for a user who didn't create the topic" do
@@ -1136,6 +1145,20 @@ describe User do
       expect(User.gravatar_template("em@il.com")).to eq("//www.gravatar.com/avatar/6dc2fde946483a1d8a84b89345a1b638.png?s={size}&r=pg&d=identicon")
     end
 
+  end
+
+  describe "#letter_avatar_color" do
+    before do
+      SiteSetting.restrict_letter_avatar_colors = "2F70AC|ED207B|AAAAAA|77FF33"
+    end
+
+    it "returns custom color if restrict_letter_avatar_colors site setting is set" do
+      colors = SiteSetting.restrict_letter_avatar_colors.split("|")
+      expect(User.letter_avatar_color("username_one")).to eq("2F70AC")
+      expect(User.letter_avatar_color("username_two")).to eq("ED207B")
+      expect(User.letter_avatar_color("username_three")).to eq("AAAAAA")
+      expect(User.letter_avatar_color("username_four")).to eq("77FF33")
+    end
   end
 
   describe ".small_avatar_url" do
@@ -1396,16 +1419,13 @@ describe User do
 
     it "doesn't count disagreed flags" do
       post_agreed = Fabricate(:post)
-      PostAction.act(user, post_agreed, PostActionType.types[:off_topic])
-      PostAction.agree_flags!(post_agreed, moderator)
+      PostActionCreator.inappropriate(user, post_agreed).reviewable.perform(moderator, :agree_and_keep)
 
       post_deferred = Fabricate(:post)
-      PostAction.act(user, post_deferred, PostActionType.types[:inappropriate])
-      PostAction.defer_flags!(post_deferred, moderator)
+      PostActionCreator.inappropriate(user, post_deferred).reviewable.perform(moderator, :ignore)
 
       post_disagreed = Fabricate(:post)
-      PostAction.act(user, post_disagreed, PostActionType.types[:spam])
-      PostAction.clear_flags!(post_disagreed, moderator)
+      PostActionCreator.inappropriate(user, post_disagreed).reviewable.perform(moderator, :disagree)
 
       expect(user.number_of_flags_given).to eq(2)
     end
@@ -1461,10 +1481,9 @@ describe User do
 
     before do
       SiteSetting.default_email_digest_frequency = 1440 # daily
-      SiteSetting.default_email_personal_messages = false
-      SiteSetting.default_email_direct = false
+      SiteSetting.default_email_level = UserOption.email_level_types[:never]
+      SiteSetting.default_email_messages_level = UserOption.email_level_types[:never]
       SiteSetting.default_email_mailing_list_mode = true
-      SiteSetting.default_email_always = true
 
       SiteSetting.default_other_new_topic_duration_minutes = -1 # not viewed
       SiteSetting.default_other_auto_track_topics_after_msecs = 0 # immediately
@@ -1485,16 +1504,15 @@ describe User do
     it "has overriden preferences" do
       user = Fabricate(:user)
       options = user.user_option
-      expect(options.email_always).to eq(true)
       expect(options.mailing_list_mode).to eq(true)
       expect(options.digest_after_minutes).to eq(1440)
-      expect(options.email_private_messages).to eq(false)
+      expect(options.email_level).to eq(UserOption.email_level_types[:never])
+      expect(options.email_messages_level).to eq(UserOption.email_level_types[:never])
       expect(options.external_links_in_new_tab).to eq(true)
       expect(options.enable_quoting).to eq(false)
       expect(options.dynamic_favicon).to eq(true)
       expect(options.disable_jump_reply).to eq(true)
       expect(options.automatically_unpin_topics).to eq(false)
-      expect(options.email_direct).to eq(false)
       expect(options.new_topic_duration_minutes).to eq(-1)
       expect(options.auto_track_topics_after_msecs).to eq(0)
       expect(options.notification_level_when_replying).to eq(3)
@@ -1518,7 +1536,7 @@ describe User do
 
     it "Creates a UserOption row when a user record is created and destroys once done" do
       user = Fabricate(:user)
-      expect(user.user_option.email_always).to eq(false)
+      expect(user.user_option.email_level).to eq(UserOption.email_level_types[:only_when_away])
 
       user_id = user.id
       user.destroy!
@@ -1972,8 +1990,8 @@ describe User do
       user = Fabricate(:user)
       post = Fabricate(:post)
 
-      PostAction.act(user, post, PostActionType.types[:like])
-      PostAction.remove_act(user, post, PostActionType.types[:like])
+      PostActionCreator.like(user, post)
+      PostActionDestroyer.destroy(user, post, :like)
 
       UserAction.create!(user_id: user.id, action_type: UserAction::LIKE)
       UserAction.create!(user_id: -1, action_type: UserAction::LIKE, target_user_id: user.id)

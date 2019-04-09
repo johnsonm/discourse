@@ -46,12 +46,22 @@ export default Ember.Component.extend(
       "user.location",
       "user.website_name"
     ),
+    isSuspendedOrHasBio: Ember.computed.or(
+      "user.suspend_reason",
+      "user.bio_cooked"
+    ),
     showCheckEmail: Ember.computed.and("user.staged", "canCheckEmails"),
 
     user: null,
 
     // If inside a topic
     topicPostCount: null,
+
+    @computed("user.staff")
+    staff: isStaff => (isStaff ? "staff" : ""),
+
+    @computed("user.trust_level")
+    newUser: trustLevel => (trustLevel === 0 ? "new-user" : ""),
 
     @computed("user.name")
     nameFirst(name) {
@@ -157,12 +167,9 @@ export default Ember.Component.extend(
         .finally(() => this.set("loading", null));
     },
 
-    didInsertElement() {
-      this._super(...arguments);
-    },
-
     _close() {
       this._super(...arguments);
+
       this.setProperties({
         user: null,
         topicPostCount: null
@@ -195,8 +202,8 @@ export default Ember.Component.extend(
         this._close();
       },
 
-      showUser() {
-        this.showUser(this.get("user"));
+      showUser(username) {
+        this.showUser(username);
         this._close();
       },
 

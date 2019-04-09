@@ -4,12 +4,25 @@ require 'rails_helper'
 require_dependency 'post_creator'
 
 describe Category do
+  let(:user) { Fabricate(:user) }
+
   it { is_expected.to validate_presence_of :user_id }
   it { is_expected.to validate_presence_of :name }
 
   it 'validates uniqueness of name' do
     Fabricate(:category)
     is_expected.to validate_uniqueness_of(:name).scoped_to(:parent_category_id)
+  end
+
+  it 'validates inclusion of search_priority' do
+    category = Fabricate.build(:category, user: user)
+
+    expect(category.valid?).to eq(true)
+
+    category.search_priority = Searchable::PRIORITIES.values.last + 1
+
+    expect(category.valid?).to eq(false)
+    expect(category.errors.keys).to contain_exactly(:search_priority)
   end
 
   it 'validates uniqueness in case insensitive way' do
@@ -311,6 +324,13 @@ describe Category do
     it "creates permalink when category slug is changed" do
       @category.update_attributes(slug: 'new-category')
       expect(Permalink.count).to eq(1)
+    end
+
+    it "reuses existing permalink when category slug is changed" do
+      permalink = Permalink.create!(url: "c/#{@category.slug}", category_id: 42)
+
+      expect { @category.update_attributes(slug: 'new-slug') }.to_not change { Permalink.count }
+      expect(permalink.reload.category_id).to eq(@category.id)
     end
 
     it "creates permalink when sub category slug is changed" do
@@ -767,7 +787,7 @@ describe Category do
         subcategory.set_permissions(group => :full, group2 => :readonly)
 
         expect(subcategory.valid?).to eq(false)
-        expect(subcategory.errors.full_messages).to eq([I18n.t("category.errors.permission_conflict")])
+        expect(subcategory.errors.full_messages).to contain_exactly(I18n.t("category.errors.permission_conflict", group_names: group2.name))
       end
 
       it "is valid if permissions are same or more restrictive" do
@@ -799,7 +819,7 @@ describe Category do
         parent_category.set_permissions(group => :readonly)
 
         expect(parent_category.valid?).to eq(false)
-        expect(parent_category.errors.full_messages).to eq([I18n.t("category.errors.permission_conflict")])
+        expect(parent_category.errors.full_messages).to contain_exactly(I18n.t("category.errors.permission_conflict", group_names: group2.name))
       end
 
       it "is valid if subcategory permissions are same or more restrictive" do

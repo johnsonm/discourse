@@ -197,7 +197,6 @@ ro:
     age: "Vârsta"
     joined: "Înregistrat"
     admin_title: "Admin"
-    flags_title: "Marcaje"
     show_more: "Mai mult"
     show_help: "Opțiuni"
     links: "Adrese web"
@@ -224,8 +223,6 @@ ro:
     every_hour: "La fiecare oră"
     daily: "Zilnic"
     weekly: "Săptămânal"
-    every_two_weeks: "Odată la două săptamâni"
-    every_three_days: "La fiecare trei zile"
     max_of_count: "max din {{count}}"
     alternation: "sau"
     character_count:
@@ -306,30 +303,6 @@ ro:
       none_found: "Nu au fost găsite subiecte noi."
       title:
         placeholder: "Scrieți aici titlul subiectului"
-    queue:
-      topic: "Subiect:"
-      approve: "Aprobare"
-      reject: "Respingere"
-      delete_user: "Şterge utilizatorul"
-      title: "Necesită aprobare"
-      none: "Nu sunt postări de verificat."
-      edit: "Editează"
-      cancel: "Anulează"
-      view_pending: "Vezi postările în aşteptare"
-      has_pending_posts:
-        one: "Acest subiect are <b>o</b> postare în așteptare"
-        few: "Acest subiect are <b>{{count}}</b> postări în așteptare."
-        other: "Acest subiect are <b>{{count}}</b> de postări în așteptare."
-      confirm: "Salvează schimbările"
-      delete_prompt: "Ești sigur că vrei să ștergi utilizatorul <b>%{username}</b>? Vor fi șterse toate postările lui iar email-ul și IP-ul vor fi blocate."
-      approval:
-        title: "Necesită aprobare"
-        description: "Am primit noua postare dar trebuie să fie aprobată de un moderator înainte că ea să apară pe site. Te rugăm să ai răbdare."
-        pending_posts:
-          one: "Aveţi <strong>1</strong> postare în aşteptare."
-          few: "Aveţi <strong>{{count}}</strong> postări în aşteptare."
-          other: "Aveţi <strong>{{count}}</strong> (de) postări în așteptare."
-        ok: "OK"
     user_action:
       user_posted_topic: "<a href='{{userUrl}}'>{{user}}</a> a postat <a href='{{topicUrl}}'>discuția</a>"
       you_posted_topic: "<a href='{{userUrl}}'>ai</a> postat <a href='{{topicUrl}}'>subiectul</a>"
@@ -579,6 +552,7 @@ ro:
         disable: "Dezactivează notificări"
         enable: "Activează notificările"
         each_browser_note: "Observație: Setările trebuie modificate pe fiecare browser utilizat."
+        consent_prompt: "Vrei să primești notificări atunci când cineva îți răspunde?"
       dismiss: "Înlătură"
       dismiss_notifications: "Elimină tot"
       dismiss_notifications_tooltip: "Marchează toate notificările ca citite"
@@ -712,7 +686,6 @@ ro:
         instructions: "Fundalul va fi centrat şi va avea o dimensiune standard de 590px."
       email:
         title: "Email"
-        instructions: "nu afișa niciodată către public"
         ok: "Îți vom trimite un email pentru confirmare."
         invalid: "Introduceți o adresă de email validă."
         authenticated: "Emailul a fost autentificat de către {{provider}}."
@@ -770,14 +743,9 @@ ro:
         every_30_minutes: "La fiecare 30 de minute "
         every_hour: "În fiecare oră"
         daily: "Zilnic"
-        every_three_days: "La fiecare trei zile"
         weekly: "Săptămânal"
-        every_two_weeks: "La fiecare două săptămâni"
       include_tl0_in_digests: "Include conținut de la utilizatori noi în  rezumatul de pe email."
       email_in_reply_to: "Include un fragment din răspunsurile la postare în emailuri"
-      email_direct: "Trimite un email când cineva mă citează, îmi răspunde la o postare, menționează numele meu de utilizator, sau mă invită la un subiect."
-      email_private_messages: "Trimite-mi un email când cineva îmi trimite un mesaj."
-      email_always: "Trimite-mi notificările pe email atunci când sunt activ pe site."
       other_settings: "Altele"
       categories_settings: "Categorii"
       new_topic_duration:
@@ -1020,7 +988,7 @@ ro:
       button_ok: "Ok"
       button_help: "Ajutor"
     login:
-      title: "Autentificare cu"
+      title: "Autentificare"
       username: "Utilizator"
       password: "Parolă"
       email_placeholder: "email sau nume de utilizator"
@@ -1103,13 +1071,7 @@ ro:
       filter_placeholder: Caută...
     emoji_picker:
       filter_placeholder: Caută emoji
-      people: Oameni
-      nature: Natură
-      food: Mâncare
-      activity: Activitate
-      travel: Călătorie
       objects: Obiecte
-      celebration: Sărbători
       custom: Emojii personalizate
       recent: Folosite recent
     shared_drafts:
@@ -1737,15 +1699,13 @@ ro:
         one: "vezi un răspuns ascuns"
         few: "vezi {{count}} răspunsuri ascunse"
         other: "vezi {{count}} de răspunsuri ascunse"
+      notice:
+        first: "Este prima dată când {{user}}a adăugat un comentariu. Să-i spunem bun venit în comunitate!"
       unread: "postarea nu a fost citită"
       has_replies:
         one: "Un răspuns"
         few: "{{count}} răspunsuri"
         other: "{{count}} de răspunsuri"
-      has_likes:
-        one: "O apreciere"
-        few: "{{count}} aprecieri"
-        other: "{{count}} de aprecieri"
       has_likes_title:
         one: "O persoană a apreciat această postare."
         few: "{{count}} persoane au apreciat această postare."
@@ -1759,7 +1719,6 @@ ro:
         create: "Ne pare rău, a apărut o eroare la creerea postării. Te rugăm să încerci iar."
         edit: "Ne pare rău, a apărut o eroare la editarea postării. Te rugăm să încerci iar."
         upload: "Ne pare rău, a apărut o eroare la încărcarea fișierului. Te rugăm să încerci iar."
-        file_too_large: "Ne pare rău, fișierul este prea mare (mărimea maximă este {{max_size_kb}}kb). De ce nu încarci  acest fișier mare pe un serviciu de distribuție prin cloud și apoi să îi partajezi link-ul?"
         too_many_uploads: "Ne pare rău, poți încărca doar câte un fișier."
         image_upload_not_allowed_for_new_user: "Ne pare rău, un utilizator nou nu poate încărca imagini."
         attachment_upload_not_allowed_for_new_user: "Ne pare rău, un utilizator nou nu poate încărca atașamente."
@@ -2441,63 +2400,6 @@ ro:
       commits:
         latest_changes: "Cele mai recente schimbări: te rugăm actualizează frecvent!"
         by: "de către"
-      flags:
-        title: "Marcaje de avertizare"
-        active_posts: "Postări marcate"
-        old_posts: "Postări marcate vechi"
-        topics: "Subiecte marcate"
-        moderation_history: "Istoric de moderare"
-        agree: "De acord"
-        agree_title: "Confirmă acest marcaj ca valid și corect"
-        agree_flag_hide_post: "Ascunde postarea"
-        agree_flag_restore_post_title: "Restabilește postarea pentru astfel încât toți utilizatorii să o poată vedea."
-        agree_flag_suspend: "Suspendă utilizator"
-        agree_flag: "Păstrează postarea"
-        ignore_flag: "Ignoră"
-        delete: "Șterge"
-        delete_title: "Șterge postarea la care se referă marcajul de avertizare."
-        delete_post_defer_flag: "Șterge postarea și ignoră marcarea"
-        delete_post_defer_flag_title: "Șterge postarea; dacă este prima, șterge subiectul"
-        delete_post_agree_flag: "Șterge postarea și aprobă marcajul de avertizare"
-        delete_post_agree_flag_title: "Șterge postarea; dacă este prima, șterge subiectul"
-        delete_flag_modal_title: "Șterge și..."
-        delete_spammer: "Șterge spammer"
-        delete_spammer_title: "Șterge utilizatorul, postările și subiectele acestuia."
-        disagree_flag_unhide_post: "Nu sunt de acord (arată postarea)"
-        disagree_flag_unhide_post_title: "Elimină orice marcaj de avertizare din postare și fă din nou vizibilă postarea"
-        disagree_flag: "Nu sunt de acord"
-        disagree_flag_title: "Refuză marcaj ca fiind invalid sau incorect"
-        clear_topic_flags: "Terminat"
-        clear_topic_flags_title: "Subiectul a fost analizat iar problema rezolvată. Fă click pe Terminat pentru a înlătura marcajele."
-        more: "(mai multe răspunsuri...)"
-        suspend_user: "Suspendă utilizator"
-        dispositions:
-          agreed: "aprobate"
-          disagreed: "respinse"
-          deferred: "ignorat"
-        flagged_by: "Marcat de către"
-        resolved_by: "Rezolvat de "
-        took_action: "A luat măsuri"
-        system: "Sistem"
-        error: "Ceva nu a funcționat"
-        reply_message: "Răspunde"
-        topic_flagged: "Aceast <strong>subiect</strong> a fost marcat cu marcaj de avertizare."
-        show_full: "arată întreaga postare"
-        visit_topic: "Vizualizează subiectul pentru a acționa."
-        was_edited: "Mesajul a fost editat după primul marcaj"
-        previous_flags_count: "Acest mesaj a fost deja marcat de {{count}} (de) ori."
-        details: "detalii"
-        flagged_topics:
-          topic: "Subiect"
-          type: "Tip"
-          users: "Utilizatori"
-          no_results: "Nu există discuții semnalizate."
-        short_names:
-          off_topic: "în afara subiectului"
-          inappropriate: "neadecvat"
-          spam: "spam"
-          notify_user: "personalizat"
-          notify_moderators: "personalizat"
       groups:
         primary: "Grup primar"
         no_primary: "(nu există grup primar)"
@@ -2990,19 +2892,10 @@ ro:
         nav:
           new: "Noi"
           active: "Activi"
-          pending: "În așteptare"
           staff: "Membrii echipei"
           suspended: "Suspendați"
           suspect: "Suspecți"
         approved: "Aprobați?"
-        approved_selected:
-          one: "aprobă utilizatorul"
-          few: "aprobă utilizatorii ({{count}})"
-          other: "aprobă utilizatorii ({{count}})"
-        reject_selected:
-          one: "refuză utilizatorul"
-          few: "refuză utilizatorii ({{count}})"
-          other: "refuză utilizatorii ({{count}})"
         titles:
           active: "Utilizatori activi"
           new: "Utilizatori noi"
@@ -3017,14 +2910,6 @@ ro:
           moderators: "Moderatori"
           suspended: "Utilizatori suspendați"
           suspect: "Utilizatori suspecţi"
-        reject_successful:
-          one: "1 utilizator a fost respins cu succes."
-          few: "%{count} utilizatori au fost respinși cu succes."
-          other: "%{count} de utilizatori au fost respinși cu succes."
-        reject_failures:
-          one: "Un utilizator nu a putut fi respins."
-          few: " %{count} utilizatori nu au putut fi respinși."
-          other: "%{count} de utilizatori nu au putut fi respinși."
         not_verified: "Neverificat"
         check_email:
           title: "Arată adresa de email a acestui utilizator"

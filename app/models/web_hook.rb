@@ -28,7 +28,8 @@ class WebHook < ActiveRecord::Base
   def self.last_delivery_statuses
     @last_delivery_statuses ||= Enum.new(inactive: 1,
                                          failed: 2,
-                                         successful: 3)
+                                         successful: 3,
+                                         disabled: 4)
   end
 
   def self.default_event_types
@@ -55,6 +56,10 @@ class WebHook < ActiveRecord::Base
   end
 
   def self.enqueue_object_hooks(type, object, event, serializer = nil)
+    if type == :flag
+      Discourse.deprecate("The flags webhook is deprecated. Please use reviewable instead.")
+    end
+
     if active_web_hooks(type).exists?
       payload = WebHook.generate_payload(type, object, serializer)
 

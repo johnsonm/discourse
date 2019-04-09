@@ -3,7 +3,6 @@ import MountWidget from "discourse/components/mount-widget";
 import { cloak, uncloak } from "discourse/widgets/post-stream";
 import { isWorkaroundActive } from "discourse/lib/safari-hacks";
 import offsetCalculator from "discourse/lib/offset-calculator";
-import optionalService from "discourse/lib/optional-service";
 
 function findTopView($posts, viewportTop, postsWrapperTop, min, max) {
   if (max < min) {
@@ -26,7 +25,6 @@ function findTopView($posts, viewportTop, postsWrapperTop, min, max) {
 }
 
 export default MountWidget.extend({
-  adminTools: optionalService(),
   widget: "post-stream",
   _topVisible: null,
   _bottomVisible: null,
@@ -262,6 +260,38 @@ export default MountWidget.extend({
     Ember.run.scheduleOnce("afterRender", this, this.scrolled);
   },
 
+  _posted(staged) {
+    const disableJumpReply = this.currentUser.get("disable_jump_reply");
+
+    this.queueRerender(() => {
+      if (staged && !disableJumpReply) {
+        const postNumber = staged.get("post_number");
+        DiscourseURL.jumpToPost(postNumber, { skipIfOnScreen: true });
+      }
+    });
+  },
+
+  _refresh(args) {
+    if (args) {
+      if (args.id) {
+        this.dirtyKeys.keyDirty(`post-${args.id}`);
+
+        if (args.refreshLikes) {
+          this.dirtyKeys.keyDirty(`post-menu-${args.id}`, {
+            onRefresh: "refreshLikes"
+          });
+        }
+      } else if (args.force) {
+        this.dirtyKeys.forceAll();
+      }
+    }
+    this.queueRerender();
+  },
+
+  _debouncedScroll() {
+    Ember.run.debounce(this, this._scrollTriggered, 10);
+  },
+
   didInsertElement() {
     this._super(...arguments);
     const debouncedScroll = () =>
@@ -269,21 +299,12 @@ export default MountWidget.extend({
 
     this._previouslyNearby = {};
 
-    this.appEvents.on("post-stream:refresh", debouncedScroll);
+    this.appEvents.on("post-stream:refresh", this, "_debouncedScroll");
     $(document).bind("touchmove.post-stream", debouncedScroll);
     $(window).bind("scroll.post-stream", debouncedScroll);
     this._scrollTriggered();
 
-    this.appEvents.on("post-stream:posted", staged => {
-      const disableJumpReply = this.currentUser.get("disable_jump_reply");
-
-      this.queueRerender(() => {
-        if (staged && !disableJumpReply) {
-          const postNumber = staged.get("post_number");
-          DiscourseURL.jumpToPost(postNumber, { skipIfOnScreen: true });
-        }
-      });
-    });
+    this.appEvents.on("post-stream:posted", this, "_posted");
 
     this.$().on("mouseenter.post-stream", "button.widget-button", e => {
       $("button.widget-button").removeClass("d-hover");
@@ -294,39 +315,17 @@ export default MountWidget.extend({
       $("button.widget-button").removeClass("d-hover");
     });
 
-    this.appEvents.on("post-stream:refresh", args => {
-      if (args) {
-        if (args.id) {
-          this.dirtyKeys.keyDirty(`post-${args.id}`);
-
-          if (args.refreshLikes) {
-            this.dirtyKeys.keyDirty(`post-menu-${args.id}`, {
-              onRefresh: "refreshLikes"
-            });
-          }
-        } else if (args.force) {
-          this.dirtyKeys.forceAll();
-        }
-      }
-      this.queueRerender();
-    });
+    this.appEvents.on("post-stream:refresh", this, "_refresh");
   },
 
   willDestroyElement() {
     this._super(...arguments);
     $(document).unbind("touchmove.post-stream");
     $(window).unbind("scroll.post-stream");
-    this.appEvents.off("post-stream:refresh");
+    this.appEvents.off("post-stream:refresh", this, "_debouncedScroll");
     this.$().off("mouseenter.post-stream");
     this.$().off("mouseleave.post-stream");
-    this.appEvents.off("post-stream:refresh");
-    this.appEvents.off("post-stream:posted");
-  },
-
-  showModerationHistory(post) {
-    this.get("adminTools").showModerationHistory({
-      filter: "post",
-      post_id: post.id
-    });
+    this.appEvents.off("post-stream:refresh", this, "_refresh");
+    this.appEvents.off("post-stream:posted", this, "_posted");
   }
 });

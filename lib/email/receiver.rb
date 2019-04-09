@@ -1,6 +1,5 @@
 require "digest"
 require_dependency "new_post_manager"
-require_dependency "post_action_creator"
 require_dependency "html_to_markdown"
 require_dependency "plain_text_to_markdown"
 require_dependency "upload_creator"
@@ -69,6 +68,7 @@ module Email
         begin
           return if IncomingEmail.exists?(message_id: @message_id)
           ensure_valid_address_lists
+          ensure_valid_date
           @from_email, @from_display_name = parse_from_field
           @from_user = User.find_by_email(@from_email)
           @incoming_email = create_incoming_email
@@ -91,6 +91,12 @@ module Email
         if addresses&.errors.present?
           @mail[field] = addresses.to_s.scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i)
         end
+      end
+    end
+
+    def ensure_valid_date
+      if @mail.date.nil?
+        raise InvalidPost, I18n.t("system_messages.email_reject_invalid_post_specified.date_invalid")
       end
     end
 
@@ -143,14 +149,16 @@ module Email
         return
       end
 
-      # Lets create a staged user if there isn't one yet. We will try to
-      # delete staged users in process!() if something bad happens.
-      if user.nil?
-        user = find_or_create_user!(@from_email, @from_display_name)
-        log_and_validate_user(user)
-      end
-
       if post = find_related_post
+        # Most of the time, it is impossible to **reply** without a reply key, so exit early
+        if user.blank?
+          if sent_to_mailinglist_mirror? || !SiteSetting.find_related_post_with_key
+            user = stage_from_user
+          elsif user.blank?
+            raise BadDestinationAddress
+          end
+        end
+
         create_reply(user: user,
                      raw: body,
                      elided: elided,
@@ -171,6 +179,9 @@ module Email
         end
 
         raise first_exception if first_exception
+
+        # We don't stage new users for emails to reply addresses, exit if user is nil
+        raise BadDestinationAddress if user.blank?
 
         post = find_related_post(force: true)
 
@@ -628,13 +639,18 @@ module Email
 
       case destination[:type]
       when :group
+        user ||= stage_from_user
+
         group = destination[:obj]
         create_group_post(group, user, body, elided, hidden_reason_id)
 
       when :category
         category = destination[:obj]
 
-        raise StrangersNotAllowedError    if user.staged? && !category.email_in_allow_strangers
+        raise StrangersNotAllowedError    if (user.nil? || user.staged?) && !category.email_in_allow_strangers
+
+        user ||= stage_from_user
+
         raise InsufficientTrustLevelError if !user.has_trust_level?(SiteSetting.email_in_min_trust) && !sent_to_mailinglist_mirror?
 
         create_topic(user: user,
@@ -646,6 +662,9 @@ module Email
                      skip_validations: user.staged?)
 
       when :reply
+        # We don't stage new users for emails to reply addresses, exit if user is nil
+        raise BadDestinationAddress if user.blank?
+
         post_reply_key = destination[:obj]
 
         if post_reply_key.user_id != user.id && !forwarded_reply_key?(post_reply_key, user)
@@ -751,6 +770,7 @@ module Email
     end
 
     def process_forwarded_email(destination, user)
+      user ||= stage_from_user
       embedded = Mail.new(embedded_email_raw)
       email, display_name = parse_from_field(embedded)
 
@@ -936,11 +956,8 @@ module Email
     end
 
     def create_post_action(user, post, type)
-      PostActionCreator.new(user, post).perform(type)
-    rescue PostAction::AlreadyActed
-      # it's cool, don't care
-    rescue Discourse::InvalidAccess => e
-      raise InvalidPostAction.new(e)
+      result = PostActionCreator.new(user, post, type).perform
+      raise InvalidPostAction.new if result.failed? && result.forbidden
     end
 
     def is_whitelisted_attachment?(attachment)
@@ -1035,12 +1052,7 @@ module Email
       options[:via_email] = true
       options[:raw_email] = @raw_email
 
-      # ensure posts aren't created in the future
       options[:created_at] ||= @mail.date
-      if options[:created_at].nil?
-        raise InvalidPost, "No post creation date found. Is the e-mail missing a Date: header?"
-      end
-
       options[:created_at] = DateTime.now if options[:created_at] > DateTime.now
 
       is_private_message = options[:archetype] == Archetype.private_message ||
@@ -1140,9 +1152,15 @@ module Email
       Email::Sender.new(message, :subscription).send
     end
 
+    def stage_from_user
+      @from_user ||= find_or_create_user!(@from_email, @from_display_name).tap do |u|
+        log_and_validate_user(u)
+      end
+    end
+
     def delete_staged_users
       @staged_users.each do |user|
-        if @incoming_email.user.id == user.id
+        if @incoming_email.user&.id == user.id
           @incoming_email.update_columns(user_id: nil)
         end
 
@@ -1154,8 +1172,8 @@ module Email
 
     def enable_email_pm_setting(user)
       # ensure user PM emails are enabled (since user is posting via email)
-      if !user.staged && !user.user_option.email_private_messages
-        user.user_option.update!(email_private_messages: true)
+      if !user.staged && user.user_option.email_messages_level == UserOption.email_level_types[:never]
+        user.user_option.update!(email_messages_level: UserOption.email_level_types[:always])
       end
     end
   end

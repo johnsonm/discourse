@@ -217,6 +217,10 @@ class Upload < ActiveRecord::Base
     number_to_human_size(self.filesize)
   end
 
+  def rebake_posts_on_old_scheme
+    self.posts.where("cooked LIKE '%/_optimized/%'").find_each(&:rebake!)
+  end
+
   def self.migrate_to_new_scheme(limit = nil)
     problems = []
 
@@ -224,8 +228,7 @@ class Upload < ActiveRecord::Base
       max_file_size_kb = [SiteSetting.max_image_size_kb, SiteSetting.max_attachment_size_kb].max.kilobytes
       local_store = FileStore::LocalStore.new
 
-      scope = Upload.by_users
-        .where("url NOT LIKE '%/original/_X/%'")
+      scope = Upload.by_users.where("url NOT LIKE '%/original/_X/%' AND url LIKE '%/uploads/#{RailsMultisite::ConnectionManagement.current_db}%'")
         .order(id: :desc)
 
       scope = scope.limit(limit) if limit
@@ -239,12 +242,21 @@ class Upload < ActiveRecord::Base
           # download if external
           if external
             url = SiteSetting.scheme + ":" + previous_url
-            file = FileHelper.download(
-              url,
-              max_file_size: max_file_size_kb,
-              tmp_file_name: "discourse",
-              follow_redirect: true
-            ) rescue nil
+
+            begin
+              retries ||= 0
+
+              file = FileHelper.download(
+                url,
+                max_file_size: max_file_size_kb,
+                tmp_file_name: "discourse",
+                follow_redirect: true
+              )
+            rescue OpenURI::HTTPError
+              retry if (retires += 1) < 1
+              next
+            end
+
             path = file.path
           else
             path = local_store.path_for(upload)
@@ -253,17 +265,19 @@ class Upload < ActiveRecord::Base
           if upload.sha1.blank?
             upload.sha1 = Upload.generate_digest(path)
           end
-          # optimize if image
-          FileHelper.optimize_image!(path) if FileHelper.is_supported_image?(File.basename(path))
+
           # store to new location & update the filesize
           File.open(path) do |f|
             upload.url = Discourse.store.store_upload(f, upload)
             upload.filesize = f.size
-            upload.save!
+            upload.save!(validate: false)
           end
           # remap the URLs
           DbHelper.remap(UrlHelper.absolute(previous_url), upload.url) unless external
           DbHelper.remap(previous_url, upload.url)
+
+          upload.optimized_images.find_each(&:destroy!)
+          upload.rebake_posts_on_old_scheme
           # remove the old file (when local)
           unless external
             FileUtils.rm(path, force: true)

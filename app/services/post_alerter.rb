@@ -1,5 +1,5 @@
 require_dependency 'distributed_mutex'
-require_dependency 'user_action_creator'
+require_dependency 'user_action_manager'
 
 class PostAlerter
   def self.post_created(post, opts = {})
@@ -297,6 +297,12 @@ class PostAlerter
       .where('NOT admin AND NOT moderator')
       .exists?
 
+    # apply ignored here
+    return if notifier_id && IgnoredUser.where(user_id: user.id, ignored_user_id: notifier_id)
+      .joins(:ignored_user)
+      .where('NOT admin AND NOT moderator')
+      .exists?
+
     # skip if muted on the topic
     return if TopicUser.where(
       topic: post.topic,
@@ -370,7 +376,7 @@ class PostAlerter
       end
     end
 
-    UserActionCreator.log_notification(original_post, user, type, opts[:acting_user_id])
+    UserActionManager.notification_created(original_post, user, type, opts[:acting_user_id])
 
     topic_title = post.topic.title
     # when sending a private message email, keep the original title

@@ -224,7 +224,6 @@ he:
     age: "גיל"
     joined: "הצטרפו"
     admin_title: "ניהול"
-    flags_title: "דגלים"
     show_more: "הראה עוד"
     show_help: "אפשרויות"
     links: "קישורים"
@@ -253,8 +252,6 @@ he:
     every_hour: "כל שעה"
     daily: "יומית"
     weekly: "שבועית"
-    every_two_weeks: "דו-שבועית"
-    every_three_days: "כל שלושה ימים"
     max_of_count: "מקסימום של {{count}}"
     alternation: "או"
     character_count:
@@ -352,32 +349,6 @@ he:
       title:
         search: "חפש הודעה לפי שם:"
         placeholder: "הקלידו את כותרת ההודעה כאן"
-    queue:
-      topic: "נושא:"
-      approve: "לאשר"
-      reject: "לדחות"
-      delete_user: "מחק משתמש"
-      title: "זקוק לאישור"
-      none: "לא נותרו פוסטים לסקירה"
-      edit: "ערוך"
-      cancel: "ביטול"
-      view_pending: "הצג פוסטים ממתינים"
-      has_pending_posts:
-        one: " בנושא זה ישנו פוסט אחד הממתין לאישור"
-        two: "בנושא זה ישנם <b>{{count}}</b> פוסטים הממתינים לאישור"
-        many: "בנושא זה ישנם <b>{{count}}</b> פוסטים הממתינים לאישור"
-        other: "בנושא זה ישנם <b>{{count}}</b> פוסטים הממתינים לאישור"
-      confirm: "שמירת שינויים"
-      delete_prompt: "האם אתם בטוחים שאתם מעוניינים להסיר את <b>%{username}</b>? זה יסיר את כל הפוסטים שלהם ויחסום את המייל וכתובת ה IP שלהם."
-      approval:
-        title: "הפוסט זקוק לאישור"
-        description: "קיבלנו את הפוסט אך נדרש אישור של מנחה לפני שהוא יוצג, אנא המתינו בסבלנות."
-        pending_posts:
-          one: "יש לכם פוסט <strong>אחד</strong> שממתין."
-          two: "יש לכם <strong>{{count}}</strong> פוסטים ממתינים."
-          many: "יש לכם <strong>{{count}}</strong> פוסטים ממתינים."
-          other: "יש לכם <strong>{{count}}</strong> פוסטים ממתינים."
-        ok: "אשר"
     user_action:
       user_posted_topic: "<a href='{{userUrl}}'>{{user}}</a> פרסם <a href='{{topicUrl}}'>את הנושא</a>"
       you_posted_topic: "<a href='{{userUrl}}'>את/ה</a> פרסמת <a href='{{topicUrl}}'>את הנושא</a>"
@@ -780,8 +751,6 @@ he:
         confirm_password_description: "אנא אשר את סיסמתך בכדי להמשיך"
         label: "קוד"
         rate_limit: "אנא המתינו לפני שתנסו קוד אישור אחר."
-        enable_description: |
-          סרקו את הברקוד באפליקציה נתמכת (<a href="https://www.google.com/search?q=authenticator+apps+for+android" target="_blank">Android</a> – <a href="https://www.google.com/search?q=authenticator+apps+for+ios" target="_blank">iOS</a> והכניסו את קוד האימות שלכם.
         disable_description: "אנא הכניסו את קוד האישור מהיישומון שלכם."
         show_key_description: "הכנס ידנית"
         extended_description: |
@@ -824,7 +793,6 @@ he:
         primary: "כתובת דוא\"ל ראשית"
         secondary: "כתובות דוא\"ל משניות"
         no_secondary: "אין כתובות דוא\"ל משניות"
-        instructions: "לעולם לא מוצג לציבור"
         ok: "נשלח אליכם דואר אלקטרוני לאישור"
         invalid: "בבקשה הכניסו כתובת דואר אלקטרוני תקינה"
         authenticated: "כתובת הדואר האלקטרוני שלך אושרה על ידי {{provider}}"
@@ -908,14 +876,9 @@ he:
         every_30_minutes: "מידי 30 דקות"
         every_hour: "שעתי"
         daily: "יומית"
-        every_three_days: "כל שלושה ימים"
         weekly: "שבועית"
-        every_two_weeks: "כל שבועיים"
       include_tl0_in_digests: "כללו תכנים ממשתמשים חדשים במיילים מסכמים"
       email_in_reply_to: "הכללת ציטוטים מתגובות לפרסומים שנשלחו בדוא\"ל"
-      email_direct: "שלחו לי דוא\"ל כשמישהם מצטטים אותי, מגיבים לפוסט שלי, מזכירים את @שם-המשתמש/ת שלי, או מזמינים אותי לנושא"
-      email_private_messages: "שלחו לי דוא\"ל כשמישהם שולחים לי הודעות"
-      email_always: "שלח לי התראות מייל גם כשאני פעיל/ה באתר. "
       other_settings: "אחר"
       categories_settings: "קטגוריות"
       new_topic_duration:
@@ -1304,12 +1267,7 @@ he:
         other: "בחרו לפחות {{count}} פריטים."
     emoji_picker:
       filter_placeholder: חיפוש אחר אימוג׳י
-      people: אנשים
-      nature: טבע
-      food: אוכל
-      activity: פעילות
       objects: עצמים
-      celebration: חגיגה
       custom: אימוג׳יז מותאמים
       recent: בשימוש לאחרונה
       default_tone: ללא גוון עור
@@ -2076,11 +2034,6 @@ he:
         two: "{{count}} תגובות"
         many: "{{count}} תגובות"
         other: "{{count}} תגובות"
-      has_likes:
-        one: "לייק אחד"
-        two: "{{count}} לייקים "
-        many: "{{count}} לייקים "
-        other: "{{count}} לייקים "
       has_likes_title:
         one: "מישהו אחד אהב את התגובה הזו"
         two: "{{count}} אנשים אהבו את התגובה הזו"
@@ -2096,7 +2049,6 @@ he:
         create: "סליחה, הייתה שגיאה ביצירת הפוסט שלכם. אנא נסו שנית."
         edit: "סליחה, הייתה שגיאה בעריכת הפוסט שלכם. אנא נסו שנית."
         upload: "סליחה, הייתה שגיאה בהעלאת הקובץ שלך. אנא נסו שנית"
-        file_too_large: "מצטערים, הקובץ גדול מידי (הגודל המירבי הוא {{max_size_kb}}kb). אולי תקצו להעלות קבצים גדולים לשירות שיתוף בענן ולשתף את הקישור."
         too_many_uploads: "סליחה, אך ניתן להעלות רק קובץ אחת כל פעם."
         upload_not_authorized: "מצטערים, הקובץ שאתם מנסים להעלות אינו מורשה (סיומות מורשות: {{authorized_extensions}})."
         image_upload_not_allowed_for_new_user: "סליחה, משתמשים חדשים לא יכולים להעלות תמונות."
@@ -2789,37 +2741,6 @@ he:
       commits:
         latest_changes: "שינויים אחרונים: בבקשה עדכן תכופות!"
         by: "על ידי"
-      flags:
-        title: "דגלים"
-        agree: "הסכמה"
-        agree_title: "אישור דגל זה כתקין ונכון"
-        delete: "מחיקה"
-        delete_title: "מחיקת הפוסט שהדגל מצביע עליו."
-        delete_post_defer_flag_title: "מחיקת הפוסט; אם זהו הפוסט הראשון, מחיקת הנושא"
-        delete_post_agree_flag_title: "מחיקת פוסט; אם זהו הפוסט הראשון, מחיקת הנושא"
-        delete_flag_modal_title: "מחיקה ו..."
-        delete_spammer: "מחיקת ספאמר"
-        delete_spammer_title: "הסרת המשתמש/ת וכל הפוסטים והנושאים של משתמש/ת אלו."
-        disagree_flag_unhide_post: "אי-קבלה (הצגה מחדש של הפוסט)"
-        disagree_flag_unhide_post_title: "הסרה של כל הדגלים מהפוסט הזה והחזרתו למצב תצוגה"
-        disagree_flag: "אי קבלה"
-        disagree_flag_title: "התעלמות מהדגל היות שאינו תקין או אינו נכון"
-        clear_topic_flags: "סיום"
-        clear_topic_flags_title: "הנושא נבדק והבעיה נפתרה. לחצו על סיום כדי להסיר את הדגלים."
-        more: "(עוד תגובות...)"
-        dispositions:
-          agreed: "התקבל"
-          disagreed: "לא התקבל"
-        flagged_by: "דוגל על ידי"
-        resolved_by: "נפתר על ידי"
-        took_action: "ננקטה פעולה"
-        system: "מערכת"
-        error: "משהו השתבש"
-        reply_message: "תגובה"
-        topic_flagged: "<strong>נושא</strong> זה דוגל."
-        visit_topic: "בקרו בנושא כדי לנקוט פעולה"
-        was_edited: "הפוסט נערך לאחר הדיגול הראשון"
-        previous_flags_count: "פוסט זה כבר דוגל {{count}} פעמים."
       groups:
         primary: "קבוצה ראשית"
         no_primary: "(אין קבוצה ראשית)"
@@ -3326,21 +3247,10 @@ he:
         nav:
           new: "חדש"
           active: "פעיל"
-          pending: "ממתין"
           staff: "צוות"
           suspended: "מושעים"
           suspect: "חשודים"
         approved: "מאושר?"
-        approved_selected:
-          one: "אשר משתמש"
-          two: "אשרו משתמשים ({{count}})"
-          many: "אשרו משתמשים ({{count}})"
-          other: "אשרו משתמשים ({{count}})"
-        reject_selected:
-          one: "דחו משתמש"
-          two: "דחו משתמשים ({{count}})"
-          many: "דחו משתמשים ({{count}})"
-          other: "דחו משתמשים ({{count}})"
         titles:
           active: "הפעל משתמשים"
           new: "משתמשים חדשים"
@@ -3355,16 +3265,6 @@ he:
           moderators: "מנהלים"
           suspended: "משתמשים מושעים"
           suspect: "משתמשים חשודים"
-        reject_successful:
-          one: "משתמש אחד נדחה בהצלחה."
-          two: "%{count} משתמשים נדחו בהצלחה."
-          many: "%{count} משתמשים נדחו בהצלחה."
-          other: "%{count} משתמשים נדחו בהצלחה."
-        reject_failures:
-          one: "דחיית משתמש נכשלה."
-          two: "דחיית %{count} משתמשים נכשלה."
-          many: "דחיית %{count} משתמשים נכשלה."
-          other: "דחיית %{count} משתמשים נכשלה."
         not_verified: "לא מאומת"
         check_email:
           title: "חשיפת כתובת הדוא\"ל של המשתמש/ת"

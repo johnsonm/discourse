@@ -638,6 +638,9 @@ blockquote {
   .cooked {
     padding: 0 $topic-body-width-padding 0.25em $topic-body-width-padding;
   }
+  a.expand-hidden {
+    padding-left: $topic-body-width-padding;
+  }
 }
 
 .topic-avatar {
@@ -883,5 +886,24 @@ span.highlighted {
     &.top {
       width: calc(100% - 56px); // [100% - margin-left]
     }
+  }
+}
+
+.crawler-post {
+  .post-time {
+    float: right;
+  }
+  .post-likes {
+    float: right;
+  }
+  margin-top: 5px;
+}
+
+#breadcrumbs {
+  .badge-category-bg {
+    background-color: $secondary-high;
+  }
+  .category-title {
+    color: $primary;
   }
 }

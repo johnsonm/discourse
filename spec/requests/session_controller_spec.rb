@@ -403,6 +403,17 @@ RSpec.describe SessionController do
       expect(logged_on_user.admin).to eq(true)
     end
 
+    it 'does not redirect offsite' do
+      sso = get_sso("#{Discourse.base_url}//site.com/xyz")
+      sso.external_id = '666'
+      sso.email = 'bob@bob.com'
+      sso.name = 'Sam Saffron'
+      sso.username = 'sam'
+
+      get "/session/sso_login", params: Rack::Utils.parse_query(sso.payload), headers: headers
+      expect(response).to redirect_to("#{Discourse.base_url}//site.com/xyz")
+    end
+
     it 'redirects to a non-relative url' do
       sso = get_sso("#{Discourse.base_url}/b/")
       sso.external_id = '666' # the number of the beast
@@ -1275,6 +1286,45 @@ RSpec.describe SessionController do
       expect(session[:current_user_id]).to be_blank
       expect(response.cookies["_t"]).to be_blank
     end
+  end
+
+  describe '#one_time_password' do
+    context 'missing token' do
+      it 'returns the right response' do
+        get "/session/otp"
+        expect(response.status).to eq(404)
+      end
+    end
+
+    context 'invalid token' do
+      it 'returns the right response' do
+        get "/session/otp/asd1231dasd123"
+
+        expect(response.status).to eq(404)
+      end
+
+      context 'when token is valid' do
+        it 'should authenticate user and delete token' do
+          user = Fabricate(:user)
+
+          get "/session/current.json"
+          expect(response.status).to eq(404)
+
+          token = SecureRandom.hex
+          $redis.setex "otp_#{token}", 10.minutes, user.username
+
+          get "/session/otp/#{token}"
+
+          expect(response.status).to eq(302)
+          expect(response).to redirect_to("/")
+          expect($redis.get("otp_#{token}")).to eq(nil)
+
+          get "/session/current.json"
+          expect(response.status).to eq(200)
+        end
+      end
+    end
+
   end
 
   describe '#forgot_password' do

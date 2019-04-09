@@ -242,6 +242,7 @@ en:
   provider_not_found: "You are not permitted to view the requested resource. The authentication provider does not exist."
   read_only_mode_enabled: "The site is in read only mode. Interactions are disabled."
   invalid_grant_badge_reason_link: "External or invalid discourse link is not allowed in badge reason"
+  email_template_cant_be_modified: "This email template can't be modified"
 
   reading_time: "Reading time"
   likes: "Likes"
@@ -347,10 +348,6 @@ en:
 
   excerpt_image: "image"
 
-  queue:
-    delete_reason: "Deleted via post moderation queue"
-    not_found: "Post not found or already updated."
-
   groups:
     success:
       bulk_add:
@@ -379,6 +376,7 @@ en:
       trust_level_4: "trust_level_4"
     request_membership_pm:
       title: "Membership Request for @%{group_name}"
+      handle: "handle membership request"
 
   education:
     until_posts:
@@ -578,6 +576,8 @@ en:
 
       [trust]: https://blog.discourse.org/2018/06/understanding-discourse-trust-levels/
 
+  admin_quick_start_title: "READ ME FIRST: Admin Quick Start Guide"
+
   category:
     topic_prefix: "About the %{category} category"
     replace_paragraph: "(Replace this first paragraph with a brief description of your new category. This guidance will appear in the category selection area, so try to keep it below 200 characters.)"
@@ -591,7 +591,7 @@ en:
       email_already_used_in_group: "'%{email}' is already used by the group '%{group_name}'."
       email_already_used_in_category: "'%{email}' is already used by the category '%{category_name}'."
       description_incomplete: "The category description post must have at least one paragraph."
-      permission_conflict: "Any group that is allowed to access a subcategory must also be allowed to access the parent category."
+      permission_conflict: "Any group that is allowed to access a subcategory must also be allowed to access the parent category. The following groups have access to one of the subcategories, but no access to parent category: %{group_names}."
       disallowed_topic_tags: "This topic has tags not allowed by this category: '%{tags}'"
     cannot_delete:
       uncategorized: "This category is special. It is intended as a holding area for topics that have no category; it cannot be deleted."
@@ -617,6 +617,9 @@ en:
   post:
     image_placeholder:
       broken: "This image is broken"
+    has_likes:
+      one: "%{count} Like"
+      other: "%{count} Likes"
 
   rate_limiter:
     slow_down: "You’ve performed this action too many times, please try again later."
@@ -790,6 +793,10 @@ en:
       grant: "Grant Admin Access"
       complete: "<b>%{target_username}</b> is now an administrator."
       back_to: "Return to %{title}"
+  reviewable_score_types:
+    needs_approval:
+      title: "Needs Approval"
+
   post_action_types:
     off_topic:
       title: "Off-Topic"
@@ -873,7 +880,7 @@ en:
     user_must_edit: "<p>This post was flagged by the community and is temporarily hidden.</p>"
 
   ignored:
-    hidden_content: '<p>Hidden content</p>'
+    hidden_content: "<p>Hidden content</p>"
 
   archetypes:
     regular:
@@ -909,6 +916,7 @@ en:
     read_write: "read/write"
     description: '"%{application_name}" is requesting the following access to your account:'
     instructions: 'We just generated a new user API key for you to use with "%{application_name}", please paste the following key into your application:'
+    otp_description: 'Would you like to allow "%{application_name}" to access this site?'
     no_trust_level: "Sorry, you do not have the required trust level to access the user API"
     generic_error: "Sorry, we are unable to issue user API keys, this feature may be disabled by the site admin"
     scopes:
@@ -918,7 +926,10 @@ en:
       session_info: "Read user session info"
       read: "Read all"
       write: "Write all"
-
+      one_time_password: "Create a one-time login token"
+    invalid_public_key: "Sorry, the public key is invalid."
+    invalid_auth_redirect: "Sorry, this auth_redirect host is not allowed."
+    invalid_token: "Missing, invalid or expired token."
   flags:
     errors:
       already_handled: "Flag was already handled"
@@ -1232,6 +1243,7 @@ en:
       labels:
         ignored_user: Ignored User
         ignores_count: Ignores count
+        mutes_count: Mutes count
       description: "List top ignored users."
 
   dashboard:
@@ -1266,7 +1278,7 @@ en:
   site_settings:
     censored_words: "Words that will be automatically replaced with &#9632;&#9632;&#9632;&#9632;"
     delete_old_hidden_posts: "Auto-delete any hidden posts that stay hidden for more than 30 days."
-    default_locale: "The default language of this Discourse instance"
+    default_locale: "The default language of this Discourse instance. You can replace the text of system generated categories and topics at <a href='%{base_path}/admin/customize/site_texts' target='_blank'>Customize / Text Content</a>."
     allow_user_locale: "Allow users to choose their own language interface preference"
     set_locale_from_accept_language_header: "set interface language for anonymous users from their web browser's language headers. (EXPERIMENTAL, does not work with anonymous cache)"
     support_mixed_text_direction: "Support mixed left-to-right and right-to-left text directions."
@@ -1288,6 +1300,10 @@ en:
     search_query_log_max_size: "Maximum amount of search queries to keep"
     search_query_log_max_retention_days: "Maximum amount of time to keep search queries, in days."
     search_ignore_accents: "Ignore accents when searching for text."
+    category_search_priority_very_low_weight: "Weight applied to ranking for very low category search priority."
+    category_search_priority_low_weight: "Weight applied to ranking for low category search priority."
+    category_search_priority_high_weight: "Weight applied to ranking for high category search priority."
+    category_search_priority_very_high_weight: "Weight applied to ranking for very high category search priority."
     allow_uncategorized_topics: "Allow topics to be created without a category. WARNING: If there are any uncategorized topics, you must recategorize them before turning this off."
     allow_duplicate_topic_titles: "Allow topics with identical, duplicate titles."
     unique_posts_mins: "How many minutes before a user can make a post with the same content again"
@@ -1339,6 +1355,7 @@ en:
     notification_email: "The from: email address used when sending all essential system emails. The domain specified here must have SPF, DKIM and reverse PTR records set correctly for email to arrive."
     email_custom_headers: "A pipe-delimited list of custom email headers"
     email_subject: "Customizable subject format for standard emails. See <a href='https://meta.discourse.org/t/customize-subject-format-for-standard-emails/20801' target='_blank'>https://meta.discourse.org/t/customize-subject-format-for-standard-emails/20801</a>"
+    enforce_second_factor: "Forces users to enable second factor authentication. Select 'all' to enforce it to all users. Select 'staff' to enforce it to staff users only."
     force_https: "Force your site to use HTTPS only. WARNING: do NOT enable this until you verify HTTPS is fully set up and working absolutely everywhere! Did you check your CDN, all social logins, and any external logos / dependencies to make sure they are all HTTPS compatible, too?"
     same_site_cookies: "Use same site cookies, they eliminate all vectors Cross Site Request Forgery on supported browsers (Lax or Strict). Warning: Strict will only work on sites that force login and use SSO."
     summary_score_threshold: "The minimum score required for a post to be included in 'Summarize This Topic'"
@@ -1356,7 +1373,7 @@ en:
     anon_polling_interval: "How often should anonymous clients poll in milliseconds"
     background_polling_interval: "How often should the clients poll in milliseconds (when the window is in the background)"
 
-    flags_required_to_hide_post: "Number of flags that cause a post to be automatically hidden and message sent to the user (0 for never)"
+    score_required_to_hide_post: "Score threshold that causes a post to be automatically hidden and message sent to the user (0 to disable)"
     cooldown_minutes_after_hiding_posts: "Number of minutes a user must wait before they can edit a post hidden via community flagging"
 
     max_topics_in_first_day: "The maximum number of topics a user is allowed to create in the 24 hour period after creating their first post"
@@ -1366,7 +1383,7 @@ en:
     tl3_additional_likes_per_day_multiplier: "Increase limit of likes per day for tl3 (regular) by multiplying with this number"
     tl4_additional_likes_per_day_multiplier: "Increase limit of likes per day for tl4 (leader) by multiplying with this number"
 
-    num_spam_flags_to_silence_new_user: "If a new user's posts get this many spam flags from num_users_to_silence_new_user different users, hide all their posts and prevent future posting. 0 to disable."
+    spam_score_to_silence_new_user: "If a new user's posts receive this score from num_users_to_silence_new_user different users, hide all their posts and prevent future posting. 0 to disable."
     num_users_to_silence_new_user: "If a new user's posts get num_spam_flags_to_silence_new_user spam flags from this many different users, hide all their posts and prevent future posting. 0 to disable."
     num_tl3_flags_to_silence_new_user: "If a new user's posts get this many flags from num_tl3_users_to_silence_new_user different trust level 3 users, hide all their posts and prevent future posting. 0 to disable."
     num_tl3_users_to_silence_new_user: "If a new user's posts get num_tl3_flags_to_silence_new_user flags from this many different trust level 3 users, hide all their posts and prevent future posting. 0 to disable."
@@ -1472,7 +1489,6 @@ en:
     enable_local_logins_via_email: "Allow users to request a one-click login link to be sent to them via email."
     allow_new_registrations: "Allow new user registrations. Uncheck this to prevent anyone from creating a new account."
     enable_signup_cta: "Show a notice to returning anonymous users prompting them to sign up for an account."
-    enable_yahoo_logins: "Enable Yahoo authentication"
 
     enable_google_oauth2_logins: "Enable Google Oauth2 authentication. This is the method of authentication that Google currently supports. Requires key and secret. See <a href='https://meta.discourse.org/t/15858' target='_blank'>Configuring Google login for Discourse</a>."
     google_oauth2_client_id: "Client ID of your Google application."
@@ -1504,7 +1520,6 @@ en:
     backup_frequency: "The number of days between backups."
     s3_backup_bucket: "The remote bucket to hold backups. WARNING: Make sure it is a private bucket."
     s3_endpoint: "The endpoint can be modified to backup to an S3 compatible service like DigitalOcean Spaces or Minio. WARNING: Leave blank if using AWS S3."
-    s3_force_path_style: "Enforce path-style addressing for your custom endpoint. IMPORTANT: Required for using Minio uploads and backups."
     s3_configure_tombstone_policy: "Enable automatic deletion policy for tombstone uploads. IMPORTANT: If disabled, no space will be reclaimed after uploads are deleted."
     s3_disable_cleanup: "Disable the removal of backups from S3 when removed locally."
     enable_s3_inventory: "Generate reports and verify uploads using Amazon S3 inventory. IMPORTANT: requires valid S3 credentials (both access key id & secret access key)."
@@ -1560,8 +1575,8 @@ en:
     enable_s3_uploads: "Place uploads on Amazon S3 storage. IMPORTANT: requires valid S3 credentials (both access key id & secret access key)."
     s3_use_iam_profile: 'Use an <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html">AWS EC2 instance profile</a> to grant access to the S3 bucket. NOTE: enabling this requires Discourse to be running in an appropriately-configured EC2 instance, and overrides the "s3 access key id" and "s3 secret access key" settings.'
     s3_upload_bucket: "The Amazon S3 bucket name that files will be uploaded into. WARNING: must be lowercase, no periods, no underscores."
-    s3_access_key_id: "The Amazon S3 access key id that will be used to upload images."
-    s3_secret_access_key: "The Amazon S3 secret access key that will be used to upload images."
+    s3_access_key_id: "The Amazon S3 access key id that will be used to upload images, attachments, and backups."
+    s3_secret_access_key: "The Amazon S3 secret access key that will be used to upload images, attachments, and backups."
     s3_region: "The Amazon S3 region name that will be used to upload images and backups."
     s3_cdn_url: "The CDN URL to use for all s3 assets (for example: https://cdn.somewhere.com). WARNING: after changing this setting you must rebake all old posts."
 
@@ -1569,6 +1584,7 @@ en:
 
     external_system_avatars_enabled: "Use external system avatars service."
     external_system_avatars_url: "URL of the external system avatars service. Allowed substitutions are {username} {first_letter} {color} {size}"
+    restrict_letter_avatar_colors: "A list of 6-digit hexadecimal color values to be used for letter avatar background."
 
     selectable_avatars_enabled: "Force users to choose an avatar from the list."
     selectable_avatars: "List of avatars users can choose from."
@@ -1710,7 +1726,7 @@ en:
     max_age_unmatched_ips: "Delete unmatched screened IP entries after (N) days."
 
     num_flaggers_to_close_topic: "Minimum number of unique flaggers that is required to automatically pause a topic for intervention"
-    num_flags_to_close_topic: "Minimum number of active flags that is required to automatically pause a topic for intervention"
+    score_to_auto_close_topic: "The total flag score of that is required to automatically pause a topic for intervention"
     num_hours_to_close_topic: "Number of hours to pause a topic for intervention."
 
     auto_respond_to_flag_actions: "Enable automatic reply when disposing a flag."
@@ -1719,7 +1735,7 @@ en:
     auto_silence_fast_typers_max_trust_level: "Maximum trust level to auto silence fast typers"
     auto_silence_first_post_regex: "Case insensitive regex that if passed will cause first post by user to be silenced and sent to approval queue. Example: raging|a[bc]a , will cause all posts containing raging or aba or aca to be silenced on first. Only applies to first post."
     flags_default_topics: "Show flagged topics by default in the admin section"
-    min_flags_staff_visibility: "The minimum amount of flags on a post must have before staff can see it in the admin section"
+    min_score_default_visibility: "Don't show reviewable items unless they meet this score"
 
     reply_by_email_enabled: "Enable replying to topics via email."
     reply_by_email_address: "Template for reply by email incoming email address, for example: %%{reply_key}@reply.example.com or replies+%%{reply_key}@example.com"
@@ -1827,6 +1843,8 @@ en:
 
     ignored_users_message_gap_days: "How long to wait before notifying moderators again about a user who has been ignored by many others."
 
+    clean_up_inactive_users_after_days: "Number of days before an inactive user (trust level 0 without any posts) is removed."
+
     user_website_domains_whitelist: "User website will be verified against these domains. Pipe-delimited list."
 
     allow_profile_backgrounds: "Allow users to upload profile backgrounds."
@@ -1916,16 +1934,16 @@ en:
     watched_words_regular_expressions: "Watched words are regular expressions."
 
     min_post_notice_tl: "Minimum trust level required to see post notices."
+    old_post_notice_days: "Days before post notice becomes old"
     returning_users_days: "How many days should pass before a user is considered to be returning."
 
     default_email_digest_frequency: "How often users receive summary emails by default."
     default_include_tl0_in_digests: "Include posts from new users in summary emails by default. Users can change this in their preferences."
-    default_email_personal_messages: "Send an email when someone messages the user by default."
-    default_email_direct: "Send an email when someone quotes/replies to/mentions or invites the user by default."
+    default_email_level: "Set default email notification level when someone quotes/replies to/mentions or invites user."
+    default_email_messages_level: "Set default email notification level when someone messages user."
     default_email_mailing_list_mode: "Send an email for every new post by default."
     default_email_mailing_list_mode_frequency: "Users who enable mailing list mode will receive emails this often by default."
     disable_mailing_list_mode: "Disallow users from enabling mailing list mode."
-    default_email_always: "Send an email notification even when the user is active by default."
     default_email_previous_replies: "Include previous replies in emails by default."
 
     default_email_in_reply_to: "Include excerpt of replied to post in emails by default."
@@ -2018,11 +2036,18 @@ en:
       staged_users_disabled: "You must first enable 'staged users' before enabling this setting."
       reply_by_email_disabled: "You must first enable 'reply by email' before enabling this setting."
       sso_url_is_empty: "You must set a 'sso url' before enabling this setting."
+      sso_invite_only: "You cannot enable sso and invite only at the same time."
       enable_local_logins_disabled: "You must first enable 'enable local logins' before enabling this setting."
       min_username_length_exists: "You cannot set the minimum username length above the shortest username (%{username})."
       min_username_length_range: "You cannot set the minimum above the maximum."
       max_username_length_exists: "You cannot set the maximum username length below the longest username (%{username})."
       max_username_length_range: "You cannot set the maximum below the minimum."
+      invalid_hex_value: "Color values have to be 6-digit hexadecimal codes."
+      category_search_priority:
+        very_low_weight_invalid: "You cannot set the weight to be greater than 'category_search_priority_low_weight'."
+        low_weight_invalid: "You cannot set the weight to be greater or equal to 1 or smaller than 'category_search_priority_very_low_weight'."
+        high_weight_invalid: "You cannot set the weight to be greater or equal to 1 or greater than 'category_search_priority_very_high_weight'."
+        very_high_weight_invalid: "You cannot set the weight to be smaller than 'category_search_priority_high_weight'."
 
     placeholder:
       sso_provider_secrets:
@@ -2167,7 +2192,6 @@ en:
   admin:
     email:
       sent_test: "sent!"
-      sent_test_disabled: "cannot send because emails are disabled"
 
   user:
     deactivated: "Was deactivated due to too many bounced emails to '%{email}'."
@@ -2199,14 +2223,15 @@ en:
       unused_staged_user: "Unused staged user"
       fixed_primary_email: "Fixed primary email for staged user"
       same_ip_address: "Same IP address (%{ip_address}) as other users"
+      inactive_user: "Inactive user"
 
-  flags_reminder:
-    flags_were_submitted:
-      one: "Flags were submitted over 1 hour ago. [Please review them](%{base_path}/admin/flags)."
-      other: "Flags were submitted over %{count} hours ago. [Please review them](%{base_path}/admin/flags)."
+  reviewables_reminder:
+    submitted:
+      one: "Items were submitted over 1 hour ago. [Please review them](%{base_path}/review)."
+      other: "Items were submitted over %{count} hours ago. [Please review them](%{base_path}/review)."
     subject_template:
-      one: "1 flag waiting to be handled"
-      other: "%{count} flags waiting to be handled"
+      one: "1 item needs to be reviewed"
+      other: "%{count} items need to be reviewed"
 
   unsubscribe_mailer:
     title: "Unsubscribe Mailer"
@@ -2412,8 +2437,8 @@ en:
     agreed: "Thanks for letting us know. We agree there is an issue and we're looking into it."
     agreed_and_deleted: "Thanks for letting us know. We agree there is an issue and we've removed the post."
     disagreed: "Thanks for letting us know. We're looking into it."
-    deferred: "Thanks for letting us know. We're looking into it."
-    deferred_and_deleted: "Thanks for letting us know. We've removed the post."
+    ignored: "Thanks for letting us know. We're looking into it."
+    ignored_and_deleted: "Thanks for letting us know. We've removed the post."
 
   temporarily_closed_due_to_flags:
     one: "This topic is temporarily closed for at least 1 hour due to a large number of community flags."
@@ -2722,6 +2747,7 @@ en:
         %{post_error}
 
         If you can correct the problem, please try again.
+      date_invalid: "No post creation date found. Is the e-mail missing a Date: header?"
 
     email_reject_post_too_short:
       title: "Email Reject Post Too Short"
@@ -4105,17 +4131,17 @@ en:
         This badge is granted to congratulate two new users each month for their excellent overall contributions, as measured by how often their posts were liked, and by whom.
     enthusiast:
       name: Enthusiast
-      description: Visited 10 days
+      description: Visited 10 consecutive days
       long_description: |
         This badge is granted for visiting 10 consecutive days. Thanks for sticking with us for over a week!
     aficionado:
       name: Aficionado
-      description: Visited 100 days
+      description: Visited 100 consecutive days
       long_description: |
         This badge is granted for visiting 100 consecutive days. That’s more than three months!
     devotee:
       name: Devotee
-      description: Visited 365 days
+      description: Visited 365 consecutive days
       long_description: |
         This badge is granted for visiting 365 consecutive days. Wow, an entire year!
     badge_title_metadata: "%{display_name} badge on %{site_title}"
@@ -4335,9 +4361,67 @@ en:
       linked: '%{username} linked to your post from "%{topic}" - %{site_title}'
       confirm_title: "Notifications enabled - %{site_title}"
       confirm_body: "Success! Notifications have been enabled."
+      custom: "Notification from %{site_title}"
 
   staff_action_logs:
     not_found: "not found"
     unknown: "unknown"
     user_merged: "%{username} was merged into this account"
     user_delete_self: "Deleted by self from %{url}"
+
+  reviewables:
+    missing_version: "You must supply a version parameter"
+    conflict: "There was an update conflict preventing you from doing that."
+    actions:
+      agree:
+        title: "Agree..."
+      agree_and_keep:
+        title: "Keep Post"
+        description: "Agree with flag and keep the post unchanged."
+      agree_and_suspend:
+        title: "Suspend User"
+        description: "Agree with flag and suspend the user."
+      agree_and_silence:
+        title: "Silence User"
+        description: "Agree with flag and silence the user."
+      agree_and_restore:
+        title: "Restore Post"
+        description: "Restore the post so that all users can see it."
+      agree_and_hide:
+        title: "Hide Post"
+        description: "Hide this post and automatically send the user a message urging them to edit it."
+      delete_spammer:
+        title: "Delete Spammer"
+        description: "Remove the user and all their posts and topics."
+        confirm: "Are you sure you want to delete all that user's posts, topics, and block their IP and email addresses?"
+      delete:
+        title: "Delete..."
+      delete_and_ignore:
+        title: "Delete Post and Ignore"
+        description: "Delete post; if the first post, delete the topic as well"
+      delete_and_ignore_replies:
+        title: "Delete Post + Replies and Ignore"
+        description: "Delete post and all of its replies; if the first post, delete the topic as well"
+        confirm: "Are you sure you want to delete the replies to the post as well?"
+      delete_and_agree:
+        title: "Delete Post and Agree"
+        description: "Delete post; if the first post, delete the topic as well"
+      delete_and_agree_replies:
+        title: "Delete Post + Replies and Agree"
+        description: "Delete post and all of its replies; if the first post, delete the topic as well"
+        confirm: "Are you sure you want to delete the replies to the post as well?"
+      disagree_and_restore:
+        title: "Disagree and Restore Post"
+        description: "Restore the post so that all users can see it."
+      disagree:
+        title: "Disagree"
+      ignore:
+        title: "Ignore"
+      approve:
+        title: "Approve"
+      reject:
+        title: "Reject"
+      delete_user:
+        title: "Delete User"
+        confirm: "Are you sure you want to delete that user? This will remove all of their posts and block their email and IP address."
+        reason: "Deleted via review queue"

@@ -49,6 +49,20 @@ describe CategoriesController do
 
       expect(response.body).to have_tag "title", text: "Discourse - Official community"
     end
+
+    it "redirects /category paths to /c paths" do
+      get "/category/uncategorized"
+      expect(response.status).to eq(302)
+      expect(response.body).to include("c/uncategorized")
+    end
+
+    it "respects permalinks before redirecting /category paths to /c paths" do
+      perm = Permalink.create!(url: "category/something", category_id: category.id)
+
+      get "/category/something"
+      expect(response.status).to eq(301)
+      expect(response.body).to include(category.slug)
+    end
   end
 
   context 'extensibility event' do
@@ -141,6 +155,7 @@ describe CategoriesController do
             text_color: "fff",
             slug: "hello-cat",
             auto_close_hours: 72,
+            search_priority: Searchable::PRIORITIES[:ignore],
             permissions: {
               "everyone" => readonly,
               "staff" => create_post
@@ -156,6 +171,7 @@ describe CategoriesController do
           expect(category.slug).to eq("hello-cat")
           expect(category.color).to eq("ff0")
           expect(category.auto_close_hours).to eq(72)
+          expect(category.search_priority).to eq(Searchable::PRIORITIES[:ignore])
           expect(UserHistory.count).to eq(4) # 1 + 3 (bootstrap mode)
         end
       end
@@ -295,7 +311,7 @@ describe CategoriesController do
       end
 
       describe "success" do
-        it "updates the group correctly" do
+        it "updates attributes correctly" do
           readonly = CategoryGroup.permission_types[:readonly]
           create_post = CategoryGroup.permission_types[:create_post]
 
@@ -312,7 +328,8 @@ describe CategoriesController do
             custom_fields: {
               "dancing" => "frogs"
             },
-            minimum_required_tags: ""
+            minimum_required_tags: "",
+            allow_global_tags: 'true'
           }
 
           expect(response.status).to eq(200)
@@ -326,6 +343,7 @@ describe CategoriesController do
           expect(category.auto_close_hours).to eq(72)
           expect(category.custom_fields).to eq("dancing" => "frogs")
           expect(category.minimum_required_tags).to eq(0)
+          expect(category.allow_global_tags).to eq(true)
         end
 
         it 'logs the changes correctly' do

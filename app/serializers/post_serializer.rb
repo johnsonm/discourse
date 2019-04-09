@@ -257,7 +257,7 @@ class PostSerializer < BasicPostSerializer
         summary[:can_defer_flags] = true if scope.is_staff? &&
                                                    PostActionType.flag_types_without_custom.values.include?(id) &&
                                                    active_flags.present? && active_flags.has_key?(id) &&
-                                                   active_flags[id].count > 0
+                                                   active_flags[id] > 0
       end
 
       if actions.present? && actions.has_key?(id)
@@ -371,7 +371,7 @@ class PostSerializer < BasicPostSerializer
 
   def include_post_notice_type?
     return false if !scope.user || !scope.user.id || scope.user.id == object.user_id ||
-                    !object.user || object.user.anonymous? ||
+                    !object.user || object.user.anonymous? || object.user.bot? ||
                     !scope.user.has_trust_level?(SiteSetting.min_post_notice_tl)
 
     post_notice_type.present?

@@ -878,15 +878,13 @@ export default Ember.Component.extend({
     if ($preview.find(".codeblock-image").length === 0) {
       this.$(".d-editor-preview *")
         .contents()
-        .filter(function() {
-          return this.nodeType === 3; // TEXT_NODE
-        })
         .each(function() {
-          $(this).replaceWith(
-            $(this)
-              .text()
-              .replace(imageScaleRegex, "<span class='codeblock-image'>$&</a>")
-          );
+          if (this.nodeType !== 3) return; // TEXT_NODE
+          const $this = $(this);
+
+          if ($this.text().match(imageScaleRegex)) {
+            $this.wrap("<span class='codeblock-image'></span>");
+          }
         });
     }
 
@@ -916,7 +914,10 @@ export default Ember.Component.extend({
     Ember.run.next(() => {
       $("#main-outlet").css("padding-bottom", 0);
       // need to wait a bit for the "slide down" transition of the composer
-      Ember.run.later(() => this.appEvents.trigger("composer:closed"), 400);
+      Ember.run.later(
+        () => this.appEvents.trigger("composer:closed"),
+        Ember.testing ? 0 : 400
+      );
     });
 
     if (this._enableAdvancedEditorPreviewSync())

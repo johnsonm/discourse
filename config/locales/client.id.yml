@@ -148,7 +148,6 @@ id:
     age: "Umur"
     joined: "Bergabung"
     admin_title: "Admin"
-    flags_title: "Flags"
     show_more: "tampilkan lebih banyak"
     show_help: "pilihan"
     links: "Tautan"
@@ -172,8 +171,6 @@ id:
     every_hour: "setiap jam"
     daily: "harian"
     weekly: "mingguan"
-    every_two_weeks: "setiap dua minggu"
-    every_three_days: "setiap tiga hari"
     max_of_count: "maksimal dari {{count}}"
     alternation: "atau"
     character_count:
@@ -229,26 +226,6 @@ id:
       none_found: "Tidak ada topik ditemukan."
       title:
         placeholder: "tulis judul topik disini"
-    queue:
-      topic: "Topik:"
-      approve: "Terima"
-      reject: "Tolak"
-      delete_user: "Hapus Pengguna"
-      title: "Membutuhan Persetujuan"
-      none: "Tidak ada pos untuk di pratinjau."
-      edit: "Ubah"
-      cancel: "Batal"
-      view_pending: "lihat postingan tertunda"
-      has_pending_posts:
-        other: "Bahasan ini <b>{{count}}</b> pesan menunggu persetujuan"
-      confirm: "Simpan perubahan"
-      delete_prompt: "Apakah anda yakin akan menghapus <b>%{username}</b> ? Ini akan menghapus semua pesan dan memblokir email dan alamat IP. "
-      approval:
-        title: "Pesan Membutuhkan Persetujuan"
-        description: "Kami telah menerima posting baru Anda, tetapi diperlukan persetujuan dari moderator sebelum posting tersebut tampil. Mohon kesabarannya. Terima kasih!"
-        pending_posts:
-          other: "Anda mempunyai <strong>{{count}}</strong> pesan tertunda."
-        ok: "Ya"
     user_action:
       user_posted_topic: "<a href='{{userUrl}}'>{{user}}</a> memposting <a href='{{topicUrl}}'>topik</a>"
       you_posted_topic: "<a href='{{userUrl}}'>Anda</a> memposting <a href='{{topicUrl}}'>the topic</a>"
@@ -547,7 +524,6 @@ id:
         instructions: "Gambar latar belakang akan ditengahkan dan mempunyai lebar standar 590px"
       email:
         title: "Surel"
-        instructions: "Tidak akan pernah diperlihatkan ke khalayak umum"
         ok: "Kami akan mengirimkan surel kepada anda untuk konfirmasi"
         invalid: "Silahkan masukkan alamat email yang valid"
         authenticated: "Email anda sudah dikonfirmasi oleh {{provider}}"
@@ -596,10 +572,7 @@ id:
         every_30_minutes: "setiap 30 menit"
         every_hour: "per jam"
         daily: "harian"
-        every_three_days: "setiap tiga hari"
         weekly: "mingguan"
-        every_two_weeks: "setiap dua minggu"
-      email_private_messages: "Kirimkan saya surel bila seseorang mengirimkan pesan kepada saya"
       other_settings: "Lainnya"
       categories_settings: "Kategori"
       new_topic_duration:
@@ -792,12 +765,7 @@ id:
       filter_placeholder: Cari...
     emoji_picker:
       filter_placeholder: Cari emoji
-      people: Orang
-      nature: Alam
-      food: Makanan
-      activity: Aktifitas
       objects: Objek
-      celebration: Perayaan
     composer:
       options: "Pilihan"
       add_warning: "Ini adalah peringatan resmi."
@@ -921,8 +889,6 @@ id:
         last_checked: "Terakhir dicek"
         reports:
           all_time: "Sepanjang Waktu"
-      flags:
-        system: "Sistem"
       groups:
         delete: "Hapus"
         delete_confirm: "Hapus grup ini?"

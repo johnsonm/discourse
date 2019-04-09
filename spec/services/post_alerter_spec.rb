@@ -125,10 +125,10 @@ describe PostAlerter do
       coding_horror = Fabricate(:coding_horror)
 
       PostActionNotifier.enable
-      SiteSetting.flags_required_to_hide_post = 2
+      SiteSetting.score_required_to_hide_post = 4.0
 
-      PostAction.act(evil_trout, post, PostActionType.types[:spam])
-      PostAction.act(walterwhite, post, PostActionType.types[:spam])
+      PostActionCreator.spam(evil_trout, post)
+      PostActionCreator.spam(walterwhite, post)
 
       post.reload
       expect(post.hidden).to eq(true)
@@ -146,8 +146,8 @@ describe PostAlerter do
       expect(notification.post_number).to eq(post.post_number)
       expect(notification.data_hash["display_username"]).to eq(post.user.username)
 
-      PostAction.act(coding_horror, post, PostActionType.types[:spam])
-      PostAction.act(walterwhite, post, PostActionType.types[:off_topic])
+      PostActionCreator.create(coding_horror, post, :spam)
+      PostActionCreator.create(walterwhite, post, :off_topic)
 
       post.reload
       expect(post.hidden).to eq(true)
@@ -165,6 +165,15 @@ describe PostAlerter do
     it 'does not notify for muted users' do
       post = Fabricate(:post, raw: '[quote="EvilTrout, post:1"]whatup[/quote]')
       MutedUser.create!(user_id: evil_trout.id, muted_user_id: post.user_id)
+
+      expect {
+        PostAlerter.post_created(post)
+      }.to change(evil_trout.notifications, :count).by(0)
+    end
+
+    it 'does not notify for ignored users' do
+      post = Fabricate(:post, raw: '[quote="EvilTrout, post:1"]whatup[/quote]')
+      IgnoredUser.create!(user_id: evil_trout.id, ignored_user_id: post.user_id)
 
       expect {
         PostAlerter.post_created(post)
@@ -606,10 +615,12 @@ describe PostAlerter do
       body = nil
       headers = nil
 
-      Excon.expects(:post).with { |_req, _body|
-        headers = _body[:headers]
-        body = _body[:body]
-      }.times(3).returns("OK")
+      stub_request(:post, "https://site2.com/push")
+        .to_return do |request|
+          body = request.body
+          headers = request.headers
+          { status: 200, body: "OK" }
+        end
 
       payload = {
         "secret_key" => SiteSetting.push_api_secret_key,
@@ -936,10 +947,10 @@ describe PostAlerter do
       before do
         SiteSetting.tagging_enabled = true
         Jobs.run_immediately!
+        TagUser.change(user.id, watched_tag.id, TagUser.notification_levels[:watching_first_post])
       end
 
       it "triggers a notification" do
-        TagUser.change(user.id, watched_tag.id, TagUser.notification_levels[:watching_first_post])
         expect(user.notifications.where(notification_type: Notification.types[:watching_first_post]).count).to eq(0)
 
         PostRevisor.new(post).revise!(Fabricate(:user), tags: [other_tag.name, watched_tag.name])
@@ -947,6 +958,15 @@ describe PostAlerter do
 
         PostRevisor.new(post).revise!(Fabricate(:user), tags: [watched_tag.name, other_tag.name])
         expect(user.notifications.where(notification_type: Notification.types[:watching_first_post]).count).to eq(1)
+      end
+
+      it "doesn't trigger a notification if topic is unlisted" do
+        post.topic.update_column(:visible, false)
+
+        expect(user.notifications.where(notification_type: Notification.types[:watching_first_post]).count).to eq(0)
+
+        PostRevisor.new(post).revise!(Fabricate(:user), tags: [other_tag.name, watched_tag.name])
+        expect(user.notifications.where(notification_type: Notification.types[:watching_first_post]).count).to eq(0)
       end
     end
   end

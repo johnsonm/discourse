@@ -9,6 +9,7 @@ class CategoriesController < ApplicationController
   skip_before_action :check_xhr, only: [:index, :categories_and_latest, :categories_and_top, :redirect]
 
   def redirect
+    return if handle_permalink("/category/#{params[:path]}")
     redirect_to path("/c/#{params[:path]}")
   end
 
@@ -293,6 +294,8 @@ class CategoriesController < ApplicationController
                       :default_top_period,
                       :minimum_required_tags,
                       :navigate_to_first_post_after_read,
+                      :search_priority,
+                      :allow_global_tags,
                       custom_fields: [params[:custom_fields].try(:keys)],
                       permissions: [*p.try(:keys)],
                       allowed_tags: [],

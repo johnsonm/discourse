@@ -69,8 +69,11 @@
 
     $element
       .html(DATE_TEMPLATE)
-      .attr("title", textPreview)
-      .attr("data-html-tooltip", `<div class="previews">${htmlPreview}</div>`)
+      .attr("aria-label", textPreview)
+      .attr(
+        "data-html-tooltip",
+        `<div class="locale-dates-previews">${htmlPreview}</div>`
+      )
       .addClass("cooked-date")
       .find(".relative-time")
       .text(formatedDateTime);
@@ -182,8 +185,19 @@
     const type = parts[1];
     const diff = moment().diff(dateTime, type);
     const add = Math.ceil(diff + count);
+    const wasDST = moment(dateTime.format()).isDST();
+    let dateTimeWithRecurrence = dateTime.add(add, type);
+    const isDST = moment(dateTimeWithRecurrence.format()).isDST();
 
-    return dateTime.add(add, type);
+    if (!wasDST && isDST) {
+      dateTimeWithRecurrence.subtract(1, "hour");
+    }
+
+    if (wasDST && !isDST) {
+      dateTimeWithRecurrence.add(1, "hour");
+    }
+
+    return dateTimeWithRecurrence;
   }
 
   function _createDateTimeRange(dateTime, timezone) {

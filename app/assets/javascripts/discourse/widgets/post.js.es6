@@ -13,7 +13,7 @@ import {
   formatUsername
 } from "discourse/lib/utilities";
 import hbs from "discourse/widgets/hbs-compiler";
-import { relativeAge } from "discourse/lib/formatter";
+import { durationTiny } from "discourse/lib/formatter";
 
 function transformWithCallbacks(post) {
   let transformed = transformBasicPost(post);
@@ -355,7 +355,9 @@ createWidget("post-contents", {
   },
 
   html(attrs, state) {
-    let result = [new PostCooked(attrs, new DecoratorHelper(this))];
+    let result = [
+      new PostCooked(attrs, new DecoratorHelper(this), this.currentUser)
+    ];
     result = result.concat(applyDecorators(this, "after-cooked", attrs, state));
 
     if (attrs.cooked_hidden) {
@@ -432,12 +434,22 @@ createWidget("post-notice", {
   tagName: "div.post-notice",
 
   buildClasses(attrs) {
+    const classes = [];
+
     if (attrs.postNoticeType === "first") {
-      return ["new-user"];
+      classes.push("new-user");
     } else if (attrs.postNoticeType === "returning") {
-      return ["returning-user"];
+      classes.push("returning-user");
     }
-    return [];
+
+    if (
+      new Date() - new Date(attrs.created_at) >
+      this.siteSettings.old_post_notice_days * 86400000
+    ) {
+      classes.push("old");
+    }
+
+    return classes;
   },
 
   html(attrs) {
@@ -451,12 +463,10 @@ createWidget("post-notice", {
       text = I18n.t("post.notice.first", { user });
     } else if (attrs.postNoticeType === "returning") {
       icon = "far-smile";
+      const distance = (new Date() - new Date(attrs.postNoticeTime)) / 1000;
       text = I18n.t("post.notice.return", {
         user,
-        time: relativeAge(attrs.postNoticeTime, {
-          format: "tiny",
-          addAgo: true
-        })
+        time: durationTiny(distance, { addAgo: true })
       });
     }
 
@@ -648,9 +658,6 @@ export default createWidget("post", {
       classNames.push("moderator");
     } else {
       classNames.push("regular");
-    }
-    if (attrs.ignored) {
-      classNames.push("post-ignored");
     }
     if (addPostClassesCallbacks) {
       for (let i = 0; i < addPostClassesCallbacks.length; i++) {

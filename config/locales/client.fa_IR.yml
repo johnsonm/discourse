@@ -176,7 +176,6 @@ fa_IR:
     age: "سن"
     joined: "ملحق شده"
     admin_title: "مدیر"
-    flags_title: "پرچم‌ها"
     show_more: "بیش‌تر نشان بده"
     show_help: "گزینه‌ها"
     links: "پیوندها"
@@ -201,8 +200,6 @@ fa_IR:
     every_hour: "هر ساعت"
     daily: "روزانه"
     weekly: "هفتگی"
-    every_two_weeks: "هر دو هفته"
-    every_three_days: "هر سه روز"
     max_of_count: "حداکثر {{count}}"
     alternation: "یا"
     character_count:
@@ -270,28 +267,6 @@ fa_IR:
       none_found: "موضوعی یافت نشد."
       title:
         placeholder: "عنوان موضوع را اینجا بنویسید"
-    queue:
-      topic: "موضوع:"
-      approve: "تایید"
-      reject: "رد کردن"
-      delete_user: "پاک کردن کاربر"
-      title: "به تایید نیاز است"
-      none: "نوشته ای برای بازبینی وجود ندارد."
-      edit: "ویرایش"
-      cancel: "لغو کردن"
-      view_pending: "مشاهده نوشته‌های در انتظار "
-      has_pending_posts:
-        one: "این موضوع دارای <b>{{count}}</b> نوشته‌ی در انتظار تایید است"
-        other: "این موضوع دارای <b>{{count}}</b> نوشته‌ی در انتظار تایید است"
-      confirm: "ذخیره تغییرات"
-      delete_prompt: "آیا از حذف <b>%{username}</b> اطمینان دارید؟ این عمل باعث حذف شدن تمامی نوشته های او و همینطور باعث مسدود شدن IP و ایمیل آن‌ها نیز می شود."
-      approval:
-        title: "نوشته نیاز به تایید دارد"
-        description: "ما نوشته شما را دریافت کرده ایم ولی قبل از نمایش نیاز به تایید آن توسط یکی از مدیران است. لطفا صبر داشته باشید."
-        pending_posts:
-          one: "شما دارای  <strong>{{count}}</strong>  نوشته در انتظار هستید "
-          other: "شما دارای  <strong>{{count}}</strong>  نوشته در انتظار هستید "
-        ok: "باشه"
     user_action:
       user_posted_topic: "<a href='{{userUrl}}'>{{user}}</a> <a href='{{topicUrl}}'>یک موضوع</a> ایجاد کرد"
       you_posted_topic: "<a href='{{userUrl}}'>شما یک </a><a href='{{topicUrl}}'>موضوع</a> جدید ایجاد کردید."
@@ -485,6 +460,7 @@ fa_IR:
       topic_sentence:
         one: "%{count} موضوع"
         other: "%{count} موضوع"
+      n_more: "دسته‌بندی‌ها ( %{count}مورد دیگر)"
     ip_lookup:
       title: جستجوی نشانی IP
       hostname: نام میزبان
@@ -665,7 +641,6 @@ fa_IR:
         instructions: "تصاویر پس زمینه در مرکز قرار خواهند گرفت و عرض  پیشفرض آن 590 پیکسل است"
       email:
         title: "ایمیل"
-        instructions: "هرگز به عموم مردم نشان داده نشده است"
         ok: "برای تایید ایمیلی برایتان ارسال خواهیم کرد."
         invalid: "لطفا یک آدرس ایمیل معتبر وارد کنید"
         authenticated: "ایمیل شما توسط {{provider}} تصدیق شد"
@@ -720,14 +695,9 @@ fa_IR:
         every_30_minutes: "هر 30 دقیقه"
         every_hour: "هر ساعت"
         daily: "روزانه"
-        every_three_days: "هر سه روز"
         weekly: "هفتگی"
-        every_two_weeks: "هر دو هفته "
       include_tl0_in_digests: "محتوای ایجاد شده توسط کاربران جدید در ایمیل خلاصه قرار گیرد."
       email_in_reply_to: "خلاصه‌ی پاسخ‌ها را در ایمیل قرار بده."
-      email_direct: "وقتی کسی نوشته‌های من را نقل‌قول کرد، یا به من پاسخ داد، یا به @نام‌کاربری من اشاره کرد، یا به موضوعی دعوت کرد، ایمیل بفرست."
-      email_private_messages: "وقتی کسی به من پیام خصوصی فرستاد، ایمیل بفرست"
-      email_always: "ایمیل های اعلان را وقتی در سایت فعال هستم نیز برایم بفرست"
       other_settings: "موارد دیگر"
       categories_settings: "دسته‌بندی‌ها"
       new_topic_duration:
@@ -799,6 +769,7 @@ fa_IR:
         title: "خلاصه"
         stats: "آمار"
         time_read: " زمان خواندن"
+        recent_time_read: "زمان خواندن اخیر"
         topic_count:
           one: "موضوعات ساخته شدند"
           other: "موضوعات ساخته شدند"
@@ -892,6 +863,9 @@ fa_IR:
     first_post: نوشته نخست
     mute: بی صدا
     unmute: صدادار
+    time_read: خواندن
+    time_read_recently: "اخیراً"
+    time_read_tooltip: "%{time_read} مجموع زمان خواندن "
     last_reply_lowercase: آخرین پاسخ
     replies_lowercase:
       one: 'پاسخ‌ها '
@@ -1015,13 +989,7 @@ fa_IR:
       ctrl: "Ctrl"
       alt: "Alt"
     emoji_picker:
-      people: مردم
-      nature: طبیعت
-      food: غذا
-      activity: فعالیت
-      travel: سفر
       objects: اشیا
-      celebration: جشن
       recent: اخیرا استفاده شده
     composer:
       emoji: "شکلک :)"
@@ -1176,6 +1144,7 @@ fa_IR:
           first: اولین نوشته هستند
           pinned: سنجاق شدند
           unpinned: سنجاق نشدند
+          seen: خواندم
           unseen: نخواندم
           wiki: دانشنامه هستند
         statuses:
@@ -1571,9 +1540,6 @@ fa_IR:
       has_replies:
         one: "{{count}} پاسخ"
         other: "{{count}} پاسخ"
-      has_likes:
-        one: "{{count}} پسند"
-        other: "{{count}} پسند"
       has_likes_title:
         one: "{{count}} کاربر این مورد را پسندیده‌اند"
         other: "{{count}} کاربر این مورد را پسندیده‌اند"
@@ -1585,7 +1551,6 @@ fa_IR:
         create: "متأسفیم، در ایجاد نوشته‌ی شما خطایی روی داد. لطفاً دوباره تلاش کنید."
         edit: "متأسفیم، در ویرایش نوشته‌ی شما خطایی روی داد. لطفاً دوباره تلاش کنید."
         upload: "متأسفیم، در بارگذاری آن پرونده خطایی روی داد. لطفاً دوباره تلاش کنید."
-        file_too_large: "با عرض پوزش، حجم فایل بسیار بالاست (بالاترین حجم قابل بارگذاری {{max_size_kb}} کیلوبایت) است. چرا فایل‌های حجیم را در سرویس‌های ابری بارگذاری نمی‌کنید و لینک‌های آن را در انجمن قرار نمی‌دهید؟"
         too_many_uploads: "متأسفیم، هر بار تنها می‌توانید یک پرونده را بار‌گذاری کنید."
         upload_not_authorized: "با عرض پوزش، فایلی که در حال‌ بارگذاری آن هستید مجاز نیست. (پسوند‌های قابل بارگذاری: {{authorized_extensions}})."
         image_upload_not_allowed_for_new_user: "با عرض پوزش، کاربران جدید نمی توانند تصویر بار‌گذاری کنند."
@@ -2204,37 +2169,6 @@ fa_IR:
       commits:
         latest_changes: "آخرین تغییرات: لطفا بیشتر به‌روز‌رسانی کنید!"
         by: "توسط"
-      flags:
-        title: "پرچم‌ها"
-        agree: "موافقت کردن"
-        agree_title: "تایید این پرچم به عنوان معتبر و صحیح"
-        delete: "حذف"
-        delete_title: "نوشته‌ای که پرچم به آن اشاره دارد حذف کن."
-        delete_post_defer_flag_title: "حذف نوشته; اگر اولین نوشته است، موضوع را حذف نمایید."
-        delete_post_agree_flag_title: "حذف نوشته; اگر اولین نوشته است، موضوع را حذف نمایید."
-        delete_flag_modal_title: "حذف و..."
-        delete_spammer: "حذف هرزنگار"
-        delete_spammer_title: "حذف کاربر و تمام نوشته ها و موضوعات این کاربر"
-        disagree_flag_unhide_post: "مخالفم (با رویت نوشته)"
-        disagree_flag_unhide_post_title: "حذف تمام پرچم های این نوشته و دوباره نوشته را قابل نمایش کن "
-        disagree_flag: "مخالف"
-        disagree_flag_title: "انکار این پرچم به عنوان نامعتبر است و یا نادرست"
-        clear_topic_flags: "تأیید"
-        clear_topic_flags_title: "موضوع بررسی و موضوع حل شده است. تأیید را بفشارید تا پرچم‌ها برداشته شوند."
-        more: "(پاسخ های بیشتر...)"
-        dispositions:
-          agreed: "موافقت شد"
-          disagreed: "مخالفت شد"
-        flagged_by: "پرچم شده توسط"
-        resolved_by: "حل شده توسط"
-        took_action: "زمان عمل"
-        system: "سیستم"
-        error: "اشتباهی روی داد"
-        reply_message: "پاسخ دادن"
-        topic_flagged: "این <strong>موضوع</strong> پرچم خورده است."
-        visit_topic: " موضوع را برای اقدام لازم ببینید"
-        was_edited: "نوشته پس از پرچم اول ویرایش شد"
-        previous_flags_count: "این موضوع در حال حاضر {{count}} بار پرچم گذاری شده است."
       groups:
         primary: "گروه اصلی"
         no_primary: "(بدون گروه اصلی)"
@@ -2455,6 +2389,7 @@ fa_IR:
           color_scheme_select: "انتخاب رنگ مورد استفاده قالب"
           custom_sections: "بخش‌های سفارشی"
           theme_components: "اجزای قالب"
+          and_x_more: "و {{count}} مورد دیگر"
           uploads: "بارگذاری‌ها"
           no_uploads: "می‌توانید فایل‌های ثابت همراه با قالب خود مثل فونت و تصویر بارگذاری کنید"
           add_upload: "افزودن بارگذاری"
@@ -2706,17 +2641,10 @@ fa_IR:
         nav:
           new: "جدید"
           active: "فعال"
-          pending: "در انتظار"
           staff: "همکاران"
           suspended: "تعلیق شد "
           suspect: "مشکوک"
         approved: "تایید شده ؟"
-        approved_selected:
-          one: "({{count}}) کاربر تایید شده"
-          other: "({{count}}) کاربر تایید شده"
-        reject_selected:
-          one: "({{count}}) کاربر رد شده"
-          other: "({{count}}) کاربر رد شده"
         titles:
           active: "کاربران فعال"
           new: "کاربران تازه"
@@ -2731,12 +2659,6 @@ fa_IR:
           moderators: "مدیران"
           suspended: "کاربران تعلیق شده"
           suspect: "کاربران مشکوک"
-        reject_successful:
-          one: "%{count} کاربر با موفقیت رد شدند"
-          other: "%{count} کاربر با موفقیت رد شدند"
-        reject_failures:
-          one: "رد %{count} کاربر ناموفق بود"
-          other: "رد %{count} کاربر ناموفق بود"
         not_verified: "تایید نشده"
         check_email:
           title: "ایمیل این کاربران را قابل رویت کن"

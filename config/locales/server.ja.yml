@@ -37,7 +37,12 @@ ja:
   redirect_warning: "選択されたリンクがこのフォーラムに投稿されたものと確認できませんでした。このまま進むには、下のリンクを選択してください。"
   on_another_topic: "別のトピックで"
   themes:
+    bad_color_scheme: "テーマを更新できません、無効なカラーパレットです"
     other_error: "サーバーに不具合があるので、テーマを更新してください。"
+    import_error:
+      generic: テーマをインポートするときにエラーが起こりました
+      about_json: "重要なエラー: about.json が存在しないか無効です"
+      unpack_failed: "ファイルの解凍に失敗しました"
     errors:
       component_no_user_selectable: "テーマコンポーネントはユーザー選択可能にできません"
       component_no_default: "テーマコンポーネントはデフォルトテーマにできません"
@@ -151,8 +156,6 @@ ja:
     user_topics: "@%{username}からの最新トピック"
   too_late_to_edit: "この投稿の編集・削除期間が過ぎました。編集・削除が出来ません。"
   excerpt_image: "画像"
-  queue:
-    delete_reason: "投稿の承認機能を用いて削除されました"
   groups:
     default_names:
       everyone: "みなさん"
@@ -167,6 +170,14 @@ ja:
   education:
     until_posts:
       other: "%{count} 投稿"
+    too_many_replies: |
+      ### このトピックへの返信数の制限に達しました
+
+      新しいユーザーは、同じトピックへの返信数が%{newuser_max_replies_per_topic}件に一時的に制限されています。
+
+      返信を追加する代わりに、次に手段を検討してください。
+      ・これまでの返信を編集する。
+      ・他のトピックを訪れる。
   activerecord:
     attributes:
       category:
@@ -586,7 +597,6 @@ ja:
   site_settings:
     censored_words: "自動的に &#9632;&#9632;&#9632;&#9632; で置換されます"
     delete_old_hidden_posts: "30日以上非表示になっている投稿を自動で削除します"
-    default_locale: "この Discourse インスタンスのデフォルト言語"
     allow_user_locale: "ユーザーが言語を選択できるようにする"
     min_post_length: "投稿を許可する最少の文字数"
     min_first_post_length: "最初の投稿(投稿本文)を許可する最少の文字数"
@@ -642,7 +652,6 @@ ja:
     traditional_markdown_linebreaks: "Markdown の従来形式のラインブレーク (行の終わりにダブルスペース) を使う"
     post_undo_action_window_mins: "投稿に対するアクション (「いいね!」、通報等) 取り消しを許可する時間 (秒)"
     must_approve_users: "スタッフはサイトへのアクセスが許可される前のすべての新規ユーザを承認する必要があります。警告：公開中のサイトでこれを有効にすると、既存の非スタッフユーザのアクセスを取り消すことになります！"
-    allow_moderators_to_create_categories: "モデレータのカテゴリ作成を許可"
     cors_origins: "CORSを許可。オリジンはhttp://かhttps://を含む必要があります。CORSを有効にするには、環境変数　DISCOURSE_ENABLE_CORSにtrueをセットする必要があります"
     top_menu: "ホームナビゲーションに表示する項目・表示順を指定。例:  latest|new|unread|categories|top|read|posted|bookmarks"
     post_menu: "投稿メニューに表示する項目を指定。例 like|edit|flag|delete|share|bookmark|reply"
@@ -707,8 +716,6 @@ ja:
     purge_deleted_uploads_grace_period_days: "削除されたアップロードファイルが完全削除されるまでの猶予期間 (単位：日)。"
     enable_s3_uploads: "Amazon S3にアップロードします。重要: 有効なS3 credentials(access key id & secret access key)が必要です"
     s3_upload_bucket: "ファイルをアップロードする Amazon S3のバケット名。　警告: 小文字である必要があり、ピリオドとアンダースコアを含むことはできません"
-    s3_access_key_id: "画像をアップロードするAmazonS3のaccess key id"
-    s3_secret_access_key: "画像をアップロードする Amazon S3 の secret access key"
     s3_cdn_url: "s3アセットに利用するCDNのURL(例: https://cdn.somewhere.com) 警告: 変更後は過去の投稿をrebakeする必要があります"
     avatar_sizes: "自動生成するアバターサイズのリスト"
     external_system_avatars_enabled: "外部のアバターシステムサービスを使用します。"
@@ -777,7 +784,6 @@ ja:
     max_age_unmatched_emails: "(N)日間一致しなかったスクリーンメールアドレスを削除"
     max_age_unmatched_ips: "(N)日間一致しなかったスクリーンIPアドレスを削除"
     num_flaggers_to_close_topic: "介入するため、自動的にトピックを停止するために必要なフラグを付けたユニークユーザの数"
-    num_flags_to_close_topic: "トピックの介入のため、自動的にトピックを停止するために必要なフラグの数"
     auto_respond_to_flag_actions: "フラグを解除時の自動返信を有効にする"
     min_first_post_typing_time: "最初の投稿に必要なタイピング時間。閾値以下の場合、投稿は自動的に承認キューに追加されます。0を設定すると無効化されます(推奨されません)"
     reply_by_email_enabled: "メールでのトピックへの返信を有効化する"
@@ -832,6 +838,7 @@ ja:
     emoji_set: "How would you like your emoji?"
     approve_unless_trust_level: "トラストレベル以下のユーザーの投稿には承認が必要"
     default_email_previous_replies: "デフォルトでメールの文章に以前の返信を含める"
+    tagging_enabled: "トピックでタグを有効にしますか？"
     tag_style: "カテゴリバッジのスタイル"
     errors:
       invalid_email: "不正なメールアドレスです"
@@ -920,9 +927,6 @@ ja:
     ip_address:
       blocked: "あなたのIPアドレスからの新規登録は許可されていません"
       max_new_accounts_per_registration_ip: "あなたのIPアドレスからの新規登録は行えません(登録可能な数を超えています)。スタッフへお問い合わせください。"
-  flags_reminder:
-    subject_template:
-      other: "%{count}件の通報が対応待ちです"
   invite_mailer:
     subject_template: "%{inviter_name}が%{site_domain_name}の%{topic_title}に招待しました。"
     text_body_template: |
@@ -1000,8 +1004,6 @@ ja:
     agreed: "伝えてくれてありがとうございます。問題に同意し、調査しています"
     agreed_and_deleted: "伝えてくれてありがとうございます。問題に同意し、投稿を削除します"
     disagreed: "伝えてくれてありがとうございます。調査しています"
-    deferred: "伝えてくれてありがとうございます。調査しています"
-    deferred_and_deleted: "伝えてくれてありがとうございます。投稿を削除しました"
   system_messages:
     private_topic_title: "トピック #%{id}"
     contents_hidden: "内容を確認するためにその投稿にアクセスして下さい。"

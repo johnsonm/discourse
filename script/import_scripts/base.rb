@@ -372,9 +372,8 @@ class ImportScripts::Base
 
       user_option = u.user_option
       user_option.email_digests = false
-      user_option.email_private_messages = false
-      user_option.email_direct = false
-      user_option.email_always = false
+      user_option.email_level = UserOption.email_level_types[:never]
+      user_option.email_messages_level = UserOption.email_level_types[:never]
       user_option.save!
       if u.save
         StaffActionLogger.new(Discourse.system_user).log_user_suspend(u, ban_reason)
@@ -597,12 +596,9 @@ class ImportScripts::Base
           skipped += 1
           puts "Skipping bookmark for user id #{params[:user_id]} and post id #{params[:post_id]}"
         else
-          begin
-            PostAction.act(user, post, PostActionType.types[:bookmark])
-            created += 1
-          rescue PostAction::AlreadyActed
-            skipped += 1
-          end
+          result = PostActionCreator.create(user, post, :bookmark)
+          created += 1 if result.success?
+          skipped += 1 if result.failed?
         end
       end
 

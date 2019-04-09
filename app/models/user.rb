@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
 
   has_many :group_users, dependent: :destroy
   has_many :groups, through: :group_users
+  has_many :group_requests, dependent: :destroy
   has_many :secure_categories, through: :groups, source: :categories
 
   has_many :user_uploads, dependent: :destroy
@@ -69,6 +70,11 @@ class User < ActiveRecord::Base
   has_many :oauth2_user_infos, dependent: :destroy
   has_one :instagram_user_info, dependent: :destroy
   has_many :user_second_factors, dependent: :destroy
+
+  has_many :totps, -> {
+    where(method: UserSecondFactor.methods[:totp], enabled: true)
+  }, class_name: "UserSecondFactor"
+
   has_one :user_stat, dependent: :destroy
   has_one :user_profile, dependent: :destroy, inverse_of: :user
   has_one :single_sign_on_record, dependent: :destroy
@@ -86,6 +92,8 @@ class User < ActiveRecord::Base
 
   has_many :acting_group_histories, dependent: :destroy, foreign_key: :acting_user_id, class_name: 'GroupHistory'
   has_many :targeted_group_histories, dependent: :destroy, foreign_key: :target_user_id, class_name: 'GroupHistory'
+
+  has_many :reviewable_scores, dependent: :destroy
 
   delegate :last_sent_email_address, to: :email_logs
 
@@ -405,19 +413,22 @@ class User < ActiveRecord::Base
   end
 
   # Approve this user
-  def approve(approver, send_mail = true)
-    self.approved = true
-    self.approved_at = Time.zone.now
-    self.approved_by = approver
+  def approve(approved_by, send_mail = true)
+    Discourse.deprecate("User#approve is deprecated. Please use the Reviewable API instead.", output_in_test: true, since: "2.3.0beta5", drop_from: "2.4")
 
-    if result = save
-      send_approval_email if send_mail
-      DiscourseEvent.trigger(:user_approved, self)
+    # Backwards compatibility - in case plugins or something is using the old API which accepted
+    # either a Number or object. Probably should remove at some point
+    approved_by = User.find_by(id: approved_by) if approved_by.is_a?(Numeric)
+
+    if reviewable_user = ReviewableUser.find_by(target: self)
+      result = reviewable_user.perform(approved_by, :approve, send_email: send_mail)
+      if result.success?
+        Reviewable.set_approved_fields!(self, approved_by)
+        return true
+      end
     end
 
-    StaffActionLogger.new(approver).log_user_approve(self)
-
-    result
+    false
   end
 
   def self.email_hash(email)
@@ -738,8 +749,21 @@ class User < ActiveRecord::Base
 
   def self.letter_avatar_color(username)
     username ||= ""
-    color = LetterAvatar::COLORS[Digest::MD5.hexdigest(username)[0...15].to_i(16) % LetterAvatar::COLORS.length]
-    color.map { |c| c.to_s(16).rjust(2, '0') }.join
+    if SiteSetting.restrict_letter_avatar_colors.present?
+      hex_length = 6
+      colors = SiteSetting.restrict_letter_avatar_colors
+      length = colors.count("|") + 1
+      num = color_index(username, length)
+      index = (num * hex_length) + num
+      colors[index, hex_length]
+    else
+      color = LetterAvatar::COLORS[color_index(username, LetterAvatar::COLORS.length)]
+      color.map { |c| c.to_s(16).rjust(2, '0') }.join
+    end
+  end
+
+  def self.color_index(username, length)
+    Digest::MD5.hexdigest(username)[0...15].to_i(16) % length
   end
 
   def avatar_template
@@ -794,7 +818,7 @@ class User < ActiveRecord::Base
   def delete_posts_in_batches(guardian, batch_size = 20)
     raise Discourse::InvalidAccess unless guardian.can_delete_all_posts? self
 
-    QueuedPost.where(user_id: id).delete_all
+    Reviewable.where(created_by_id: id).delete_all
 
     posts.order("post_number desc").limit(batch_size).each do |p|
       PostDestroyer.new(guardian.user, p).destroy
@@ -868,15 +892,20 @@ class User < ActiveRecord::Base
 
   def activate
     if email_token = self.email_tokens.active.where(email: self.email).first
-      user = EmailToken.confirm(email_token.token)
+      user = EmailToken.confirm(email_token.token, skip_reviewable: true)
       self.update!(active: true) if user.nil?
     else
       self.update!(active: true)
     end
+    create_reviewable
   end
 
-  def deactivate
+  def deactivate(performed_by)
     self.update!(active: false)
+
+    if reviewable = ReviewableUser.pending.find_by(target: self)
+      reviewable.perform(performed_by, :reject)
+    end
   end
 
   def change_trust_level!(level, opts = nil)
@@ -955,6 +984,8 @@ class User < ActiveRecord::Base
 
   # Flag all posts from a user as spam
   def flag_linked_posts_as_spam
+    results = []
+
     disagreed_flag_post_ids = PostAction.where(post_action_type_id: PostActionType.types[:spam])
       .where.not(disagreed_at: nil)
       .pluck(:post_id)
@@ -962,13 +993,12 @@ class User < ActiveRecord::Base
     topic_links.includes(:post)
       .where.not(post_id: disagreed_flag_post_ids)
       .each do |tl|
-      begin
-        message = I18n.t('flag_reason.spam_hosts', domain: tl.domain, base_path: Discourse.base_path)
-        PostAction.act(Discourse.system_user, tl.post, PostActionType.types[:spam], message: message)
-      rescue PostAction::AlreadyActed
-        # If the user has already acted, just ignore it
-      end
+
+      message = I18n.t('flag_reason.spam_hosts', domain: tl.domain, base_path: Discourse.base_path)
+      results << PostActionCreator.create(Discourse.system_user, tl.post, :spam, message: message)
     end
+
+    results
   end
 
   def has_uploaded_avatar
@@ -1183,6 +1213,13 @@ class User < ActiveRecord::Base
     next_best_badge_title ? Badge.display_name(next_best_badge_title) : nil
   end
 
+  def create_reviewable
+    return unless SiteSetting.must_approve_users? || SiteSetting.invite_only?
+    return if approved?
+
+    Jobs.enqueue(:create_user_reviewable, user_id: self.id)
+  end
+
   protected
 
   def badge_grant
@@ -1288,15 +1325,6 @@ class User < ActiveRecord::Base
       if will_save_change_to_username? && existing.present? && !same_user
         errors.add(:username, I18n.t(:'user.username.unique'))
       end
-    end
-  end
-
-  def send_approval_email
-    if SiteSetting.must_approve_users
-      Jobs.enqueue(:critical_user_email,
-        type: :signup_after_approval,
-        user_id: id
-      )
     end
   end
 
@@ -1446,6 +1474,7 @@ end
 #  staged                    :boolean          default(FALSE), not null
 #  first_seen_at             :datetime
 #  silenced_till             :datetime
+#  group_locked_trust_level  :integer
 #  manual_locked_trust_level :integer
 #
 # Indexes

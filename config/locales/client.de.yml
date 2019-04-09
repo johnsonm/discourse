@@ -168,7 +168,7 @@ de:
         eu_west_1: "EU (Irland)"
         eu_west_2: "EU (London)"
         eu_west_3: "EU (Paris)"
-        sa_east_1: "Südamerika (Sao Paulo)"
+        sa_east_1: "Südamerika (São Paulo)"
         us_east_1: "USA Ost (Nord-Virginia)"
         us_east_2: "USA Ost (Ohio)"
         us_gov_east_1: "AWS GovCloud (US-Ost)"
@@ -183,13 +183,12 @@ de:
     submit: "Absenden"
     generic_error: "Entschuldige, es ist ein Fehler aufgetreten."
     generic_error_with_reason: "Ein Fehler ist aufgetreten: %{error}"
-    go_ahead: "Nur zu!"
+    go_ahead: "Fortfahren"
     sign_up: "Registrieren"
     log_in: "Anmelden"
     age: "Alter"
     joined: "Beigetreten"
     admin_title: "Administration"
-    flags_title: "Meldungen"
     show_more: "mehr anzeigen"
     show_help: "Erweiterte Suche"
     links: "Links"
@@ -216,8 +215,6 @@ de:
     every_hour: "jede Stunde"
     daily: "täglich"
     weekly: "wöchentlich"
-    every_two_weeks: "jede zweite Woche"
-    every_three_days: "alle drei Tage"
     max_of_count: "von max. {{count}}"
     alternation: "oder"
     character_count:
@@ -307,28 +304,6 @@ de:
       title:
         search: "Suche eine Nachricht anhand der Überschrift:"
         placeholder: "Gib hier die Überschrift der Nachricht ein"
-    queue:
-      topic: "Thema:"
-      approve: "Genehmigen"
-      reject: "Ablehnen"
-      delete_user: "Benutzer löschen"
-      title: "Benötigt Genehmigung"
-      none: "Es sind keine Beiträge zur Überprüfung vorhanden."
-      edit: "Bearbeiten"
-      cancel: "Abbrechen"
-      view_pending: "ausstehende Beiträge anzeigen"
-      has_pending_posts:
-        one: "Dieses Thema hat <b>einen</b> Beitrag, der genehmigt werden muss"
-        other: "Dieses Thema hat <b>{{count}}</b> Beiträge, die genehmigt werden müssen"
-      confirm: "Speichern"
-      delete_prompt: "Möchtest du wirklich <b>%{username}</b> löschen? Damit werden alle Beiträge des Benutzers entfernt und dessen E-Mail- und IP-Adresse geblockt."
-      approval:
-        title: "Beitrag muss genehmigt werden"
-        description: "Wir haben deinen neuen Beitrag erhalten. Dieser muss allerdings zunächst durch einen Moderator freigeschaltet werden. Bitte habe etwas Geduld. "
-        pending_posts:
-          one: "Du hast <strong>1</strong> ausstehenden Beitrag."
-          other: "Du hast <strong>{{count}}</strong> ausstehende Beiträge."
-        ok: "OK"
     user_action:
       user_posted_topic: "<a href='{{userUrl}}'>{{user}}</a> hat <a href='{{topicUrl}}'>das Thema</a> verfasst"
       you_posted_topic: "<a href=\"{{userUrl}}\">Du</a> hast <a href=\"{{topicUrl}}\">das Thema</a> verfasst"
@@ -372,10 +347,19 @@ de:
         remove_user_as_group_owner: "Eigentümerrechte entziehen"
     groups:
       member_added: "Hinzugefügt"
+      member_requested: "Angefragt am"
       add_members:
         title: "Mitglieder hinzufügen"
         description: "Verwalte die Mitgliedschaft in dieser Gruppe"
         usernames: "Benutzernamen"
+      requests:
+        title: "Anfragen"
+        reason: "Grund"
+        accept: "Akzeptieren"
+        accepted: "akzeptiert"
+        deny: "ablehnen"
+        denied: "abgelehnt"
+        undone: "Anfrage zurückgenommen"
       manage:
         title: "Verwalten"
         name: "Name"
@@ -406,6 +390,7 @@ de:
       empty:
         posts: "Es gibt keine Beiträge von Mitgliedern dieser Gruppe."
         members: "Es gibt keine Mitglieder in dieser Gruppe."
+        requests: "Keine Mitgliedschaftsanfragen für diese Gruppe."
         mentions: "Es gibt keine Erwähnungen in dieser Gruppe."
         messages: "Es gibt keine Nachrichten für diese Gruppe."
         topics: "Es gibt keine Themen von Mitgliedern dieser Gruppe."
@@ -574,8 +559,6 @@ de:
       new_private_message: "Neue Nachricht"
       private_message: "Nachricht"
       private_messages: "Nachrichten"
-      ignore: "Ignorieren"
-      unignore: "Nicht mehr ignorieren"
       activity_stream: "Aktivität"
       preferences: "Einstellungen"
       profile_hidden: "Das öffentliche Profil des Benutzers ist ausgeblendet."
@@ -658,7 +641,7 @@ de:
       muted_users: "Stummgeschaltet"
       muted_users_instructions: "Benachrichtigungen von diesen Benutzern werden unterdrückt."
       ignored_users: "Ignoriert"
-      ignored_users_instructions: "Liste aller ignorierten Benutzer"
+      ignored_users_instructions: "Alle Beiträge und Benachrichtigungen von diesen Benutzern unterdrücken."
       muted_topics_link: "Zeige stummgeschaltete Themen"
       watched_topics_link: "Zeige beobachtete Themen"
       tracked_topics_link: "Zeige verfolgte Themen"
@@ -729,13 +712,14 @@ de:
         label: "Code"
         rate_limit: "Bitte warte ein wenig, bevor du es mit einem anderen Authentifizierungscode versuchst."
         enable_description: |
-          Scanne diesen QR-Code in einer unterstützten App (<a href="https://www.google.com/search?q=authenticator+apps+for+android" target="_blank">Android</a> – <a href="https://www.google.com/search?q=authenticator+apps+for+ios" target="_blank">iOS</a>) und gib’ deinen Authentifizierungscode ein.
+          Scanne diesen QR-Code mit einer unterstützten App (<a href="https://www.google.com/search?q=authenticator+apps+for+android" target="_blank">Android</a> – <a href="https://www.google.com/search?q=authenticator+apps+for+ios" target="_blank">iOS</a>) und gib deinen Authentifizierungscode ein.
         disable_description: "Bitte gib den Authentifizierungscode aus deiner App ein."
         show_key_description: "Manuell eingeben"
         extended_description: |
           Zwei-Faktor-Authentifizierung (2FA) sichert dein Konto zusätzlich ab, indem sie zusätzlich zu deinem Passwort einen einmalig gültigen Code anfordert. Codes können auf <a href="https://www.google.com/search?q=authenticator+apps+for+android" target='_blank'>Android-</a> und <a href="https://www.google.com/search?q=authenticator+apps+for+ios">iOS-</a>-Geräten generiert werden.
         oauth_enabled_warning: "Beachte bitte, dass soziale Anmelde-Methoden deaktiviert werden, sobald die Zwei-Faktor-Authentifizierung für dein Konto aktiviert ist."
         use: "Authentifizierungs-App verwenden"
+        enforced_notice: "Du musst Zwei-Faktor-Authentifizierung aktivieren, bevor du auf diese Seite zugreifen kannst."
       change_about:
         title: "„Über mich“ ändern"
         error: "Beim Ändern dieses Wertes ist ein Fehler aufgetreten."
@@ -773,7 +757,8 @@ de:
         primary: "Primäre E-Mail-Adresse"
         secondary: "Weitere E-Mail-Adressen"
         no_secondary: "Keine weiteren E-Mail-Adressen"
-        instructions: "wird nicht öffentlich angezeigt"
+        sso_override_instructions: "E-Mail kann vom SSO-Provider aktualisiert werden."
+        instructions: "Nie öffentlich gezeigt."
         ok: "Wir senden dir zur Bestätigung eine E-Mail"
         invalid: "Bitte gib eine gültige E-Mail-Adresse ein"
         authenticated: "Deine E-Mail-Adresse wurde von {{provider}} bestätigt"
@@ -856,14 +841,17 @@ de:
         every_30_minutes: "alle 30 Minuten"
         every_hour: "stündlich"
         daily: "täglich"
-        every_three_days: "alle drei Tage"
         weekly: "wöchentlich"
-        every_two_weeks: "jede zweite Woche"
+        every_month: "jeden Monat"
+        every_six_months: "alle sechs Monate"
+      email_level:
+        title: "Sende mir eine E-Mail, wenn mich jemand zitiert, auf meine Beiträge antwortet, meinen @Namen erwähnt oder mich zu einem Thema einlädt."
+        always: "immer"
+        only_when_away: "nur bei Abwesenheit"
+        never: "nie"
+      email_messages_level: "Sende mir eine E-Mail, wenn mir jemand eine Nachricht sendet."
       include_tl0_in_digests: "Inhalte neuer Benutzer in E-Mail-Zusammenfassung einschließen"
       email_in_reply_to: "Einen Auszug aus dem beantworteten Beitrag in E-Mails einfügen."
-      email_direct: "Sende mir eine E-Mail, wenn mich jemand zitiert, auf meine Beiträge antwortet, meinen @Namen erwähnt oder mich zu einem Thema einlädt."
-      email_private_messages: "Sende mir eine E-Mail, wenn mir jemand eine Nachricht sendet."
-      email_always: "Benachrichtige mich per E-Mail auch während ich auf dieser Website aktiv bin"
       other_settings: "Andere"
       categories_settings: "Kategorien"
       new_topic_duration:
@@ -907,9 +895,9 @@ de:
         expired: "Diese Einladung ist abgelaufen."
         rescind: "Einladung zurücknehmen"
         rescinded: "Einladung zurückgenommen"
-        rescind_all: "Alle ausgelaufenen Einladungen entfernen"
-        rescinded_all: "Alle ausgelaufenen Einladungen entfernt!"
-        rescind_all_confirm: "Sollen alle ausgelaufenen Einladungen entfernt werden?"
+        rescind_all: "Alle abgelaufenen Einladungen entfernen"
+        rescinded_all: "Alle abgelaufenen Einladungen entfernt!"
+        rescind_all_confirm: "Sollen alle abgelaufenen Einladungen entfernt werden?"
         reinvite: "Einladung erneut senden"
         reinvite_all: "Alle Einladungen erneut senden"
         reinvite_all_confirm: "Bist Du dir sicher alle Einladungen nochmals zu senden?"
@@ -1229,13 +1217,15 @@ de:
         other: "Wähle mindestens {{count}} Einträge aus."
     emoji_picker:
       filter_placeholder: Emoji suchen
-      people: Personen
-      nature: Natur
-      food: Lebensmittel
-      activity: Aktivität
-      travel: Reisen
+      smileys_&_emotion: Smileys und Emotion
+      people_&_body: Menschen und Körper
+      animals_&_nature: Tiere und Natur
+      food_&_drink: Essen und Getränke
+      travel_&_places: Verkehr und Orte
+      activities: Tätigkeiten
       objects: Objekte
-      celebration: Feiern
+      symbols: Symbole
+      flags: Flaggen
       custom: Benutzerdefinierte Emojis
       recent: Zuletzt verwendet
       default_tone: Keine Hautfarbe
@@ -1649,7 +1639,7 @@ de:
         when: "Wann:"
         public_timer_types: Globale Zeitschaltuhren
         private_timer_types: Zeitschaltuhren für Benutzer
-        time_frame_required: Bitte wählen Sie einen Zeitrahmen aus
+        time_frame_required: Bitte wähle einen Zeitrahmen aus
       auto_update_input:
         none: "Wähle einen Zeitbereich aus"
         later_today: "Im Laufe des Tages"
@@ -1957,15 +1947,12 @@ de:
         one: "einen versteckten Beitrag anzeigen"
         other: "{{count}} versteckte Beiträge anzeigen"
       notice:
-        first: "Es ist das erste Mal, dass {{user}} einen Beitrag schrieb - lasst ihn uns in unserer Community willkommenheissen!"
-        return: "Es ist eine Weile her, dass wir {{user}} gesehen haben. Der letzte Beitrag war in {{time}}."
+        first: "Dies ist der erste Beitrag von {{user}} — lasst uns das neue Mitglied in unserer Community willkommen hei­ßen!"
+        return: "Es ist eine Weile her, dass wir {{user}} gesehen haben. — Sein/ihr letzter Beitrag war {{time}}."
       unread: "Beitrag ist ungelesen"
       has_replies:
         one: "{{count}} Antwort"
         other: "{{count}} Antworten"
-      has_likes:
-        one: "{{count}} Like"
-        other: "{{count}} Likes"
       has_likes_title:
         one: "dieser Beitrag gefällt 1 Person"
         other: "dieser Beitrag gefällt {{count}} Personen"
@@ -1977,7 +1964,7 @@ de:
         create: "Entschuldige, es gab einen Fehler beim Anlegen des Beitrags. Bitte versuche es noch einmal."
         edit: "Entschuldige, es gab einen Fehler beim Bearbeiten des Beitrags. Bitte versuche es noch einmal."
         upload: "Entschuldige, es gab einen Fehler beim Hochladen der Datei. Bitte versuche es noch einmal."
-        file_too_large: "Entschuldige, diese Datei ist zu groß (maximal erlaubt sind {{max_size_kb}} KB). Wie wär’s, wenn du deine große Datei bei einem Filehosting-Dienst hochlädst und dann den Link teilst?"
+        file_too_large: "Entschuldigung, die Datei ist zu groß (maximale Größe ist {{max_size_kb}}kb). Wie wäre es, die Datei zu einem Cloud Sharing Service hochzuladen und dann den Link einzufügen?"
         too_many_uploads: "Entschuldige, du darfst immer nur eine Datei hochladen."
         too_many_dragged_and_dropped_files: "Entschuldige, du kannst nur {{max}} Dateien auf einmal hochladen."
         upload_not_authorized: "Entschuldigung, die Datei die du hochladen möchtest ist nicht erlaubt (erlaubte Dateiendungen sind: {{authorized_extensions}})."
@@ -2155,7 +2142,7 @@ de:
       all: "Alle Kategorien"
       choose: "Kategorie&hellip;"
       edit: "Bearbeiten"
-      edit_dialog_title: "%{categoryName}bearbeiten"
+      edit_dialog_title: "Bearbeiten: %{categoryName}"
       view: "Zeige Themen dieser Kategorie"
       general: "Allgemeines"
       settings: "Einstellungen"
@@ -2164,6 +2151,7 @@ de:
       tags_allowed_tags: "Erlaube in dieser Kategorie nur folgende Schlagwörter:"
       tags_allowed_tag_groups: "Erlaube in dieser Kategorie nur Schlagwörter aus folgenden Schlagwortgruppen:"
       tags_placeholder: "(Optional) Liste erlaubter Schlagwörter"
+      tags_tab_description: "Hier definierte Schlagwörter und Schlagwort-Gruppen sind nur in dieser Kategorie und in Kategorien, in denen sie ebenfalls definiert sind, verfügbar. In anderen Kategorien sind sie nicht verwendbar."
       tag_groups_placeholder: "(Optional) Liste erlaubter Schlagwort-Gruppen"
       topic_featured_link_allowed: "Erlaube hervorgehobene Links in dieser Kategorie"
       delete: "Kategorie löschen"
@@ -2192,8 +2180,8 @@ de:
       already_used: "Diese Farbe wird bereits für eine andere Kategorie verwendet."
       security: "Sicherheit"
       special_warning: "Warnung: Diese Kategorie wurde bei der Installation angelegt. Die Sicherheitseinstellungen können daher nicht verändert werden. Wenn du diese Kategorie nicht benötigst, dann solltest du sie löschen anstatt sie für andere Zwecke zu verwenden."
-      uncategorized_security_warning: "Diese Kategorie ist besonders. Sie ist als Sammelpunkt gedacht für Themen, die keine Kategorie haben. Sicherheitseinstellungen sind nicht möglich."
-      uncategorized_general_warning: 'Diese Kategorie ist besonders. Sie wird als Standard-Kategorie für neue Themen genutzt, für die keine Kategorie gewählt wurde. Wenn dies verhindert werden und eine Kategoriewahl erzwungen werden soll, bitte  <a href="{settingLink}"> diese Einstellung</a> deaktivieren. Falls Name oder Beschreibung geändert werden soll, kann dies unter<a href="%{customizeLink}">Anpassen / Textinhalte</a> vorgenommen werden.'
+      uncategorized_security_warning: "Diese Kategorie ist etwas Spezielles. Sie dient als Bereich für Themen, die keine Kategorie haben und besitzt keine Sicherheitseinstellungen."
+      uncategorized_general_warning: 'Diese Kategorie ist etwas Spezielles. Sie wird als Standard-Kategorie für neue Themen genutzt, für die keine Kategorie ausgewählt wurde. Deaktiviere <a href="{settingLink}">diese Einstellung</a>, wenn dieses Verhalten verhindert und eine Kategoriewahl erzwungen werden soll. Der Name und die Beschreibung können unter <a href="%{customizeLink}">Anpassen / Textinhalte</a> geändert werden.'
       images: "Bilder"
       email_in: "Benutzerdefinierte Adresse für eingehende E-Mails:"
       email_in_allow_strangers: "Akzeptiere E-Mails von anonymen Benutzern."
@@ -2238,6 +2226,15 @@ de:
         muted:
           title: "Stummgeschaltet"
           description: "Du erhältst nie mehr Benachrichtigungen über neue Themen in dieser Kategorie und die Themen werden auch nicht in der Liste der letzten Themen erscheinen."
+      search_priority:
+        label: "Suchpriorität"
+        options:
+          normal: "Normal"
+          ignore: "Ignorieren"
+          very_low: "Sehr niedrig"
+          low: "Niedrig"
+          high: "Hoch"
+          very_high: "Sehr hoch"
       sort_options:
         default: "Standard"
         likes: "Likes"
@@ -2640,7 +2637,7 @@ de:
       title: "Discourse-Administrator"
       moderator: "Moderator"
       reports:
-        title: "Liste verfügbarer Berichte"
+        title: "Verfügbare Berichte"
       dashboard:
         title: "Übersicht"
         last_updated: "Übersicht zuletzt aktualisiert:"
@@ -2689,6 +2686,7 @@ de:
         moderation_tab: "Moderation"
         security_tab: "Sicherheit"
         reports_tab: "Berichte"
+        report_filter_any: "alle"
         disabled: Deaktiviert
         timeout_error: "Entschuldige bitte, die Warteschlange ist zu lang, bitte wähle ein kürzeres Intervall"
         exception_error: "Entschuldige, ein Fehler während der Ausführung des Query ist aufgetreten"
@@ -2721,93 +2719,6 @@ de:
       commits:
         latest_changes: "Letzte Änderungen: bitte häufig updaten!"
         by: "von"
-      flags:
-        title: "Meldungen"
-        active_posts: "Gemeldete Beiträge"
-        old_posts: "Alte gemeldete Beiträge"
-        topics: "Gemeldete Themen"
-        moderation_history: "Moderationshistorie"
-        agree: "Zustimmen"
-        agree_title: "Meldung bestätigen, weil diese gültig und richtig ist"
-        agree_flag_hide_post: "Beitrag verstecken"
-        agree_flag_hide_post_title: "Verstecke diesen Beitrag und sende dem Benutzer/der Benutzerin eine Nachricht mit der Bitte, ihn zu bearbeiten."
-        agree_flag_restore_post: "Zustimmen und Beitrag wiederherstellen"
-        agree_flag_restore_post_title: "Beitrag wiederherstellen, sodass alle Benutzer/-innen ihn sehen können."
-        agree_flag_suspend: "Benutzer bannen"
-        agree_flag_suspend_title: "Meldung zustimmen und Benutzer bannen."
-        agree_flag_silence: "Benutzer stummschalten"
-        agree_flag_silence_title: "Meldung zustimmen und Benutzer stummschalten."
-        agree_flag: "Beitrag behalten"
-        agree_flag_title: "Meldung zustimmen und den Beitrag unbearbeitet lassen."
-        ignore_flag: "Ignorieren"
-        ignore_flag_title: "Entferne diese Meldung. Derzeit besteht kein Handlungsbedarf."
-        delete: "Löschen"
-        delete_title: "Lösche den Beitrag, auf den diese Meldung verweist."
-        delete_post_defer_flag: "Beitrag löschen und Meldung ignorieren"
-        delete_post_defer_flag_title: "Beitrag löschen; das Thema löschen, wenn es sich um den ersten Beitrag handelt"
-        delete_post_agree_flag: "Beitrag löschen und Meldung zustimmen"
-        delete_post_agree_flag_title: "Beitrag löschen; das Thema löschen, wenn es sich um den ersten Beitrag handelt"
-        delete_flag_modal_title: "Löschen und…"
-        delete_spammer: "Spammer löschen"
-        delete_spammer_title: "Lösche den Benutzer und alle seine Beiträge und Themen."
-        disagree_flag_unhide_post: "Ablehnen (Beitrag einblenden)"
-        disagree_flag_unhide_post_title: "Verwerfe alle Meldungen über diesen Beitrag und blende den Beitrag wieder ein"
-        disagree_flag: "Ablehnen"
-        disagree_flag_title: "Meldung ablehnen, weil diese ungültig oder falsch ist"
-        clear_topic_flags: "Erledigt"
-        clear_topic_flags_title: "Das Thema wurde untersucht und Probleme wurden beseitigt. Klicke auf „Erledigt“, um die Meldungen zu entfernen."
-        more: "(weitere Antworten…)"
-        suspend_user: "Benutzer sperren"
-        suspend_user_title: "Benutzer für diesen Beitrag sperren"
-        replies:
-          one: "[1 Antwort]"
-          other: "[%{count} Antworten]"
-        delete_replies:
-          one: "Auch die %{count} Antwort auf diesen Beitrag löschen?"
-          other: "Auch die %{count} Antworten auf diesen Beitrag löschen?"
-        dispositions:
-          agreed: "zugestimmt"
-          disagreed: "abgelehnt"
-          deferred: "ignoriert"
-        flagged_by: "Gemeldet von"
-        resolved_by: "Geklärt durch"
-        took_action: "Reagiert"
-        system: "System"
-        error: "Etwas ist schief gelaufen"
-        reply_message: "Antworten"
-        no_results: "Es gibt keine gemeldeten Beiträge."
-        topic_flagged: "Dieses <strong>Thema</strong> wurde gemeldet."
-        show_full: "zeige vollständigen Beitrag"
-        visit_topic: "Besuche das Thema, um zu reagieren"
-        was_edited: "Beitrag wurde nach der ersten Meldung bearbeitet"
-        previous_flags_count: "Dieses Thema wurde bereits {{count}} mal gemeldet."
-        show_details: "Zeige Meldungsdetails"
-        user_percentage:
-          summary:
-            one: "{{agreed}}, {{disagreed}}, {{ignored}} ({{count}} Meldung insgesamt)"
-            other: "{{agreed}}, {{disagreed}}, {{ignored}} ({{count}} Meldungen insgesamt)"
-          agreed:
-            one: "{{count}}% akzeptiert"
-            other: "{{count}}% akzeptiert"
-          disagreed:
-            one: "{{count}}% abgelehnt"
-            other: "{{count}}% abgelehnt"
-          ignored:
-            one: "{{count}}% ignoriert"
-            other: "{{count}}% ignoriert"
-        details: "Details"
-        flagged_topics:
-          topic: "Thema"
-          type: "Art"
-          users: "Benutzer"
-          last_flagged: "Zuletzt gemeldet"
-          no_results: "Es gibt keine gemeldeten Themen."
-        short_names:
-          off_topic: "off-topic"
-          inappropriate: "unangemessen"
-          spam: "spam"
-          notify_user: "benutzerdefiniert"
-          notify_moderators: "benutzerdefiniert"
       groups:
         new:
           title: "Neue Gruppe"
@@ -2943,6 +2854,7 @@ de:
           inactive: "Inaktiv"
           failed: "Fehlgeschlagen"
           successful: "Erfolgreich"
+          disabled: "Deaktiviert"
         events:
           none: "Es gibt keine verwandten Ereignisse."
           redeliver: "Neu zustellen"
@@ -3423,6 +3335,10 @@ de:
             entity_export: "Entität exportieren"
             change_name: "Name ändern"
             topic_timestamps_changed: "Themen-Zeitstempel geändert"
+            approve_user: "genehmigter Benutzer"
+            web_hook_create: "Webhook anlegen"
+            web_hook_update: "Webhook aktualisieren"
+            web_hook_destroy: "Webhook entfernen"
         screened_emails:
           title: "Gefilterte E-Mails"
           description: "Wenn jemand ein Konto erstellt, werden die folgenden E-Mail-Adressen überprüft und es wird die Anmeldung blockiert oder eine andere Aktion ausgeführt."
@@ -3506,22 +3422,16 @@ de:
         id_not_found: "Entschuldige, diese Benutzerkennung ist im System nicht vorhanden."
         active: "Aktiviert"
         show_emails: "E-Mails anzeigen"
+        hide_emails: "E-Mails ausblenden"
         nav:
           new: "Neu"
           active: "Aktiv"
-          pending: "Genehmigung"
           staff: "Team"
           suspended: "Gesperrt"
           silenced: "Stummgeschaltet"
           suspect: "Verdächtig"
           staged: "Vorbereitet"
         approved: "Genehmigt?"
-        approved_selected:
-          one: "Benutzer genehmigen"
-          other: "Benutzer genehmigen ({{count}})"
-        reject_selected:
-          one: "Benutzer ablehnen"
-          other: "Benutzer ablehnen ({{count}})"
         titles:
           active: "Aktive Benutzer"
           new: "Neue Benutzer"
@@ -3538,12 +3448,6 @@ de:
           suspended: "Gesperrte Benutzer"
           suspect: "Verdächtige Benutzer"
           staged: "Vorbereite Benutzer"
-        reject_successful:
-          one: "Erfolgreich 1 Benutzer abgelehnt."
-          other: "Erfolgreich %{count} Benutzer abgelehnt."
-        reject_failures:
-          one: "Konnte 1 Benutzer nicht ablehnen."
-          other: "Konnte %{count} Benutzer nicht ablehnen."
         not_verified: "Nicht überprüft"
         check_email:
           title: "E-Mail-Adresse des Benutzers anzeigen"
@@ -3758,6 +3662,7 @@ de:
         go_back: "Zurück zur Suche"
         recommended: "Wir empfehlen, dass du den folgenden Text an deine Bedürfnisse anpasst:"
         show_overriden: "Nur geänderte Texte anzeigen"
+        more_than_50_results: "Es gibt mehr als 50 Ergebnisse. Bitte grenze deine Suche weiter ein."
       settings:
         show_overriden: "Nur geänderte anzeigen"
         reset: "zurücksetzen"
@@ -3930,6 +3835,16 @@ de:
           label: "Neu:"
           add: "Hinzufügen"
           filter: "Suche (URL oder externe URL)"
+      reseed:
+        action:
+          label: "Text ersetzen..."
+          title: "Text der Kategorien und Themen mit Übersetzungen ersetzen"
+        modal:
+          title: "Text ersetzen"
+          subtitle: "Text der systemgenerierten Kategorien und Themen mit neuesten Übersetzungen ersetzen"
+          categories: "Kategorien"
+          topics: "Themen"
+          replace: "Ersetzen"
   wizard_js:
     wizard:
       done: "Erledigt"

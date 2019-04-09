@@ -152,7 +152,6 @@ vi:
     age: "Tuổi"
     joined: "Đã tham gia"
     admin_title: "Quản trị"
-    flags_title: "Cờ"
     show_more: "hiện thêm"
     show_help: "lựa chọn"
     links: "Liên kết"
@@ -176,8 +175,6 @@ vi:
     every_hour: "mỗi giờ"
     daily: "hàng ngày"
     weekly: "hàng tuần"
-    every_two_weeks: "mỗi hai tuần"
-    every_three_days: "mỗi ba ngày"
     max_of_count: "tối đa trong {{count}}"
     alternation: "hoặc"
     character_count:
@@ -233,26 +230,6 @@ vi:
       none_found: "Không tìm thấy chủ đề nào"
       title:
         placeholder: "viết chủ đề của chủ đề thảo luận ở đây"
-    queue:
-      topic: "Chủ đề:"
-      approve: "Duyệt"
-      reject: "Từ chối"
-      delete_user: "Xóa tài khoản"
-      title: "Cần phê duyệt"
-      none: "Không có bài viết nào để xem trước"
-      edit: "Sửa"
-      cancel: "Hủy"
-      view_pending: "xem bài viết đang chờ xử lý"
-      has_pending_posts:
-        other: "Chủ đề này có <b>{{count}}</b> bài viết cần phê chuẩn"
-      confirm: "Lưu thay đổi"
-      delete_prompt: "Bạn có chắc chắn muốn xóa <b>%{username}</b>? Thao tác này sẽ loại bỏ tất cả các bài viết của họ kèm theo khóa địa chỉ IP và email của họ."
-      approval:
-        title: "Bài viết cần phê duyệt"
-        description: "Chúng tôi đã nhận được bài viết mới của bạn, nhưng nó cần phải được phê duyệt bởi admin trước khi được hiện. Xin hãy kiên nhẫn."
-        pending_posts:
-          other: "Bạn có <strong>{{count}}</strong> bài viết đang chờ xử lý."
-        ok: "OK"
     user_action:
       user_posted_topic: "<a href='{{userUrl}}'>{{user}}</a> đã đăng <a href='{{topicUrl}}'>chủ đề</a>"
       you_posted_topic: "<a href='{{userUrl}}'>Bạn</a> đã đăng <a href='{{topicUrl}}'>chủ đề</a>"
@@ -566,7 +543,6 @@ vi:
         instructions: "Hình nền sẽ ở giữa và có chiều rộng mặc định là 590px."
       email:
         title: "Email"
-        instructions: "không bao giờ hiển thị công khai"
         ok: "Chúng tôi sẽ gửi thư điện tử xác nhận đến cho bạn"
         invalid: "Vùi lòng nhập một thư điện tử hợp lệ"
         authenticated: "Thư điện tử của bạn đã được xác nhận bởi {{provider}}"
@@ -620,14 +596,9 @@ vi:
         every_30_minutes: "mỗi 30 phút"
         every_hour: "hàng giờ"
         daily: "hàng ngày"
-        every_three_days: "ba ngày một"
         weekly: "hàng tuần"
-        every_two_weeks: "hai tuần một"
       include_tl0_in_digests: "Bao gồm nội dung của những thành viên mới trong email tóm tắt."
       email_in_reply_to: "Kèm theo đoạn dẫn trích trả lời bài viết trong email"
-      email_direct: "Gửi cho tôi một email khi có người trích dẫn, trả lời cho bài viết của tôi, đề cập đến @username của tôi, hoặc mời tôi đến một chủ đề"
-      email_private_messages: "Gửi cho tôi email khi có ai đó nhắn tin cho tôi"
-      email_always: "Gửi email thông báo cho tôi mỗi khi tôi kích hoạt trên website này"
       other_settings: "Khác"
       categories_settings: "Chuyên mục"
       new_topic_duration:
@@ -899,9 +870,6 @@ vi:
       ctrl: "Ctrl"
       alt: "Alt"
     emoji_picker:
-      people: Mọi ng
-      food: "Thức "
-      activity: "Hoạt "
       objects: Vật th
     composer:
       emoji: "Emoji :)"
@@ -1358,8 +1326,6 @@ vi:
       unread: "Bài viết chưa đọc"
       has_replies:
         other: "{{count}} Trả lời"
-      has_likes:
-        other: "{{count}} Thích"
       has_likes_title:
         other: "{{count}} người thích bài viết này"
       has_likes_title_only_you: "bạn đã like bài viết này"
@@ -1828,37 +1794,6 @@ vi:
       commits:
         latest_changes: "Thay đổi cuối: vui lòng cập nhật thường xuyên!"
         by: "bởi"
-      flags:
-        title: "Gắn cờ"
-        agree: "Đồng ý"
-        agree_title: "Xác nhận đánh dấu này hợp lệ và chính xác"
-        delete: "Xóa"
-        delete_title: "Xóa bài viết đánh dấu này đề cập đến."
-        delete_post_defer_flag_title: "Xóa bài viết; nếu là bài viết đầu tiên, xóa chủ đề này"
-        delete_post_agree_flag_title: "Xóa bài viết; nếu là bài viết đầu tiên, xóa chủ đề này"
-        delete_flag_modal_title: "Xóa và..."
-        delete_spammer: "Xóa người Spam"
-        delete_spammer_title: "Xóa người dùng này và tất cả bài viết à chủ để của người dùng này."
-        disagree_flag_unhide_post: "Không đồng ý (ẩn bài viết)"
-        disagree_flag_unhide_post_title: "Loại bỏ bất kỳ đánh dấu nào khỏi bài viết này và làm cho bài viết hiển thị trở lại"
-        disagree_flag: "Không đồng ý"
-        disagree_flag_title: "Từ chối đánh dấu này là không hợp lệ hoặc chính xác"
-        clear_topic_flags: "Hoàn tất"
-        clear_topic_flags_title: "Chủ đề đã được xem xét vấn đề và giải quyết, click để loại bỏ đánh dấu."
-        more: "(thêm trả lời...)"
-        dispositions:
-          agreed: "đồng ý"
-          disagreed: "không đồng ý"
-        flagged_by: "Gắn cờ bởi"
-        resolved_by: "Xử lý bởi"
-        took_action: "Thực hiện"
-        system: "Hệ thống"
-        error: "Có lỗi xảy ra"
-        reply_message: "Trả lời "
-        topic_flagged: "<strong>Chủ đề này</strong> đã được đánh dấu."
-        visit_topic: "Tới chủ đề để thực hiện"
-        was_edited: "Bài viết đã được chỉnh sửa sau khi đánh dấu đầu tiên"
-        previous_flags_count: "Bài viết này đã được đánh dấu {{count}} lần."
       groups:
         primary: "Nhóm Chính"
         no_primary: "(không có nhóm chính)"
@@ -2179,15 +2114,10 @@ vi:
         nav:
           new: "Mới"
           active: "Kích hoạt"
-          pending: "Đang chờ xử lý"
           staff: "Nhân viên"
           suspended: "Đã tạm khóa"
           suspect: "Nghi ngờ"
         approved: "Đã duyệt?"
-        approved_selected:
-          other: "duyệt tài khoản ({{count}})"
-        reject_selected:
-          other: "từ chối tài khoản ({{count}})"
         titles:
           active: "Thành viên kích hoạt"
           new: "Thành viên mới"
@@ -2202,10 +2132,6 @@ vi:
           moderators: "Điều hành viên"
           suspended: "Tài khoản Tạm khóa"
           suspect: "Tài khoản đáng ngờ"
-        reject_successful:
-          other: "Từ chối thành công %{count} tài khoản."
-        reject_failures:
-          other: "Từ chối thất bại %{count} tài khoản."
         not_verified: "Chưa xác thực"
         check_email:
           title: "Khám phá email của tài khoản này"

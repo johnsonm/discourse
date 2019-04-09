@@ -204,6 +204,8 @@ export default Ember.Controller.extend({
     return page === PAGE_LIMIT;
   },
 
+  searchButtonDisabled: Ember.computed.or("searching", "loading"),
+
   _search() {
     if (this.get("searching")) {
       return;
@@ -218,11 +220,12 @@ export default Ember.Controller.extend({
 
     let args = { q: searchTerm, page: this.get("page") };
 
-    this.set("searching", true);
-    this.set("loading", true);
     if (args.page === 1) {
       this.set("bulkSelectEnabled", false);
       this.get("selected").clear();
+      this.set("searching", true);
+    } else {
+      this.set("loading", true);
     }
 
     const sortOrder = this.get("sortOrder");
@@ -312,6 +315,7 @@ export default Ember.Controller.extend({
     search() {
       this.set("page", 1);
       this._search();
+      if (this.site.mobileView) this.set("expanded", false);
     },
 
     toggleAdvancedSearch() {

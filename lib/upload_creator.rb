@@ -6,8 +6,9 @@ class UploadCreator
   TYPES_TO_CROP ||= %w{avatar card_background custom_emoji profile_background}.each(&:freeze)
 
   WHITELISTED_SVG_ELEMENTS ||= %w{
-    circle clippath defs ellipse g line linearGradient path polygon polyline
-    radialGradient rect stop style svg text textpath tref tspan use
+    circle clippath defs ellipse feGaussianBlur filter g line linearGradient
+    path polygon polyline radialGradient rect stop style svg text textpath
+    tref tspan use
   }.each(&:freeze)
 
   # Available options
@@ -37,6 +38,7 @@ class UploadCreator
 
       is_image = FileHelper.is_supported_image?(@filename)
       is_image ||= @image_info && FileHelper.is_supported_image?("test.#{@image_info.type}")
+      is_image = false if @opts[:for_theme]
 
       if is_image
         extract_image_info!

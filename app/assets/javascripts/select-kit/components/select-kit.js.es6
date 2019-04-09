@@ -134,10 +134,10 @@ export default Ember.Component.extend(
       this.removeObserver(
         `content.@each.${this.get("nameProperty")}`,
         this,
-        this._compute
+        "_compute"
       );
-      this.removeObserver(`content.[]`, this, this._compute);
-      this.removeObserver(`asyncContent.[]`, this, this._compute);
+      this.removeObserver(`content.[]`, this, "_compute");
+      this.removeObserver(`asyncContent.[]`, this, "_compute");
     },
 
     willComputeAttributes() {},
@@ -401,6 +401,8 @@ export default Ember.Component.extend(
     willSelect() {},
     didSelect() {},
 
+    didClearSelection() {},
+
     willCreate() {},
     didCreate() {},
 
@@ -461,6 +463,7 @@ export default Ember.Component.extend(
     clearSelection() {
       this.deselect(this.get("selection"));
       this.focusFilterOrHeader();
+      this.didClearSelection();
     },
 
     actions: {

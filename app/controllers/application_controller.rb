@@ -499,6 +499,13 @@ class ApplicationController < ActionController::Base
     SecureSession.new(session["secure_session_id"] ||= SecureRandom.hex)
   end
 
+  def handle_permalink(path)
+    permalink = Permalink.find_by_url(path)
+    if permalink && permalink.target_url
+      redirect_to permalink.target_url, status: :moved_permanently
+    end
+  end
+
   private
 
   def check_readonly_mode
@@ -593,7 +600,16 @@ class ApplicationController < ActionController::Base
     opts = { status: opts } if opts.is_a?(Integer)
     opts.fetch(:headers, {}).each { |name, value| headers[name.to_s] = value }
 
-    render json: MultiJson.dump(create_errors_json(obj, opts)), status: opts[:status] || 422
+    render(
+      json: MultiJson.dump(create_errors_json(obj, opts)),
+      status: opts[:status] || status_code(obj)
+    )
+  end
+
+  def status_code(obj)
+    return 403 if obj.try(:forbidden)
+    return 404 if obj.try(:not_found)
+    422
   end
 
   def success_json
@@ -685,10 +701,32 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_login_if_required
-    return if current_user || (request.format.json? && is_api?)
+    return if request.format.json? && is_api?
 
-    if SiteSetting.login_required?
+    # Used by clients authenticated via user API.
+    # Redirects to provided URL scheme if
+    # - request uses a valid public key and auth_redirect scheme
+    # - one_time_password scope is allowed
+    if !current_user &&
+      params.has_key?(:user_api_public_key) &&
+      params.has_key?(:auth_redirect)
+      begin
+        OpenSSL::PKey::RSA.new(params[:user_api_public_key])
+      rescue OpenSSL::PKey::RSAError
+        return render plain: I18n.t("user_api_key.invalid_public_key")
+      end
 
+      if UserApiKey.invalid_auth_redirect?(params[:auth_redirect])
+        return render plain: I18n.t("user_api_key.invalid_auth_redirect")
+      end
+
+      if UserApiKey.allowed_scopes.superset?(Set.new(["one_time_password"]))
+        redirect_to("#{params[:auth_redirect]}?otp=true")
+        return
+      end
+    end
+
+    if !current_user && SiteSetting.login_required?
       flash.keep
       dont_cache_page
 
@@ -702,6 +740,18 @@ class ApplicationController < ActionController::Base
         # save original URL in a cookie (javascript redirects after login in this case)
         cookies[:destination_url] = destination_url
         redirect_to path("/login")
+      end
+    end
+
+    if current_user &&
+      !current_user.totp_enabled? &&
+      !request.format.json? &&
+      !is_api? &&
+      ((SiteSetting.enforce_second_factor == 'staff' && current_user.staff?) ||
+        SiteSetting.enforce_second_factor == 'all')
+      redirect_path = "#{GlobalSetting.relative_url_root}/u/#{current_user.username}/preferences/second-factor"
+      if !request.fullpath.start_with?(redirect_path)
+        redirect_to path(redirect_path)
       end
     end
   end
@@ -743,7 +793,7 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def render_post_json(post, add_raw = true)
+  def render_post_json(post, add_raw: true)
     post_serializer = PostSerializer.new(post, scope: guardian, root: false)
     post_serializer.add_raw = add_raw
 

@@ -1,0 +1,9 @@
+{{#if scores}}
+  <table class='reviewable-scores'>
+    <tbody>
+    {{#each scores as |rs|}}
+      {{reviewable-score rs=rs tagName=''}}
+    {{/each}}
+  </tbody>
+  </table>
+{{/if}}

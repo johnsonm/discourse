@@ -16,6 +16,24 @@ widgetTest("basic elements", {
   }
 });
 
+widgetTest("post - links", {
+  template: '{{mount-widget widget="post-contents" args=args}}',
+  beforeEach() {
+    this.set("args", {
+      cooked:
+        "<a href='http://link1.example.com/'>first link</a> and <a href='http://link2.example.com/?some=query'>second link</a>",
+      linkCounts: [
+        { url: "http://link1.example.com/", clicks: 1, internal: true },
+        { url: "http://link2.example.com/", clicks: 2, internal: true }
+      ]
+    });
+  },
+  async test(assert) {
+    assert.equal(find(".badge.clicks:nth(0)").text(), "1");
+    assert.equal(find(".badge.clicks:nth(1)").text(), "2");
+  }
+});
+
 widgetTest("wiki", {
   template:
     '{{mount-widget widget="post" args=args showHistory=(action "showHistory")}}',
@@ -856,20 +874,24 @@ widgetTest("pm map", {
 widgetTest("post notice - with username", {
   template: '{{mount-widget widget="post" args=args}}',
   beforeEach() {
+    const date_2d_ago = new Date();
+    date_2d_ago.setDate(date_2d_ago.getDate() - 2);
     this.siteSettings.prioritize_username_in_ux = true;
+    this.siteSettings.old_post_notice_days = 14;
     this.set("args", {
       postNoticeType: "returning",
-      postNoticeTime: new Date("2010-01-01 12:00:00 UTC"),
+      postNoticeTime: date_2d_ago,
       username: "codinghorror",
-      name: "Jeff"
+      name: "Jeff",
+      created_at: new Date()
     });
   },
   test(assert) {
     assert.equal(
-      find(".post-notice.returning-user")
+      find(".post-notice.returning-user:not(.old)")
         .text()
         .trim(),
-      I18n.t("post.notice.return", { user: "codinghorror", time: "Jan '10" })
+      I18n.t("post.notice.return", { user: "codinghorror", time: "2d ago" })
     );
   }
 });
@@ -878,15 +900,17 @@ widgetTest("post notice - with name", {
   template: '{{mount-widget widget="post" args=args}}',
   beforeEach() {
     this.siteSettings.prioritize_username_in_ux = false;
+    this.siteSettings.old_post_notice_days = 14;
     this.set("args", {
       postNoticeType: "first",
       username: "codinghorror",
-      name: "Jeff"
+      name: "Jeff",
+      created_at: new Date(2019, 0, 1)
     });
   },
   test(assert) {
     assert.equal(
-      find(".post-notice.new-user")
+      find(".post-notice.old.new-user")
         .text()
         .trim(),
       I18n.t("post.notice.first", { user: "Jeff", time: "Jan '10" })

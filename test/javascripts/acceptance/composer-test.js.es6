@@ -600,6 +600,47 @@ QUnit.test("Checks for existing draft", async assert => {
   toggleCheckDraftPopup(false);
 });
 
+QUnit.test("Can switch states without abandon popup", async assert => {
+  const composerActions = selectKit(".composer-actions");
+  toggleCheckDraftPopup(true);
+
+  await visit("/t/internationalization-localization/280");
+
+  const longText = "a".repeat(256);
+
+  await click(".btn-primary.create.btn");
+
+  await fillIn(".d-editor-input", longText);
+
+  // prettier-ignore
+  server.get("/draft.json", () => { // eslint-disable-line no-undef
+    return [ 200, { "Content-Type": "application/json" }, {
+      draft: "{\"reply\":\"This is a draft of the first post\",\"action\":\"reply\",\"categoryId\":1,\"archetypeId\":\"regular\",\"metaData\":null,\"composerTime\":2863,\"typingTime\":200}",
+      draft_sequence: 42
+    } ];
+  });
+
+  await click("article#post_3 button.reply");
+
+  await composerActions.expand();
+  await composerActions.selectRowByValue("reply_to_topic");
+
+  assert.equal(find(".modal-body").text(), "", "abandon popup shouldn't come");
+
+  assert.equal(
+    find(".d-editor-input").val(),
+    longText,
+    "entered text should still be there"
+  );
+
+  assert.ok(
+    find('.action-title a[href="/t/internationalization-localization/280"]'),
+    "mode should have changed"
+  );
+
+  toggleCheckDraftPopup(false);
+});
+
 QUnit.test("Loading draft also replaces the recipients", async assert => {
   toggleCheckDraftPopup(true);
 
@@ -617,6 +658,27 @@ QUnit.test("Loading draft also replaces the recipients", async assert => {
 
   assert.equal(find(".users-input .item:eq(0)").text(), "codinghorror");
 });
+
+QUnit.test(
+  "Deleting the text content of the first post in a private message",
+  async assert => {
+    Discourse.SiteSettings.allow_uncategorized_topics = false;
+
+    await visit("/t/34");
+
+    await click("#post_1 .d-icon-ellipsis-h");
+
+    await click("#post_1 .d-icon-pencil-alt");
+
+    await fillIn(".d-editor-input", "");
+
+    assert.equal(
+      find(".d-editor-container textarea").attr("placeholder"),
+      I18n.t("composer.reply_placeholder"),
+      "it should not block because of missing category"
+    );
+  }
+);
 
 const assertImageResized = (assert, uploads) => {
   assert.equal(
@@ -692,4 +754,20 @@ QUnit.test("Image resizing buttons", async assert => {
   uploads[9] = "![identicalImage|300x300,75%](upload://identicalImage.png)";
   await click(find(".button-wrapper .scale-btn[data-scale='75']")[5]);
   assertImageResized(assert, uploads);
+
+  await fillIn(
+    ".d-editor-input",
+    `
+![test|690x313](upload://test.png)
+
+\`<script>alert("xss")</script>\`
+    `
+  );
+
+  await triggerEvent($(".d-editor-preview img"), "mouseover");
+
+  assert.ok(
+    find("script").length === 0,
+    "it does not unescapes script tags in code blocks"
+  );
 });

@@ -44,17 +44,18 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :web_hooks
 
   validates :user_id, presence: true
+
   validates :name, if: Proc.new { |c| c.new_record? || c.will_save_change_to_name? },
                    presence: true,
                    uniqueness: { scope: :parent_category_id, case_sensitive: false },
                    length: { in: 1..50 }
+
   validates :num_featured_topics, numericality: { only_integer: true, greater_than: 0 }
+  validates :search_priority, inclusion: { in: Searchable::PRIORITIES.values }
+
   validate :parent_category_validator
-
   validate :email_in_validator
-
   validate :ensure_slug
-
   validate :permissions_compatibility_validator
 
   validates :auto_close_hours, numericality: { greater_than: 0, less_than_or_equal_to: 87600 }, allow_nil: true
@@ -663,9 +664,12 @@ class Category < ActiveRecord::Base
     return if parent_groups.include?(Group[:everyone].id)
 
     child_groups = child_permissions.map(&:first)
-    only_in_subcategory = child_groups - parent_groups
+    only_subcategory_groups = child_groups - parent_groups
 
-    errors.add(:base, I18n.t("category.errors.permission_conflict")) if only_in_subcategory.present?
+    if only_subcategory_groups.present?
+      group_names = Group.where(id: only_subcategory_groups).pluck(:name).join(", ")
+      errors.add(:base, I18n.t("category.errors.permission_conflict", group_names: group_names))
+    end
   end
 
   def subcategories_permissions
@@ -728,10 +732,13 @@ end
 #  suppress_from_latest              :boolean          default(FALSE)
 #  minimum_required_tags             :integer          default(0), not null
 #  navigate_to_first_post_after_read :boolean          default(FALSE), not null
+#  search_priority                   :integer          default(0)
+#  allow_global_tags                 :boolean          default(FALSE), not null
 #
 # Indexes
 #
-#  index_categories_on_email_in     (email_in) UNIQUE
-#  index_categories_on_topic_count  (topic_count)
-#  unique_index_categories_on_name  (COALESCE(parent_category_id, '-1'::integer), name) UNIQUE
+#  index_categories_on_email_in         (email_in) UNIQUE
+#  index_categories_on_search_priority  (search_priority)
+#  index_categories_on_topic_count      (topic_count)
+#  unique_index_categories_on_name      (COALESCE(parent_category_id, '-1'::integer), name) UNIQUE
 #

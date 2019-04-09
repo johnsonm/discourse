@@ -144,7 +144,6 @@ describe WatchedWord do
     end
 
     it "is compatible with flag_sockpuppets" do
-      # e.g., handle PostAction::AlreadyActed
       SiteSetting.flag_sockpuppets = true
       ip_address = '182.189.119.174'
       user1 = Fabricate(:user, ip_address: ip_address, created_at: 2.days.ago)
@@ -177,6 +176,27 @@ describe WatchedWord do
       expect {
         post.rebake!
       }.to_not change { PostAction.count }
+    end
+  end
+
+  describe 'upload' do
+    context 'logged in as admin' do
+      before do
+        sign_in(admin)
+      end
+
+      it 'creates the words from the file' do
+        post '/admin/logs/watched_words/upload.json', params: {
+          action_key: 'flag',
+          file: Rack::Test::UploadedFile.new(file_from_fixtures("words.csv", "csv"))
+        }
+        expect(response.status).to eq(200)
+        expect(WatchedWord.count).to eq(6)
+        expect(WatchedWord.pluck(:word)).to contain_exactly(
+          'thread', '线', 'धागा', '실', 'tråd', 'нить'
+        )
+        expect(WatchedWord.pluck(:action).uniq).to eq([WatchedWord.actions[:flag]])
+      end
     end
   end
 end

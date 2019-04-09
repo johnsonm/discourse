@@ -264,12 +264,9 @@ class ImportScripts::FMGP < ImportScripts::Base
     return false if !p.deleted_at.nil?
     return false if @usermap.include?(p.user_id) and @usermap[p.user_id].nil?
     raw = formatted_message(post)
-    if p.raw.strip != raw.strip
-      #puts '', 'OLD', p.raw, ''
-      #puts '', 'NEW', raw, ''
-      p.raw = raw
-      p.baked_version = nil
-      p.save
+    if p.raw.strip != raw.strip or @post_images.length > 0
+      # if changes to raw and/or images uploaded
+      p.revise(@system_user, { raw: raw}, skip_validations: true, bypass_rate_limiter: true, bypass_bump: true)
       @imagefiles.write(@post_images.join('')) if !@imagefiles.nil?
       @post_images = []
       return true
@@ -428,6 +425,50 @@ class ImportScripts::FMGP < ImportScripts::Base
       return url
     end
   end
+
+  # none of the following methods are needed when only fixing up formatting of existing posts
+  def update_bumped_at
+  end
+
+  def update_last_posted_at
+  end
+
+  def def update_last_posted_at
+  end
+
+  def update_user_stats
+  end
+
+  def update_topic_users
+  end
+
+  def update_topic_status
+  end
+
+  def reset_topic_counters
+  end
+
+  def close_inactive_topics
+  end
+
+  def update_topic_status
+  end
+
+  def update_last_seen_at
+  end
+
+  def update_post_timings
+  end
+
+  def update_feature_topic_users
+  end
+
+  def update_category_featured_topics
+  end
+
+  def update_topic_count_replies
+  end
+
 end
 
 if __FILE__ == $0

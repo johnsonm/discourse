@@ -263,10 +263,11 @@ class ImportScripts::FMGP < ImportScripts::Base
   def update_raw(post, p)
     return false if !p.deleted_at.nil?
     return false if @usermap.include?(p.user_id) and @usermap[p.user_id].nil?
+    return false if p.topic.nil? # topic to which this post is attached was deleted
     raw = formatted_message(post)
     if p.raw.strip != raw.strip or @post_images.length > 0
       # if changes to raw and/or images uploaded
-      p.revise(@system_user, { raw: raw}, skip_validations: true, bypass_rate_limiter: true, bypass_bump: true)
+      p.revise(@system_user, {raw: raw}, skip_validations: true, bypass_rate_limiter: true, bypass_bump: true)
       @imagefiles.write(@post_images.join('')) if !@imagefiles.nil?
       @post_images = []
       return true

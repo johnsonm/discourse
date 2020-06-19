@@ -144,12 +144,15 @@ RSpec.describe "tasks/uploads" do
 
     let(:upload1) { Fabricate(:upload_s3) }
     let(:upload2) { Fabricate(:upload_s3) }
+    let(:upload3) { Fabricate(:upload_s3) }
 
     let!(:url1) { "upload://#{upload1.base62_sha1}.jpg" }
     let!(:url2) { "upload://#{upload2.base62_sha1}.jpg" }
+    let!(:url3) { "upload://#{upload3.base62_sha1}.jpg" }
 
     let(:post1) { Fabricate(:post, raw: "[foo](#{url1})") }
     let(:post2) { Fabricate(:post, raw: "[foo](#{url2})") }
+    let(:post3) { Fabricate(:post, raw: "[foo](#{url3})") }
 
     before do
       global_setting :s3_bucket, 'file-uploads/folder'
@@ -159,16 +162,19 @@ RSpec.describe "tasks/uploads" do
       upload1.save!
       upload2.url = "//#{SiteSetting.s3_upload_bucket}.amazonaws.com/original/1X/#{upload2.base62_sha1}.png"
       upload2.save!
+      upload3.url = "//#{SiteSetting.s3_upload_bucket}.amazonaws.com/original/1X/#{upload3.base62_sha1}.png"
+      upload3.save!
 
       PostUpload.create(post: post1, upload: upload1)
       PostUpload.create(post: post2, upload: upload2)
+      PostUpload.create(post: post3, upload: upload3)
       SiteSetting.enable_s3_uploads = false
     end
 
-    def invoke_task
-      capture_stdout do
-        Rake::Task['uploads:batch_migrate_from_s3'].invoke('1')
-      end
+    def invoke_task(max, limit)
+      #capture_stdout do
+      Rake::Task['uploads:batch_migrate_from_s3'].invoke(max, limit)
+      #end
     end
 
     it "applies the limit" do
@@ -178,12 +184,39 @@ RSpec.describe "tasks/uploads" do
 
       post1.update_columns(baked_at: 1.week.ago)
       post2.update_columns(baked_at: 1.week.ago)
-      invoke_task
+      invoke_task("1000", "1") # nonsense arguments; max greater than limit will never be reached
 
       expect(post1.reload.baked_at).not_to eq_time(1.week.ago)
       expect(post2.reload.baked_at).to eq_time(1.week.ago)
     end
 
+    it "applies the max when unlimited" do
+      FileHelper.stubs(:download).returns(file_from_fixtures("logo.png")).once()
+
+      freeze_time
+
+      post1.update_columns(baked_at: 1.week.ago)
+      post2.update_columns(baked_at: 1.week.ago)
+      invoke_task("1", nil)
+
+      expect(post1.reload.baked_at).not_to eq_time(1.week.ago)
+      expect(post2.reload.baked_at).to eq_time(1.week.ago)
+    end
+
+    it "applies the max before the limit is reached" do
+      FileHelper.stubs(:download).returns(file_from_fixtures("logo.png")).once()
+
+      freeze_time
+
+      post1.update_columns(baked_at: 1.week.ago)
+      post2.update_columns(baked_at: 1.week.ago)
+      post3.update_columns(baked_at: 1.week.ago)
+      invoke_task("1", "2")
+
+      expect(post1.reload.baked_at).not_to eq_time(1.week.ago)
+      expect(post2.reload.baked_at).to eq_time(1.week.ago)
+      expect(post3.reload.baked_at).to eq_time(1.week.ago)
+    end
   end
 
   describe "uploads:migrate_from_s3" do
